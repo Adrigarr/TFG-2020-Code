@@ -10,7 +10,7 @@ sparql = SPARQLWrapper("https://query.wikidata.org/sparql", agent='Mozilla/5.0 (
 def getGenre(dfSong,genre):
     for i in genre:   
         resultsGenre1 = getInfoGenre(i)
-        resultsGenre1['Level'] = 3
+        resultsGenre1['Level'] = 2
         resultsGenre1 = executeDict(resultsGenre1)
         dfSong = pd.concat([dfSong, resultsGenre1], ignore_index=True)
     return dfSong
@@ -18,7 +18,7 @@ def getGenre(dfSong,genre):
 def getArtist(dfSong,artist):
     for i in artist:  
         resultsArtist1 = getInfoArtist(i)
-        resultsArtist1['Level'] = 4
+        resultsArtist1['Level'] = 3
         resultsArtist1 = executeDict(resultsArtist1)
         dfSong = pd.concat([dfSong, resultsArtist1], ignore_index=True)
     return dfSong
@@ -26,7 +26,7 @@ def getArtist(dfSong,artist):
 def getMembers(dfSong,members):
     for i in members:
         resultsMembers1 = getInfoMembers(i)
-        resultsMembers1['Level'] = 5
+        resultsMembers1['Level'] = 4
         resultsMembers1 = executeDict(resultsMembers1)
         dfSong = pd.concat([dfSong, resultsMembers1], ignore_index=True)
     return dfSong

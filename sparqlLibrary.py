@@ -7,7 +7,7 @@ import json
 #Diccionarios para obtener el nombre de la propiedad
 dic = {'P136':'género', 'P175':'intérprete', 'P264':'sello discográfico', 'P86':'compositor', 'P361':'forma parte de','P495':'country','P407':'language',
        'P577':'publication_date','P86':'compositor','P571':'inception','P737':'influenced by','P279':'subclass','P166':'award received','P2031':'work period start',
-       'P358':'discography','P740':'location of formation','P1411':'nominated for','P527':'participnats','P463':'member of','P172':'Voice Type'}
+       'P358':'discography','P740':'location of formation','P1411':'nominated for','P527':'participants','P463':'member of','P172':'Voice Type'}
 
 
 
@@ -23,6 +23,7 @@ def commonProperties(song1,song2):
       wd:%s ?same ?item1. # Primera cancion - Propiedad buscada - Valor de la propiedad
       wd:%s ?same ?item2. # Segunda cancion - Propiedad buscada - Valor de la propiedad
       FILTER (?item1 = ?item2). # Nos quedamos solo con las propiedades cuyo valor coincide
+      # Género, Intérprete (Artista), Sello discofráfico, Compositor, Parte de, Idioma, Fecha de publicación, Discografía
       FILTER (?same in (wdt:P136, wdt:P175, wdt:P264, wdt:P86, wdt:P361, wdt:P495, wdt:P407,wdt:P577,wdt:P358)). # Nos quedamos con las propiedades relevantes para nosotros: género, intérprete, sello discográfico, compositor, letra de, forma parte de (album),country,language,publication_date
       SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
       }
@@ -43,7 +44,7 @@ def commonProperties(song1,song2):
 
 #FUNCIONES:
 
-#Obtenmos el valor real de las propiedades sin caracteres sobrantes
+#Obtenemos el valor real de las propiedades sin caracteres sobrantes
 def tratamientoDataSet(df):
     df['same.value']=df['same.value'].apply(lambda x: x.split('/')[5])
     idx = df.index[df['same.value']=='P571']
@@ -68,6 +69,7 @@ def getInfoSong(song):
     WHERE
     {
     wd:%s ?same ?item1.
+    # Género, Intérprete (Artista), Sello discográfico, País, Compositor, Parte de, Idioma, Fecha de publicación, Discografía
     FILTER (?same in (wdt:P136, wdt:P175, wdt:P264, wdt:P495,wdt:P86,wdt:P361, wdt:P407,wdt:P577,wdt:P358)).
     SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
     }
@@ -77,7 +79,7 @@ def getInfoSong(song):
     #print(results3)
     resultsI1 = pd.io.json.json_normalize(results3['results']['bindings'])
     resultsItem1=resultsI1[['same.value','item1.value','item1Label.value']]
-    resultsItem1['Level']=2
+    resultsItem1['Level']=1
     resultsItem1=tratamientoDataSet(resultsItem1)
     resultsItem1 = executeDict(resultsItem1)
 
@@ -91,6 +93,7 @@ def getInfoGenre(genre):
     WHERE
     {
     wd:%s ?same ?item1.
+    # Origen, País, Influenciado por, Subclase, Parte de
     FILTER (?same in (wdt:P571, wdt:P495, wdt:P737, wdt:P279, wdt:P361)).
     SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
     }
@@ -114,6 +117,7 @@ def getInfoArtist(artist):
     WHERE
     {
     wd:%s ?same ?item1.
+    # Origen, Género, País, Influenciado por, Sello discográfico, Discografía, Lugar de formación, Premio recibido, Nominado a, Participantes, Miembro de, Tipo de voz
     FILTER (?same in (wdt:P571, wdt:P136, wdt:P495, wdt:P737, wdt:P264, wdt:P358, wdt:P740, wdt:P166, wdt:1411, wdt:P527, wdt:P463, wdt:P172)).
     SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
     }
@@ -129,13 +133,14 @@ def getInfoArtist(artist):
     
     return resultArtist1
 
-#Obtenemos propiedades del Artista.
+#Obtenemos propiedades del Miembro
 def getInfoMembers(member):
     sparql.setQuery("""
     SELECT ?same ?item1 ?item1Label 
     WHERE
     {
     wd:%s ?same ?item1.
+    # _, _, Miembro de, Género, _, Tipo de voz
     FILTER (?same in (wdt:P19, wdt:P66, wdt:P463, wdt:P136, wdt:P102, wdt:P172)).
     SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
     }
