@@ -105,15 +105,62 @@ async def test(request):
           {
             "id": 1,
             "caption": "(I can't get no) Satisfaction",
-            "root": 'true'
+            "root": True,
+            "cluster": 1
           },
           {
             "id": 2,
             "caption": "Hey Jude",
-            "root": 'true'
+            "root": True,
+            "cluster": 2
+          },
+          {
+            "id": 3,
+            "caption": "aux1",
+            "cluster": 3
+          },
+          {
+            "id": 4,
+            "caption": "aux2",
+            "cluster": 3
+          },
+          {
+            "id": 5,
+            "caption": "aux3",
+            "cluster": 3
+          },
+          {
+            "id": 6,
+            "caption": "aux4",
+            "cluster": 3
           }
         ],
-        "edges": []
+        "edges": [
+            {
+                "source": 1,
+                "target": 3
+            },
+            {
+                "source": 3,
+                "target": 4
+            },
+            {
+                "source": 2,
+                "target": 5
+            },
+            {
+                "source": 5,
+                "target": 4
+            },
+            {
+                "source": 3,
+                "target": 6
+            },
+            {
+                "source": 5,
+                "target": 6
+            }
+        ]
       }
 
     # Recorremos todas las relaciones del nivel 1
@@ -121,7 +168,8 @@ async def test(request):
         # Añadimos un nodo
         aux1 = {
             "id": len(graph["nodes"])+1, # ID que toca usar
-            "caption": level.at[i, 'valueProperty'] # Valor de la propiedad
+            "caption": level.at[i, 'valueProperty'], # Valor de la propiedad
+            "cluster": 4
         }
         graph["nodes"].append(aux1)
 
@@ -144,7 +192,7 @@ async def test(request):
         json.dump(graph, f, ensure_ascii=False)
 
     return template(
-        'graph3.html'
+        'graph4.html'
     )
 
     #return response.json(open(os.getcwd() + '/static/data/level1.json', 'r').read())
@@ -153,25 +201,83 @@ async def test(request):
 
     #return response.html(relationsDF.to_html())
 
-@app.route("/graph")
+@app.route("/result2")
 async def test(request):
+    thislist = request.query_args # Esta es la lista de argumentos recibidos en la URL
+
+    song1= thislist[0][1]
+    song2= thislist[1][1]
+    relationsDF = main(song1,song2) # relationsDF es un DataFrame
+
+    return response.html(relationsDF.to_html())
+
+
+@app.route("/graph4")
+async def test(request):
+
+    return template(
+        'graph4.html'
+    )
+
+@app.route("/index")
+async def test(request):
+    thislist = request.query_args # Esta es la lista de argumentos recibidos en la URL
+
+    song1= thislist[0][1]
+    song2= thislist[1][1]
+    relationsDF = main(song1,song2) # relationsDF es un DataFrame
+
+    with open(os.getcwd() + '/static/js/prueba.js', 'w') as file:
+        file.write("""
+// create an array with nodes
+var nodes = new vis.DataSet([
+    {id: 1, label: 'Node 1', level: 2},
+    {id: 2, label: 'Node 2', level: 4},
+    {id: 3, label: 'Satisfaction', level: 1},
+    {id: 4, label: 'Hey Jude', level: 5},
+    {id: 5, label: 'Node 5', level: 3},
+    {id: 6, label: 'Node 6', level: 3}
+]);
+
+// create an array with edges
+var edges = new vis.DataSet([
+    {from: 3, to: 1},
+    {from: 1, to: 5},
+    {from: 4, to: 2},
+    {from: 2, to: 5},
+    {from: 1, to: 6},
+    {from: 2, to: 6}
+]);
+
+// create a network
+var container = document.getElementById('mynetwork');
+
+// provide the data in the vis format
+var data = {
+    nodes: nodes,
+    edges: edges
+};
+var options = {
+    layout: {
+        hierarchical: {
+            direction: 'LR'
+        }
+    },
+    edges: {
+        arrows: 'to',
+        smooth: {
+            type: 'cubicBezier',
+            forceDirection: 'horizontal'
+        }
+    }
+};
+
+// initialize your network!
+var network = new vis.Network(container, data, options);
+""".strip())
 
     return template(
         'graph.html'
-    )
-
-@app.route("/graph2")
-async def test(request):
-
-    return template(
-        'graph2.html'
-    )
-
-@app.route("/graph3")
-async def test(request):
-
-    return template(
-        'graph3.html'
     )
 
 if __name__ == '__main__':
