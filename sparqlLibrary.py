@@ -58,12 +58,12 @@ def tratamientoDataSet(df):
     df.at[idx, 'item1.value'] = aux2
 
     df['item1.value']=df['item1.value'].apply(lambda x: x.split('/')[4])
-    df.columns = ['idProperty', 'idValueProperty','valueProperty','Level']
+    df.columns = ['idProperty', 'idValueProperty','valueProperty','Level', 'ID']
     return df
 
 
 #Obtenemos propiedades de la cancion.
-def getInfoSong(song):
+def getInfoSong(song, title):
     sparql.setQuery("""
     SELECT ?same ?item1 ?item1Label 
     WHERE
@@ -79,15 +79,15 @@ def getInfoSong(song):
     #print(results3)
     resultsI1 = pd.io.json.json_normalize(results3['results']['bindings'])
     resultsItem1=resultsI1[['same.value','item1.value','item1Label.value']]
-    resultsItem1['Level']=1
+    resultsItem1['Level']=2
+    resultsItem1['ID'] = title
     resultsItem1=tratamientoDataSet(resultsItem1)
-    resultsItem1 = executeDict(resultsItem1)
 
     
     return resultsItem1
 
 #Obtenemos propiedades del género.
-def getInfoGenre(genre):
+def getInfoGenre(genre, title):
     sparql.setQuery("""
     SELECT ?same ?item1 ?item1Label 
     WHERE
@@ -103,15 +103,16 @@ def getInfoGenre(genre):
     results4 = sparql.query().convert()
     resultsG1 = pd.io.json.json_normalize(results4['results']['bindings'])
     resultsG1=resultsG1[['same.value','item1.value','item1Label.value']]
-    resultsG1['Level']=2
-    resultsGenre1=tratamientoDataSet(resultsG1)
+    resultsG1['Level'] = 2
+    resultsG1['ID'] = title
+    resultsGenre1 = tratamientoDataSet(resultsG1)
     resultsGenre1 = executeDict(resultsGenre1)
 
 
     return resultsGenre1
 
 #Obtenemos propiedades del Artista.
-def getInfoArtist(artist):
+def getInfoArtist(artist, name):
     sparql.setQuery("""
     SELECT ?same ?item1 ?item1Label 
     WHERE
@@ -127,14 +128,15 @@ def getInfoArtist(artist):
     resultsA1 = pd.io.json.json_normalize(results['results']['bindings'])
     resultsA1=resultsA1[['same.value','item1.value','item1Label.value']]
     resultsA1['Level'] = 3
-    resultArtist1=tratamientoDataSet(resultsA1)
+    resultsA1['ID'] = name
+    resultArtist1 = tratamientoDataSet(resultsA1)
     resultArtist1 = executeDict(resultArtist1)
 
     
     return resultArtist1
 
 #Obtenemos propiedades del Miembro
-def getInfoMembers(member):
+def getInfoMembers(member, name):
     sparql.setQuery("""
     SELECT ?same ?item1 ?item1Label 
     WHERE
@@ -150,6 +152,7 @@ def getInfoMembers(member):
     resultsM1 = pd.io.json.json_normalize(results['results']['bindings'])
     resultsM1 = resultsM1[['same.value','item1.value','item1Label.value']]
     resultsM1['Level'] = 4
+    resultsM1['ID'] = name
     resultMember1 = tratamientoDataSet(resultsM1)
     resultMember1 = executeDict(resultMember1)
 
@@ -158,21 +161,21 @@ def getInfoMembers(member):
 
 def getGenrefrom(df):
     if(df['idProperty'] == 'P136').any()==True:
-        aux = df.loc[df['idProperty'] =='P136','idValueProperty']
+        aux = df.loc[df['idProperty'] =='P136',['idValueProperty','valueProperty']]
     else:
         aux = pd.Series([])
     return aux
 
 def getMembersfrom(df):
     if(df['idProperty'] == 'P527').any()==True:
-        aux = df.loc[df['idProperty'] =='P527','idValueProperty']
+        aux = df.loc[df['idProperty'] =='P527',['idValueProperty','valueProperty']]
     else:
         aux = pd.Series([])
     return aux
 
 def getArtistfrom(df):
     if(df['idProperty'] == 'P175').any()==True:
-        aux = df.loc[df['idProperty'] =='P175','idValueProperty']
+        aux = df.loc[df['idProperty'] =='P175',['idValueProperty','valueProperty']]
     else:
         aux = pd.Series([])
     return aux

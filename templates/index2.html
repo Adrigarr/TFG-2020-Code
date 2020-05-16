@@ -55,20 +55,32 @@
         <br>
 
         <!-- Inicio del formulario que recoge las canciones -->
-        <form action="/result2" method="get">
+        <form action="/result2" target="_blank" method="get">
           <label for="xsong">First song:</label><br>
           <!-- <input type="text" id="xsong" name="xsong" value="Q158553"><br> -->
           <input list="songs" name="xsong">
           <datalist id="songs">
-            <option value="Q158553">
-            <option value="Q607742">
-            <option value="Q153029">
-            <option value="Q153064">
+            <option value="Start Me Up">
+            <option value="Let It Be">
+            <option value="(I Can't Get No) Satisfaction">
+            <option value="Hey Jude">
+          </datalist><br>
+
+          <label for="ysong">First artist:</label><br>
+          <!-- <input type="text" id="ysong" name="ysong" value="Q607742"><br><br> -->
+          <input list="artists" name="xartist">
+          <datalist id="artists">
+            <option value="The Rolling Stones">
+            <option value="The Beatles">
           </datalist><br>
 
           <label for="ysong">Second song:</label><br>
           <!-- <input type="text" id="ysong" name="ysong" value="Q607742"><br><br> -->
-          <input list="songs" name="ysong"><br><br>
+          <input list="songs" name="ysong"><br>
+
+          <label for="ysong">Second artist:</label><br>
+          <!-- <input type="text" id="ysong" name="ysong" value="Q607742"><br><br> -->
+          <input list="artists" name="yartist"><br><br>
 
 
           <input type="submit" value="Submit">

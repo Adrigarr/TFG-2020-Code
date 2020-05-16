@@ -1,0 +1,74 @@
+idProperty,idValueProperty,valueProperty,Level_x,ID_x,idPropertyName,Level_y,ID_y
+P136,Q11366,alternative rock,2,Hysteria,género,2,Starlight
+P136,Q11366,alternative rock,2,Hysteria,género,4,Muse
+P136,Q11366,alternative rock,2,Hysteria,género,5,Matt Bellamy
+P136,Q11366,alternative rock,2,Hysteria,género,5,Dominic Howard
+P136,Q11366,alternative rock,2,Hysteria,género,5,Christopher Wolstenholme
+P136,Q11366,alternative rock,4,Muse,género,2,Starlight
+P136,Q11366,alternative rock,4,Muse,género,4,Muse
+P136,Q11366,alternative rock,4,Muse,género,5,Matt Bellamy
+P136,Q11366,alternative rock,4,Muse,género,5,Dominic Howard
+P136,Q11366,alternative rock,4,Muse,género,5,Christopher Wolstenholme
+P136,Q11366,alternative rock,5,Matt Bellamy,género,2,Starlight
+P136,Q11366,alternative rock,5,Matt Bellamy,género,4,Muse
+P136,Q11366,alternative rock,5,Matt Bellamy,género,5,Matt Bellamy
+P136,Q11366,alternative rock,5,Matt Bellamy,género,5,Dominic Howard
+P136,Q11366,alternative rock,5,Matt Bellamy,género,5,Christopher Wolstenholme
+P136,Q11366,alternative rock,5,Dominic Howard,género,2,Starlight
+P136,Q11366,alternative rock,5,Dominic Howard,género,4,Muse
+P136,Q11366,alternative rock,5,Dominic Howard,género,5,Matt Bellamy
+P136,Q11366,alternative rock,5,Dominic Howard,género,5,Dominic Howard
+P136,Q11366,alternative rock,5,Dominic Howard,género,5,Christopher Wolstenholme
+P136,Q11366,alternative rock,5,Christopher Wolstenholme,género,2,Starlight
+P136,Q11366,alternative rock,5,Christopher Wolstenholme,género,4,Muse
+P136,Q11366,alternative rock,5,Christopher Wolstenholme,género,5,Matt Bellamy
+P136,Q11366,alternative rock,5,Christopher Wolstenholme,género,5,Dominic Howard
+P136,Q11366,alternative rock,5,Christopher Wolstenholme,género,5,Christopher Wolstenholme
+P175,Q22151,Muse,2,Hysteria,intérprete,2,Starlight
+P495,Q145,United Kingdom,2,Hysteria,country,3,alternative rock
+P495,Q145,United Kingdom,2,Hysteria,country,4,Muse
+P495,Q145,United Kingdom,3,alternative rock,country,3,alternative rock
+P495,Q145,United Kingdom,3,alternative rock,country,4,Muse
+P495,Q145,United Kingdom,4,Muse,country,3,alternative rock
+P495,Q145,United Kingdom,4,Muse,country,4,Muse
+P279,Q11399,rock music,3,alternative rock,subclass,3,alternative rock
+P495,Q30,United States of America,3,alternative rock,country,3,alternative rock
+P571,1978-01-01T00:00:00Z,1978-01-01T00:00:00Z,3,alternative rock,inception,3,alternative rock
+P571,1980-01-01T00:00:00Z,1980-01-01T00:00:00Z,3,alternative rock,inception,3,alternative rock
+P136,Q11399,rock music,4,Muse,género,4,Muse
+P136,Q11399,rock music,4,Muse,género,5,Matt Bellamy
+P136,Q11399,rock music,5,Matt Bellamy,género,4,Muse
+P136,Q11399,rock music,5,Matt Bellamy,género,5,Matt Bellamy
+P136,Q20378,alternative metal,4,Muse,género,4,Muse
+P136,Q49451,progressive rock,4,Muse,género,4,Muse
+P136,Q49451,progressive rock,4,Muse,género,5,Matt Bellamy
+P136,Q49451,progressive rock,5,Matt Bellamy,género,4,Muse
+P136,Q49451,progressive rock,5,Matt Bellamy,género,5,Matt Bellamy
+P136,Q83270,hard rock,4,Muse,género,4,Muse
+P136,Q236913,space rock,4,Muse,género,4,Muse
+P136,Q719927,symphonic rock,4,Muse,género,4,Muse
+P264,Q843402,Warner Bros. Records,4,Muse,sello discográfico,2,Starlight
+P264,Q843402,Warner Bros. Records,4,Muse,sello discográfico,4,Muse
+P358,Q591553,Muse discography,4,Muse,discography,4,Muse
+P527,Q190576,Matt Bellamy,4,Muse,participants,4,Muse
+P527,Q587031,Dominic Howard,4,Muse,participants,4,Muse
+P527,Q1984061,Christopher Wolstenholme,4,Muse,participants,4,Muse
+P571,1994-01-01T00:00:00Z,1994-01-01T00:00:00Z,4,Muse,inception,4,Muse
+P737,Q11649,Nirvana,4,Muse,influenced by,4,Muse
+P737,Q15862,Queen,4,Muse,influenced by,4,Muse
+P737,Q44190,Radiohead,4,Muse,influenced by,4,Muse
+P740,Q531311,Teignmouth,4,Muse,location of formation,4,Muse
+P19,Q350,Cambridge,5,Matt Bellamy,place of birth,5,Matt Bellamy
+P172,Q42406,English people,5,Matt Bellamy,Voice Type,5,Matt Bellamy
+P463,Q22151,Muse,5,Matt Bellamy,member of,5,Matt Bellamy
+P463,Q22151,Muse,5,Matt Bellamy,member of,5,Dominic Howard
+P463,Q22151,Muse,5,Matt Bellamy,member of,5,Christopher Wolstenholme
+P463,Q22151,Muse,5,Dominic Howard,member of,5,Matt Bellamy
+P463,Q22151,Muse,5,Dominic Howard,member of,5,Dominic Howard
+P463,Q22151,Muse,5,Dominic Howard,member of,5,Christopher Wolstenholme
+P463,Q22151,Muse,5,Christopher Wolstenholme,member of,5,Matt Bellamy
+P463,Q22151,Muse,5,Christopher Wolstenholme,member of,5,Dominic Howard
+P463,Q22151,Muse,5,Christopher Wolstenholme,member of,5,Christopher Wolstenholme
+P463,Q47455688,The Jaded Hearts Club,5,Matt Bellamy,member of,5,Matt Bellamy
+P19,Q18655,Stockport,5,Dominic Howard,place of birth,5,Dominic Howard
+P19,Q217039,Rotherham,5,Christopher Wolstenholme,place of birth,5,Christopher Wolstenholme

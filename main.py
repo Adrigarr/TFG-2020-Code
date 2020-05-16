@@ -79,13 +79,13 @@ def main(arg1,arg2,arg3,arg4):
                 raise Exception('Missing second song')
             else:
                 #SONG1
-                songData = getInfSong(song1['item.value'][0])
+                songData = getInfSong(song1['item.value'][0],song1['itemLabel.value'][0])
                 genreData = getGenre2(songData,logger)
                 artistData = getArtist2(songData,logger)
                 membersData = getMembers2(artistData,logger)
 
                 #SONG2
-                songData2 = getInfSong(song2['item.value'][0])
+                songData2 = getInfSong(song2['item.value'][0],song2['itemLabel.value'][0])
                 genreData2 = getGenre2(songData2,logger)
                 artistData2 = getArtist2(songData2,logger)
                 membersData2 = getMembers2(artistData2,logger)
@@ -98,6 +98,7 @@ def main(arg1,arg2,arg3,arg4):
 
                 relationsDF = mergeData(song1Data,song2Data)
                 relationsDF = relationsDF.drop_duplicates()
+                relationsDF.to_csv('relations.csv',index=False)
 
     except Exception as miss:
         logger.info(miss)
@@ -247,23 +248,26 @@ async def test(request):
 async def test(request):
     thislist = request.query_args # Esta es la lista de argumentos recibidos en la URL
 
-    song1= thislist[0][1]
-    song2= thislist[1][1]
-    relationsDF = main(song1,song2) # relationsDF es un DataFrame
+    song1 = thislist[0][1]
+    artist1 = thislist[1][1]
+    song2 = thislist[2][1]
+    artist2 = thislist[3][1]
+    relationsDF = main(song1, artist1, song2, artist2) # relationsDF es un DataFrame
 
     return response.html(relationsDF.to_html())
 
 @app.route("/table")
 async def test(request):
     
-    song1 = 'Start Me Up'
-    artist1 = 'The Rolling Stones'
+    song1 = "Start Me Up" # "(I Can't Get No) Satisfaction"
+    artist1 = "The Rolling Stones"
 
-    song2 = 'Let It Be'
-    artist2 = 'The Beatles'
+    song2 = "Let It Be" # "Hey Jude"
+    artist2 = "The Beatles"
     relationsDF = main(song1,artist1,song2,artist2) # relationsDF es un DataFrame
 
     return response.html(relationsDF.to_html())
+
 
 @app.route("/graph4")
 async def test(request):
@@ -276,9 +280,11 @@ async def test(request):
 async def test(request):
     thislist = request.query_args # Esta es la lista de argumentos recibidos en la URL
 
-    song1= thislist[0][1]
-    song2= thislist[1][1]
-    relationsDF = main(song1,song2) # relationsDF es un DataFrame
+    song1 = thislist[0][1]
+    artist1 = thislist[1][1]
+    song2 = thislist[2][1]
+    artist2 = thislist[3][1]
+    relationsDF = main(song1, artist1, song2, artist2) # relationsDF es un DataFrame
 
     with open(os.getcwd() + '/static/js/prueba.js', 'w') as file:
         file.write("""
