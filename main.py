@@ -259,14 +259,44 @@ async def test(request):
 @app.route("/table")
 async def test(request):
     
-    song1 = "Start Me Up" # "(I Can't Get No) Satisfaction"
+    song1 = "(I Can't Get No) Satisfaction" # "Start Me Up"
     artist1 = "The Rolling Stones"
 
-    song2 = "Let It Be" # "Hey Jude"
+    song2 = "Hey Jude" # "Let It Be"
     artist2 = "The Beatles"
     relationsDF = main(song1,artist1,song2,artist2) # relationsDF es un DataFrame
 
-    return response.html(relationsDF.to_html())
+    # Nos quedamos con un dataframe en el que solo aparecen las relaciones directas
+    level = relationsDF.loc[(relationsDF['Level_x'] == 2) & (relationsDF['Level_y'] == 2)]
+    index = level.index.values.tolist()
+
+    auxNodes = '''[
+    {id: "''' + song1 + '''", label: "''' + song1 + '''", group: 1, level: 1},
+    {id: "''' + song2 + '''", label: "''' + song2 + '''", group: 1, level: 7},
+    {id: "''' + artist1 + '''", label: "''' + artist1 + '''", group: 2, level: 2},
+    {id: "''' + artist2 + '''", label: "''' + artist2 + '''", group: 2, level: 6}'''
+
+    auxEdges = '''[
+    {from: "''' + song1 + '''", label: "artist", to: "''' + artist1 + '''"},
+    {from: "''' + song2 + '''", label: "artist", to: "''' + artist2 + '''"}'''
+
+    # Recorremos todas las relaciones del nivel 1
+    for i in index:
+        auxNodes = auxNodes + ''',
+    {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: 3, level: 4}'''
+
+        auxEdges = auxEdges + ''',
+    {from: "''' + level.at[i, 'ID_x'] + '''", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"},
+    {from: "''' + level.at[i, 'ID_y'] + '''", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
+    
+    myNodes = auxNodes + '''
+]'''
+
+    myEdges = auxEdges + '''
+]'''
+
+    #return response.html(relationsDF.to_html())
+    return response.text(myNodes)
 
 
 @app.route("/graph4")
@@ -286,37 +316,41 @@ async def test(request):
     artist2 = thislist[3][1]
     relationsDF = main(song1, artist1, song2, artist2) # relationsDF es un DataFrame
 
-    with open(os.getcwd() + '/static/js/prueba.js', 'w') as file:
-        file.write("""
-// create an array with nodes
-var nodes = new vis.DataSet([
-    {id: 1, label: 'Node 1', level: 2},
-    {id: 2, label: 'Node 2', level: 4},
-    {id: 3, label: 'Satisfaction', level: 1},
-    {id: 4, label: 'Hey Jude', level: 5},
-    {id: 5, label: 'Node 5', level: 3},
-    {id: 6, label: 'Node 6', level: 3}
-]);
+    # Nos quedamos con un dataframe en el que solo aparecen las relaciones directas
+    level = relationsDF.loc[(relationsDF['Level_x'] == 2) & (relationsDF['Level_y'] == 2)]
+    index = level.index.values.tolist()
 
-// create an array with edges
-var edges = new vis.DataSet([
-    {from: 3, to: 1},
-    {from: 1, to: 5},
-    {from: 4, to: 2},
-    {from: 2, to: 5},
-    {from: 1, to: 6},
-    {from: 2, to: 6}
-]);
+    auxNodes = '''[
+    {id: "''' + song1 + '''", label: "''' + song1 + '''", group: 1, level: 1},
+    {id: "''' + song2 + '''", label: "''' + song2 + '''", group: 1, level: 7},
+    {id: "''' + artist1 + '''", label: "''' + artist1 + '''", group: 2, level: 2},
+    {id: "''' + artist2 + '''", label: "''' + artist2 + '''", group: 2, level: 6}'''
 
-// create a network
-var container = document.getElementById('mynetwork');
+    auxEdges = '''[
+    {from: "''' + song1 + '''", label: "artist", to: "''' + artist1 + '''"},
+    {from: "''' + song2 + '''", label: "artist", to: "''' + artist2 + '''"}'''
 
-// provide the data in the vis format
-var data = {
+    # Recorremos todas las relaciones del nivel 1
+    for i in index:
+        auxNodes = auxNodes + ''',
+    {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: 3, level: 4}'''
+
+        auxEdges = auxEdges + ''',
+    {from: "''' + level.at[i, 'ID_x'] + '''", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"},
+    {from: "''' + level.at[i, 'ID_y'] + '''", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
+    
+    myNodes = auxNodes + '''
+]'''
+
+    myEdges = auxEdges + '''
+]'''
+
+    myData = """{
     nodes: nodes,
     edges: edges
-};
-var options = {
+}"""
+
+    myOptions = """{
     layout: {
         hierarchical: {
             direction: 'LR'
@@ -328,8 +362,29 @@ var options = {
             type: 'cubicBezier',
             forceDirection: 'horizontal'
         }
+    },
+    nodes: {
+        shape: 'box',
+        widthConstraint: {
+            maximum: 120
+        }
     }
-};
+}"""
+
+    with open(os.getcwd() + '/static/js/graph.js', 'w') as file:
+        file.write(f"""
+// create an array with nodes
+var nodes = new vis.DataSet({myNodes});
+
+// create an array with edges
+var edges = new vis.DataSet({myEdges});
+
+// create a network
+var container = document.getElementById('mynetwork');
+
+// provide the data in the vis format
+var data = {myData};
+var options = {myOptions};
 
 // initialize your network!
 var network = new vis.Network(container, data, options);
