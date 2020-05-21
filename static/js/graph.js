@@ -1,18 +1,16 @@
 // create an array with nodes
 var nodes = new vis.DataSet([
-    {id: "(I Can't Get No) Satisfaction", label: "(I Can't Get No) Satisfaction", group: 1, level: 1},
-    {id: "Hey Jude", label: "Hey Jude", group: 1, level: 7},
-    {id: "The Rolling Stones", label: "The Rolling Stones", group: 2, level: 2},
-    {id: "The Beatles", label: "The Beatles", group: 2, level: 6},
-    {id: "English", label: "English", group: 3, level: 4}
+    {id: "Start Me UpSX", label: "Start Me Up", group: 1, level: 1},
+    {id: "(I Can't Get No) SatisfactionSY", label: "(I Can't Get No) Satisfaction", group: 1, level: 7},
+    {id: "The Rolling Stones", label: "The Rolling Stones", group: 2, level: 4}
 ]);
 
 // create an array with edges
 var edges = new vis.DataSet([
-    {from: "(I Can't Get No) Satisfaction", label: "artist", to: "The Rolling Stones"},
-    {from: "Hey Jude", label: "artist", to: "The Beatles"},
-    {from: "(I Can't Get No) Satisfaction", label: "language", to: "English"},
-    {from: "Hey Jude", label: "language", to: "English"}
+    {from: "Start Me UpSX", label: "artist", to: "The Rolling Stones"},
+    {from: "(I Can't Get No) SatisfactionSY", label: "artist", to: "The Rolling Stones"},
+    {from: "Start Me UpSX", label: "intérprete", to: "The Rolling Stones"},
+    {from: "(I Can't Get No) SatisfactionSY", label: "intérprete", to: "The Rolling Stones"}
 ]);
 
 // create a network
@@ -26,22 +24,24 @@ var data = {
 var options = {
     layout: {
         hierarchical: {
-            direction: 'LR'
+            direction: 'LR',
+            levelSeparation: 250
         }
     },
     edges: {
-        arrows: 'to',
+        arrows: 'to'/*,
         smooth: {
             type: 'cubicBezier',
             forceDirection: 'horizontal'
-        }
+        }*/
     },
     nodes: {
         shape: 'box',
         widthConstraint: {
             maximum: 120
         }
-    }
+    },
+    physics: false
 };
 
 // initialize your network!

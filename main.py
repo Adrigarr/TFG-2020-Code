@@ -106,6 +106,111 @@ def main(arg1,arg2,arg3,arg4):
 
 
 
+# ----------------------------    FUNCIONES PARA DIBUJAR EL GRAFO --------------------------
+
+def song(level, i, auxNodes, songX, songY, artistX, artistY):
+    subNodes = ''
+    subEdges = ''
+
+    # Añadimos el nodo de la propiedad si es necesario
+    if (level.at[i, 'valueProperty'] not in auxNodes):
+        subNodes = ''',
+    {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: 3, level: 4}'''
+
+    # Añadimos las aristas para unir la propiedad con ambas canciones
+    subEdges = ''',
+    {from: "''' + level.at[i, 'ID_x'] + '''SX", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"},
+    {from: "''' + level.at[i, 'ID_y'] + '''SY", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
+
+    return [subNodes, subEdges]
+
+def genre(level, i, auxNodes, songX, songY, artistX, artistY):
+    subNodes = ''
+    subEdges = ''
+
+    # Añadimos el nodo del género X si es necesario, además de una arista para unirlo a la primera canción
+    if ((level.at[i, 'ID_x'] + 'GX') not in auxNodes):
+        subNodes = ''',
+    {id: "''' + level.at[i, 'ID_x'] + '''GX", label: "''' + level.at[i, 'ID_x'] + '''", group: 4, level: 3}'''
+
+        subEdges = ''',
+    {from: "''' + songX + '''SX", label: "genre", to: "''' + level.at[i, 'ID_x'] + '''GX"}'''
+
+    # Añadimos el nodo del género Y si es necesario, además de una arista para unirlo a la segunda canción
+    if ((level.at[i, 'ID_y'] + 'GY') not in auxNodes):
+        subNodes = subNodes + ''',
+    {id: "''' + level.at[i, 'ID_y'] + '''GY", label: "''' + level.at[i, 'ID_y'] + '''", group: 4, level: 5}'''
+
+        subEdges = subEdges + ''',
+    {from: "''' + songY + '''SY", label: "genre", to: "''' + level.at[i, 'ID_y'] + '''GY"}'''
+
+    # Añadimos el nodo de la propiedad si es necesario
+    if (level.at[i, 'valueProperty'] not in auxNodes):
+        subNodes = subNodes + ''',
+    {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: 3, level: 4}'''
+
+    # Añadimos las aristas para unir la propiedad con ambos géneros
+    subEdges = subEdges + ''',
+    {from: "''' + level.at[i, 'ID_x'] + '''GX", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"},
+    {from: "''' + level.at[i, 'ID_y'] + '''GY", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
+
+    return [subNodes, subEdges]
+
+def artist(level, i, auxNodes, songX, songY, artistX, artistY):
+    subNodes = ''
+    subEdges = ''
+
+    # Añadimos el nodo de la propiedad si es necesario
+    if (level.at[i, 'valueProperty'] not in auxNodes):
+        subNodes = subNodes + ''',
+    {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: 3, level: 4}'''
+
+    # Añadimos las aristas para unir la propiedad con ambos artistas
+    subEdges = subEdges + ''',
+    {from: "''' + level.at[i, 'ID_x'] + '''AX", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"},
+    {from: "''' + level.at[i, 'ID_y'] + '''AY", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
+
+    return [subNodes, subEdges]
+
+def member(level, i, auxNodes, songX, songY, artistX, artistY):
+    subNodes = ''
+    subEdges = ''
+
+    # Añadimos el nodo del miembro X si es necesario, además de una arista para unirlo al primer artista
+    if ((level.at[i, 'ID_x'] + 'MX') not in auxNodes):
+        subNodes = ''',
+    {id: "''' + level.at[i, 'ID_x'] + '''MX", label: "''' + level.at[i, 'ID_x'] + '''", group: 5, level: 3}'''
+
+        subEdges = ''',
+    {from: "''' + artistX + '''AX", label: "member", to: "''' + level.at[i, 'ID_x'] + '''MX"}'''
+
+    # Añadimos el nodo del miembro Y si es necesario, además de una arista para unirlo al segundo artista
+    if ((level.at[i, 'ID_y'] + 'MY') not in auxNodes):
+        subNodes = subNodes + ''',
+    {id: "''' + level.at[i, 'ID_y'] + '''MY", label: "''' + level.at[i, 'ID_y'] + '''", group: 5, level: 5}'''
+
+        subEdges = subEdges + ''',
+    {from: "''' + artistY + '''AY", label: "member", to: "''' + level.at[i, 'ID_y'] + '''MY"}'''
+
+    # Añadimos el nodo de la propiedad si es necesario
+    if (level.at[i, 'valueProperty'] not in auxNodes):
+        subNodes = subNodes + ''',
+    {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: 3, level: 4}'''
+
+    # Añadimos las aristas para unir la propiedad con ambos miembros
+    subEdges = subEdges + ''',
+    {from: "''' + level.at[i, 'ID_x'] + '''MX", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"},
+    {from: "''' + level.at[i, 'ID_y'] + '''MY", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
+
+    return [subNodes, subEdges]
+ 
+switcher = {
+        2: song,
+        3: genre,
+        4: artist,
+        5: member
+    }
+
 # ----------------------------    SECCIÓN DE LA APP Y SUS RUTAS ----------------------------
 
 app = Sanic()
@@ -126,137 +231,26 @@ async def test(request):
         'index2.html'
     )
 
-# Esta es la ruta en la que se muestra nuestro estudio
-# Por ahora muestra el dataframe dentro de una tabla,
-# se sustituirá por un grafo en una actualización futura
-@app.route("/result")
+@app.route("/table")
 async def test(request):
     thislist = request.query_args # Esta es la lista de argumentos recibidos en la URL
 
-    song1= thislist[0][1]
-    song2= thislist[1][1]
-    relationsDF = main(song1,song2) # relationsDF es un DataFrame
+    #song1 = thislist[0][1]
+    #artist1 = thislist[1][1]
+    #song2 = thislist[2][1]
+    #artist2 = thislist[3][1]
 
-    # Nos quedamos con un dataframe en el que solo aparecen las relaciones directas
-    level = relationsDF.loc[(relationsDF['Level_x'] == 1) & (relationsDF['Level_y'] == 1)]
-    index = level.index.values.tolist()
-    
-    # graph es un diccionario String:(lista de diccionarios)
-    # Creamos el grafo sin aristas y con los nodos de las 2 canciones
-    graph = {
-        "nodes": [
-          {
-            "id": 1,
-            "caption": "(I can't get no) Satisfaction",
-            "root": True,
-            "cluster": 1
-          },
-          {
-            "id": 2,
-            "caption": "Hey Jude",
-            "root": True,
-            "cluster": 2
-          },
-          {
-            "id": 3,
-            "caption": "aux1",
-            "cluster": 3
-          },
-          {
-            "id": 4,
-            "caption": "aux2",
-            "cluster": 3
-          },
-          {
-            "id": 5,
-            "caption": "aux3",
-            "cluster": 3
-          },
-          {
-            "id": 6,
-            "caption": "aux4",
-            "cluster": 3
-          }
-        ],
-        "edges": [
-            {
-                "source": 1,
-                "target": 3
-            },
-            {
-                "source": 3,
-                "target": 4
-            },
-            {
-                "source": 2,
-                "target": 5
-            },
-            {
-                "source": 5,
-                "target": 4
-            },
-            {
-                "source": 3,
-                "target": 6
-            },
-            {
-                "source": 5,
-                "target": 6
-            }
-        ]
-      }
+    song1 = "(I Can't Get No) Satisfaction" # "Start Me Up"
+    artist1 = "The Rolling Stones"
+    song2 = "Hey Jude" # "Let It Be"
+    artist2 = "The Beatles"
 
-    # Recorremos todas las relaciones del nivel 1
-    for i in index:
-        # Añadimos un nodo
-        aux1 = {
-            "id": len(graph["nodes"])+1, # ID que toca usar
-            "caption": level.at[i, 'valueProperty'], # Valor de la propiedad
-            "cluster": 4
-        }
-        graph["nodes"].append(aux1)
-
-        # Añadimos dos aristas para este nodo
-        aux2 = {
-            "source": 1, # ID de la primera canción
-            "target": aux1["id"], # ID del nodo que acabamos de crear
-            "caption": level.at[i, 'idPropertyName'] # Nombre de la propiedad
-        }
-        aux3 = {
-            "source": 2, # ID de la segunda canción
-            "target": aux1["id"], # ID del nodo que acabamos de crear
-            "caption": level.at[i, 'idPropertyName'] # Nombre de la propiedad
-        }
-        graph["edges"].append(aux2)
-        graph["edges"].append(aux3)
-
-    # Guardamos el grafo en un archivo .json
-    with open(os.getcwd() + '/static/data/level1.json', 'w', encoding='utf-8') as f:
-        json.dump(graph, f, ensure_ascii=False)
-
-    return template(
-        'graph4.html'
-    )
-
-    #return response.json(open(os.getcwd() + '/static/data/level1.json', 'r').read())
-    #return response.html(level.to_html())
-    #return response.text(graph["edges"])
-
-    #return response.html(relationsDF.to_html())
-
-@app.route("/result2")
-async def test(request):
-    thislist = request.query_args # Esta es la lista de argumentos recibidos en la URL
-
-    song1 = thislist[0][1]
-    artist1 = thislist[1][1]
-    song2 = thislist[2][1]
-    artist2 = thislist[3][1]
     relationsDF = main(song1, artist1, song2, artist2) # relationsDF es un DataFrame
 
     return response.html(relationsDF.to_html())
 
-@app.route("/table")
+
+@app.route("/result")
 async def test(request):
     
     song1 = "(I Can't Get No) Satisfaction" # "Start Me Up"
@@ -267,35 +261,38 @@ async def test(request):
     relationsDF = main(song1,artist1,song2,artist2) # relationsDF es un DataFrame
 
     # Nos quedamos con un dataframe en el que solo aparecen las relaciones directas
-    level = relationsDF.loc[(relationsDF['Level_x'] == 2) & (relationsDF['Level_y'] == 2)]
+    level = relationsDF.loc[relationsDF['Level_x'] == relationsDF['Level_y']]
+    level.sort_values(by=['Level_x'], inplace= True)
     index = level.index.values.tolist()
 
     auxNodes = '''[
-    {id: "''' + song1 + '''", label: "''' + song1 + '''", group: 1, level: 1},
-    {id: "''' + song2 + '''", label: "''' + song2 + '''", group: 1, level: 7},
-    {id: "''' + artist1 + '''", label: "''' + artist1 + '''", group: 2, level: 2},
-    {id: "''' + artist2 + '''", label: "''' + artist2 + '''", group: 2, level: 6}'''
+    {id: "''' + song1 + '''SX", label: "''' + song1 + '''", group: 1, level: 1},
+    {id: "''' + song2 + '''SY", label: "''' + song2 + '''", group: 1, level: 7},
+    {id: "''' + artist1 + '''AX", label: "''' + artist1 + '''", group: 2, level: 2},
+    {id: "''' + artist2 + '''AY", label: "''' + artist2 + '''", group: 2, level: 6}'''
 
     auxEdges = '''[
-    {from: "''' + song1 + '''", label: "artist", to: "''' + artist1 + '''"},
-    {from: "''' + song2 + '''", label: "artist", to: "''' + artist2 + '''"}'''
+    {from: "''' + song1 + '''SX", label: "artist", to: "''' + artist1 + '''AX"},
+    {from: "''' + song2 + '''SY", label: "artist", to: "''' + artist2 + '''AY"}'''
+
 
     # Recorremos todas las relaciones del nivel 1
     for i in index:
-        auxNodes = auxNodes + ''',
-    {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: 3, level: 4}'''
+        # Get the function from switcher dictionary
+        func = switcher.get(level.at[i, 'Level_x'], "nothing")
+        # Execute the function
+        sub = func(level, i, auxNodes, song1, song2, artist1, artist2)
 
-        auxEdges = auxEdges + ''',
-    {from: "''' + level.at[i, 'ID_x'] + '''", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"},
-    {from: "''' + level.at[i, 'ID_y'] + '''", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
-    
+        auxNodes = auxNodes + sub[0]
+        auxEdges = auxEdges + sub[1]
+
     myNodes = auxNodes + '''
 ]'''
 
     myEdges = auxEdges + '''
 ]'''
 
-    #return response.html(relationsDF.to_html())
+    #return response.html(level.to_html())
     return response.text(myNodes)
 
 
@@ -314,31 +311,47 @@ async def test(request):
     artist1 = thislist[1][1]
     song2 = thislist[2][1]
     artist2 = thislist[3][1]
-    relationsDF = main(song1, artist1, song2, artist2) # relationsDF es un DataFrame
-
-    # Nos quedamos con un dataframe en el que solo aparecen las relaciones directas
-    level = relationsDF.loc[(relationsDF['Level_x'] == 2) & (relationsDF['Level_y'] == 2)]
-    index = level.index.values.tolist()
+    relationsDF = main(song1,artist1,song2,artist2) # relationsDF es un DataFrame
 
     auxNodes = '''[
-    {id: "''' + song1 + '''", label: "''' + song1 + '''", group: 1, level: 1},
-    {id: "''' + song2 + '''", label: "''' + song2 + '''", group: 1, level: 7},
-    {id: "''' + artist1 + '''", label: "''' + artist1 + '''", group: 2, level: 2},
-    {id: "''' + artist2 + '''", label: "''' + artist2 + '''", group: 2, level: 6}'''
+    {id: "''' + song1 + '''SX", label: "''' + song1 + '''", group: 1, level: 1},
+    {id: "''' + song2 + '''SY", label: "''' + song2 + '''", group: 1, level: 7}'''
 
-    auxEdges = '''[
-    {from: "''' + song1 + '''", label: "artist", to: "''' + artist1 + '''"},
-    {from: "''' + song2 + '''", label: "artist", to: "''' + artist2 + '''"}'''
+
+    if (artist1 == artist2):
+        auxNodes = auxNodes + ''',
+    {id: "''' + artist1 + '''", label: "''' + artist1 + '''", group: 2, level: 4}'''
+        auxEdges = '''[
+    {from: "''' + song1 + '''SX", label: "artist", to: "''' + artist1 + '''"},
+    {from: "''' + song2 + '''SY", label: "artist", to: "''' + artist1 + '''"}'''
+
+        # Nos quedamos con un dataframe en el que solo aparecen las relaciones directas
+        level = relationsDF.loc[(relationsDF['Level_x'] == 2) & (relationsDF['Level_y'] == 2)]
+
+    else:
+        auxNodes = auxNodes + ''',
+    {id: "''' + artist1 + '''AX", label: "''' + artist1 + '''", group: 2, level: 2},
+    {id: "''' + artist2 + '''AY", label: "''' + artist2 + '''", group: 2, level: 6}'''
+        auxEdges = '''[
+    {from: "''' + song1 + '''SX", label: "artist", to: "''' + artist1 + '''AX"},
+    {from: "''' + song2 + '''SY", label: "artist", to: "''' + artist2 + '''AY"}'''
+
+        # Nos quedamos con un dataframe en el que solo aparecen las relaciones directas
+        level = relationsDF.loc[relationsDF['Level_x'] == relationsDF['Level_y']]
+        level.sort_values(by=['Level_x'], inplace= True)
+
+    index = level.index.values.tolist()
 
     # Recorremos todas las relaciones del nivel 1
     for i in index:
-        auxNodes = auxNodes + ''',
-    {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: 3, level: 4}'''
+        # Get the function from switcher dictionary
+        func = switcher.get(level.at[i, 'Level_x'], "nothing")
+        # Execute the function
+        sub = func(level, i, auxNodes, song1, song2, artist1, artist2) #ERROR
 
-        auxEdges = auxEdges + ''',
-    {from: "''' + level.at[i, 'ID_x'] + '''", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"},
-    {from: "''' + level.at[i, 'ID_y'] + '''", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
-    
+        auxNodes = auxNodes + sub[0]
+        auxEdges = auxEdges + sub[1]
+
     myNodes = auxNodes + '''
 ]'''
 
@@ -353,22 +366,24 @@ async def test(request):
     myOptions = """{
     layout: {
         hierarchical: {
-            direction: 'LR'
+            direction: 'LR',
+            levelSeparation: 250
         }
     },
     edges: {
-        arrows: 'to',
+        arrows: 'to'/*,
         smooth: {
             type: 'cubicBezier',
             forceDirection: 'horizontal'
-        }
+        }*/
     },
     nodes: {
         shape: 'box',
         widthConstraint: {
             maximum: 120
         }
-    }
+    },
+    physics: false
 }"""
 
     with open(os.getcwd() + '/static/js/graph.js', 'w') as file:
