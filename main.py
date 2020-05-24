@@ -113,7 +113,7 @@ def song(level, i, auxNodes, songX, songY, artistX, artistY):
     subEdges = ''
 
     # Añadimos el nodo de la propiedad si es necesario
-    if (level.at[i, 'valueProperty'] not in auxNodes):
+    if (('id: "'+level.at[i, 'valueProperty']+'",') not in auxNodes):
         subNodes = ''',
     {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: 3, level: 4}'''
 
@@ -131,7 +131,7 @@ def genre(level, i, auxNodes, songX, songY, artistX, artistY):
     # Añadimos el nodo del género X si es necesario, además de una arista para unirlo a la primera canción
     if ((level.at[i, 'ID_x'] + 'GX') not in auxNodes):
         subNodes = ''',
-    {id: "''' + level.at[i, 'ID_x'] + '''GX", label: "''' + level.at[i, 'ID_x'] + '''", group: 4, level: 3}'''
+    {id: "''' + level.at[i, 'ID_x'] + '''GX", label: "''' + level.at[i, 'ID_x'] + ''' ", group: 4, level: 3}'''
 
         subEdges = ''',
     {from: "''' + songX + '''SX", label: "genre", to: "''' + level.at[i, 'ID_x'] + '''GX"}'''
@@ -139,13 +139,13 @@ def genre(level, i, auxNodes, songX, songY, artistX, artistY):
     # Añadimos el nodo del género Y si es necesario, además de una arista para unirlo a la segunda canción
     if ((level.at[i, 'ID_y'] + 'GY') not in auxNodes):
         subNodes = subNodes + ''',
-    {id: "''' + level.at[i, 'ID_y'] + '''GY", label: "''' + level.at[i, 'ID_y'] + '''", group: 4, level: 5}'''
+    {id: "''' + level.at[i, 'ID_y'] + '''GY", label: "''' + level.at[i, 'ID_y'] + ''' ", group: 4, level: 5}'''
 
         subEdges = subEdges + ''',
     {from: "''' + songY + '''SY", label: "genre", to: "''' + level.at[i, 'ID_y'] + '''GY"}'''
 
     # Añadimos el nodo de la propiedad si es necesario
-    if (level.at[i, 'valueProperty'] not in auxNodes):
+    if (('id: "'+level.at[i, 'valueProperty']+'",') not in auxNodes):
         subNodes = subNodes + ''',
     {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: 3, level: 4}'''
 
@@ -161,7 +161,7 @@ def artist(level, i, auxNodes, songX, songY, artistX, artistY):
     subEdges = ''
 
     # Añadimos el nodo de la propiedad si es necesario
-    if (level.at[i, 'valueProperty'] not in auxNodes):
+    if (('id: "'+level.at[i, 'valueProperty']+'",') not in auxNodes):
         subNodes = subNodes + ''',
     {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: 3, level: 4}'''
 
@@ -179,7 +179,7 @@ def member(level, i, auxNodes, songX, songY, artistX, artistY):
     # Añadimos el nodo del miembro X si es necesario, además de una arista para unirlo al primer artista
     if ((level.at[i, 'ID_x'] + 'MX') not in auxNodes):
         subNodes = ''',
-    {id: "''' + level.at[i, 'ID_x'] + '''MX", label: "''' + level.at[i, 'ID_x'] + '''", group: 5, level: 3}'''
+    {id: "''' + level.at[i, 'ID_x'] + '''MX", label: "''' + level.at[i, 'ID_x'] + ''' ", group: 5, level: 3}'''
 
         subEdges = ''',
     {from: "''' + artistX + '''AX", label: "member", to: "''' + level.at[i, 'ID_x'] + '''MX"}'''
@@ -187,13 +187,13 @@ def member(level, i, auxNodes, songX, songY, artistX, artistY):
     # Añadimos el nodo del miembro Y si es necesario, además de una arista para unirlo al segundo artista
     if ((level.at[i, 'ID_y'] + 'MY') not in auxNodes):
         subNodes = subNodes + ''',
-    {id: "''' + level.at[i, 'ID_y'] + '''MY", label: "''' + level.at[i, 'ID_y'] + '''", group: 5, level: 5}'''
+    {id: "''' + level.at[i, 'ID_y'] + '''MY", label: "''' + level.at[i, 'ID_y'] + ''' ", group: 5, level: 5}'''
 
         subEdges = subEdges + ''',
     {from: "''' + artistY + '''AY", label: "member", to: "''' + level.at[i, 'ID_y'] + '''MY"}'''
 
     # Añadimos el nodo de la propiedad si es necesario
-    if (level.at[i, 'valueProperty'] not in auxNodes):
+    if (('id: "'+level.at[i, 'valueProperty']+'",') not in auxNodes):
         subNodes = subNodes + ''',
     {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: 3, level: 4}'''
 
@@ -247,7 +247,10 @@ async def test(request):
 
     relationsDF = main(song1, artist1, song2, artist2) # relationsDF es un DataFrame
 
-    return response.html(relationsDF.to_html())
+    level = relationsDF.loc[relationsDF['Level_x'] == relationsDF['Level_y']]
+    level.sort_values(by=['Level_x', 'idPropertyName', 'valueProperty'], inplace= True)
+
+    return response.html(level.to_html())
 
 
 @app.route("/result")
@@ -327,6 +330,7 @@ async def test(request):
 
         # Nos quedamos con un dataframe en el que solo aparecen las relaciones directas
         level = relationsDF.loc[(relationsDF['Level_x'] == 2) & (relationsDF['Level_y'] == 2)]
+        level.sort_values(by=['Level_x', 'idPropertyName', 'valueProperty'], inplace= True)
 
     else:
         auxNodes = auxNodes + ''',
@@ -338,7 +342,7 @@ async def test(request):
 
         # Nos quedamos con un dataframe en el que solo aparecen las relaciones directas
         level = relationsDF.loc[relationsDF['Level_x'] == relationsDF['Level_y']]
-        level.sort_values(by=['Level_x'], inplace= True)
+        level.sort_values(by=['Level_x', 'idPropertyName', 'valueProperty'], inplace= True)
 
     index = level.index.values.tolist()
 
@@ -386,7 +390,13 @@ async def test(request):
     physics: false
 }"""
 
-    with open(os.getcwd() + '/static/js/graph.js', 'w') as file:
+    # Añadimos la hora actual al .js para tener un control de versiones.
+    # De esta forma nos aseguramos de que el cliente tenga siempre el .js
+    # correcto.
+    x = datetime.now()
+    date = f"{x.year}{x.month}{x.day}{x.hour}{x.minute}{x.second}"
+
+    with open(os.getcwd() + '/static/js/graph' + date + '.js', 'w') as file:
         file.write(f"""
 // create an array with nodes
 var nodes = new vis.DataSet({myNodes});
@@ -406,7 +416,8 @@ var network = new vis.Network(container, data, options);
 """.strip())
 
     return template(
-        'graph.html'
+        'graph.html',
+        var1 = date
     )
 
 if __name__ == '__main__':
