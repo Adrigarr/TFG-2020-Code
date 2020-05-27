@@ -9,6 +9,7 @@ from sanic import response
 from jinja2 import Environment, PackageLoader, select_autoescape
 import os
 import json
+import re
 
 
 # define the environment for the Jinja2 templates
@@ -108,9 +109,9 @@ def main(arg1,arg2,arg3,arg4):
 
 # ----------------------------    FUNCIONES PARA DIBUJAR EL GRAFO --------------------------
 
-def song(level, i, auxNodes, songX, songY, artistX, artistY):
+def song(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY):
     subNodes = ''
-    subEdges = ''
+    subEdges = auxEdges
 
     # Añadimos el nodo de la propiedad si es necesario
     if (('id: "'+level.at[i, 'valueProperty']+'",') not in auxNodes):
@@ -118,22 +119,22 @@ def song(level, i, auxNodes, songX, songY, artistX, artistY):
     {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: 3, level: 4}'''
 
     # Añadimos las aristas para unir la propiedad con ambas canciones
-    subEdges = ''',
+    subEdges += ''',
     {from: "''' + level.at[i, 'ID_x'] + '''SX", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"},
     {from: "''' + level.at[i, 'ID_y'] + '''SY", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
 
     return [subNodes, subEdges]
 
-def genre(level, i, auxNodes, songX, songY, artistX, artistY):
+def genre(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY):
     subNodes = ''
-    subEdges = ''
+    subEdges = auxEdges
 
     # Añadimos el nodo del género X si es necesario, además de una arista para unirlo a la primera canción
     if ((level.at[i, 'ID_x'] + 'GX') not in auxNodes):
         subNodes = ''',
     {id: "''' + level.at[i, 'ID_x'] + '''GX", label: "''' + level.at[i, 'ID_x'] + ''' ", group: 4, level: 3}'''
 
-        subEdges = ''',
+        subEdges += ''',
     {from: "''' + songX + '''SX", label: "genre", to: "''' + level.at[i, 'ID_x'] + '''GX"}'''
 
     # Añadimos el nodo del género Y si es necesario, además de una arista para unirlo a la segunda canción
@@ -141,7 +142,7 @@ def genre(level, i, auxNodes, songX, songY, artistX, artistY):
         subNodes = subNodes + ''',
     {id: "''' + level.at[i, 'ID_y'] + '''GY", label: "''' + level.at[i, 'ID_y'] + ''' ", group: 4, level: 5}'''
 
-        subEdges = subEdges + ''',
+        subEdges += ''',
     {from: "''' + songY + '''SY", label: "genre", to: "''' + level.at[i, 'ID_y'] + '''GY"}'''
 
     # Añadimos el nodo de la propiedad si es necesario
@@ -150,15 +151,15 @@ def genre(level, i, auxNodes, songX, songY, artistX, artistY):
     {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: 3, level: 4}'''
 
     # Añadimos las aristas para unir la propiedad con ambos géneros
-    subEdges = subEdges + ''',
+    subEdges += ''',
     {from: "''' + level.at[i, 'ID_x'] + '''GX", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"},
     {from: "''' + level.at[i, 'ID_y'] + '''GY", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
 
     return [subNodes, subEdges]
 
-def artist(level, i, auxNodes, songX, songY, artistX, artistY):
+def artist(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY):
     subNodes = ''
-    subEdges = ''
+    subEdges = auxEdges
 
     # Añadimos el nodo de la propiedad si es necesario
     if (('id: "'+level.at[i, 'valueProperty']+'",') not in auxNodes):
@@ -166,41 +167,107 @@ def artist(level, i, auxNodes, songX, songY, artistX, artistY):
     {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: 3, level: 4}'''
 
     # Añadimos las aristas para unir la propiedad con ambos artistas
-    subEdges = subEdges + ''',
+    subEdges += ''',
     {from: "''' + level.at[i, 'ID_x'] + '''AX", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"},
     {from: "''' + level.at[i, 'ID_y'] + '''AY", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
 
     return [subNodes, subEdges]
 
-def member(level, i, auxNodes, songX, songY, artistX, artistY):
+def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY):
     subNodes = ''
-    subEdges = ''
+    subEdges = auxEdges
 
     # Añadimos el nodo del miembro X si es necesario, además de una arista para unirlo al primer artista
-    if ((level.at[i, 'ID_x'] + 'MX') not in auxNodes):
+    if ('MembersX' not in auxNodes):
         subNodes = ''',
-    {id: "''' + level.at[i, 'ID_x'] + '''MX", label: "''' + level.at[i, 'ID_x'] + ''' ", group: 5, level: 3}'''
+    {id: "MembersX", label: "Miembros de ''' + artistX + '''", group: 5, level: 3}'''
+        subEdges += ''',
+    {from: "''' + artistX + '''AX", label: "miembros", to: "MembersX"}'''
 
-        subEdges = ''',
-    {from: "''' + artistX + '''AX", label: "member", to: "''' + level.at[i, 'ID_x'] + '''MX"}'''
 
     # Añadimos el nodo del miembro Y si es necesario, además de una arista para unirlo al segundo artista
-    if ((level.at[i, 'ID_y'] + 'MY') not in auxNodes):
-        subNodes = subNodes + ''',
-    {id: "''' + level.at[i, 'ID_y'] + '''MY", label: "''' + level.at[i, 'ID_y'] + ''' ", group: 5, level: 5}'''
-
-        subEdges = subEdges + ''',
-    {from: "''' + artistY + '''AY", label: "member", to: "''' + level.at[i, 'ID_y'] + '''MY"}'''
+    if ('MembersY' not in auxNodes):
+        subNodes = ''',
+    {id: "MembersY", label: "Miembros de ''' + artistY + '''", group: 5, level: 5}'''
+        subEdges += ''',
+    {from: "''' + artistY + '''AY", label: "miembros", to: "MembersY"}'''
 
     # Añadimos el nodo de la propiedad si es necesario
     if (('id: "'+level.at[i, 'valueProperty']+'",') not in auxNodes):
         subNodes = subNodes + ''',
     {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: 3, level: 4}'''
 
+
+
     # Añadimos las aristas para unir la propiedad con ambos miembros
-    subEdges = subEdges + ''',
-    {from: "''' + level.at[i, 'ID_x'] + '''MX", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"},
-    {from: "''' + level.at[i, 'ID_y'] + '''MY", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
+    x = level.at[i, 'ID_x']
+    y = level.at[i, 'ID_y']
+    buscadoX = 'from: "MembersX", label: "' + level.at[i, 'idPropertyName'] +'", title: ".*", value: ., to: "' + level.at[i, 'valueProperty'] + '"'
+    buscadoY = 'from: "MembersY", label: "' + level.at[i, 'idPropertyName'] +'", title: ".*", value: ., to: "' + level.at[i, 'valueProperty'] + '"'
+
+
+    # Buscamos todas las apariciones de buscadoX, con lo que obtenemos la arista exacta (si la hay)
+    encontradoX = re.findall(buscadoX, subEdges) # NOTA: Esto es una lista (que debería tener uno o cero elementos)
+
+    # Si ya existe esa arista, la estudiamos para editarla (si es necesario)
+    if encontradoX:
+
+        index = subEdges.find(encontradoX[0]) # La posición de la arista X
+        splited = buscadoX.split('.*') # Partimos nuestra búsqueda para tener la primera parte de la cadena, es decir, todo hasta llegar al título
+
+        # Si el miembro X no está en el título de la arista, lo añadimos y aumentamos el valor
+        # NOTA: Esta comprobación funciona porque el dataframe está ordenado. Si se cambia el orden, habría
+        #       que modificar esta parte
+        if (x not in subEdges[(index + len(splited[0])):]):
+
+            # Limpiamos el string de la arista para obtener el valor antiguo
+            auxiliar = re.sub('from: "MembersX", label: "' + level.at[i, 'idPropertyName'] +
+                '", title: ".*", value: ', '', encontradoX[0])
+
+            value = re.sub(', to: "' + level.at[i, 'valueProperty'] + '"', '', auxiliar)
+
+            # Actualizamos el valor
+            incremento = int(value) + 1
+            nuevaArista = encontradoX[0].replace(value,str(incremento))
+            subEdges = re.sub(encontradoX[0], nuevaArista, subEdges)    
+            
+            # Añadimos el nombre del miembro X al título de la arista
+            subEdges = subEdges[:(index + len(splited[0]))] + x + ', ' + subEdges[(index + len(splited[0])):]
+
+
+        # Buscamos todas las apariciones de buscadoX, con lo que obtenemos la arista exacta
+        encontradoY = re.findall(buscadoY, subEdges) # NOTA: Esto es una lista (que debería tener un solo elemento)
+
+        index = subEdges.find(encontradoY[0]) # La posición de la arista Y
+        splited = buscadoY.split('.*') # Partimos nuestra búsqueda para tener la primera parte de la cadena, es decir, todo hasta llegar al título
+
+        # Si el miembro Y no está en el título de la arista, lo añadimos y aumentamos el valor
+        # NOTA: Esta comprobación funciona porque el dataframe está ordenado. Si se cambia el orden, habría
+        #       que modificar esta parte
+        if (y not in subEdges[(index + len(splited[0])):]):   
+
+            # Limpiamos el string de la arista para obtener el valor antiguo
+            auxiliar = re.sub('from: "MembersY", label: "' + level.at[i, 'idPropertyName'] +
+                '", title: ".*", value: ','',encontradoY[0])
+
+            value = re.sub(', to: "' + level.at[i, 'valueProperty'] + '"', '', auxiliar)
+
+            # Actualizamos el valor
+            incremento = int(value) + 1
+            nuevaArista = encontradoY[0].replace(value,str(incremento))
+            subEdges = re.sub(encontradoY[0], nuevaArista, subEdges)
+
+            # Añadimos el nombre del miembro X al título de la arista
+            subEdges = subEdges[:(index + len(splited[0]))] + y + ', ' + subEdges[(index + len(splited[0])):]
+    
+
+    # Si no existe la arista de los miembros X a la propiedad, añadimos las dos aristas que forman la explicación
+    else:
+
+      subEdges += ''',
+    {from: "MembersX", label: "''' + level.at[i, 'idPropertyName'] + '''", title: "''' + x + '''", value: 1, to: "''' + level.at[i, 'valueProperty'] + '''"},
+    {from: "MembersY", label: "''' + level.at[i, 'idPropertyName'] + '''", title: "''' + y + '''", value: 1, to: "''' + level.at[i, 'valueProperty'] + '''"}'''
+
 
     return [subNodes, subEdges]
  
@@ -230,6 +297,11 @@ async def test(request):
     return template(
         'index2.html'
     )
+
+@app.route("/aux")
+async def test(request):
+
+    return response.text(globals())
 
 @app.route("/table")
 async def test(request):
@@ -284,7 +356,7 @@ async def test(request):
         # Get the function from switcher dictionary
         func = switcher.get(level.at[i, 'Level_x'], "nothing")
         # Execute the function
-        sub = func(level, i, auxNodes, song1, song2, artist1, artist2)
+        sub = func(level, i, auxNodes, auxEdges, song1, song2, artist1, artist2)
 
         auxNodes = auxNodes + sub[0]
         auxEdges = auxEdges + sub[1]
@@ -306,6 +378,7 @@ async def test(request):
         'graph4.html'
     )
 
+#WIP
 @app.route("/index")
 async def test(request):
     thislist = request.query_args # Esta es la lista de argumentos recibidos en la URL
@@ -320,12 +393,12 @@ async def test(request):
     {id: "''' + song1 + '''SX", label: "''' + song1 + '''", group: 1, level: 1},
     {id: "''' + song2 + '''SY", label: "''' + song2 + '''", group: 1, level: 7}'''
 
-
+    # Si ambos artistas coinciden, los tratamos como una explicación directa
     if (artist1 == artist2):
         auxNodes = auxNodes + ''',
     {id: "''' + artist1 + '''", label: "''' + artist1 + '''", group: 2, level: 4}'''
-        auxEdges = '''[
-    {from: "''' + song1 + '''SX", label: "artist", to: "''' + artist1 + '''"},
+
+        auxEdges = '''{from: "''' + song1 + '''SX", label: "artist", to: "''' + artist1 + '''"},
     {from: "''' + song2 + '''SY", label: "artist", to: "''' + artist1 + '''"}'''
 
         # Nos quedamos con un dataframe en el que solo aparecen las relaciones directas
@@ -336,8 +409,8 @@ async def test(request):
         auxNodes = auxNodes + ''',
     {id: "''' + artist1 + '''AX", label: "''' + artist1 + '''", group: 2, level: 2},
     {id: "''' + artist2 + '''AY", label: "''' + artist2 + '''", group: 2, level: 6}'''
-        auxEdges = '''[
-    {from: "''' + song1 + '''SX", label: "artist", to: "''' + artist1 + '''AX"},
+
+        auxEdges = '''{from: "''' + song1 + '''SX", label: "artist", to: "''' + artist1 + '''AX"},
     {from: "''' + song2 + '''SY", label: "artist", to: "''' + artist2 + '''AY"}'''
 
         # Nos quedamos con un dataframe en el que solo aparecen las relaciones directas
@@ -351,15 +424,16 @@ async def test(request):
         # Get the function from switcher dictionary
         func = switcher.get(level.at[i, 'Level_x'], "nothing")
         # Execute the function
-        sub = func(level, i, auxNodes, song1, song2, artist1, artist2) #ERROR
+        sub = func(level, i, auxNodes, auxEdges, song1, song2, artist1, artist2) #ERROR
 
         auxNodes = auxNodes + sub[0]
-        auxEdges = auxEdges + sub[1]
+        auxEdges = sub[1]
 
     myNodes = auxNodes + '''
 ]'''
 
-    myEdges = auxEdges + '''
+    myEdges = '''[
+    ''' + auxEdges + '''
 ]'''
 
     myData = """{
@@ -375,7 +449,14 @@ async def test(request):
         }
     },
     edges: {
-        arrows: 'to'/*,
+        arrows: 'to',
+        arrowStrikethrough: false,
+        scaling: {
+            label: false
+        },
+        font: {
+            size: 16
+        }/*,
         smooth: {
             type: 'cubicBezier',
             forceDirection: 'horizontal'
@@ -385,6 +466,9 @@ async def test(request):
         shape: 'box',
         widthConstraint: {
             maximum: 120
+        },
+        font: {
+            size: 18
         }
     },
     physics: false

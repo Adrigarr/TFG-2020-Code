@@ -17,8 +17,8 @@
 
     <style type="text/css">
         #mynetwork {
-            width: 600px;
-            height: 400px;
+            width: 1300px;
+            height: 900px;
             border: 1px solid lightgray;
         }
     </style>
@@ -65,7 +65,7 @@
         <br>
 
         <!-- Inicio del formulario que recoge las canciones -->
-        <form action="/index" target="_blank" method="get">
+        <form action="/index"  method="get"><!--target="_blank"-->
           <label for="xsong">First song:</label><br>
           <!-- <input type="text" id="xsong" name="xsong" value="Q158553"><br> -->
           <input list="songs" name="xsong">
@@ -97,16 +97,17 @@
         </form>
         <br>
         <br>
-        <center><div id="mynetwork"></div></center>
-
-        <script src="/static/js/graph{{var1}}.js"></script>
       </div>
-    </div>
-  </div>
+    </div> <!-- Row -->
+  </div> <!-- Container -->
+
+  <center><div id="mynetwork"></div></center>
 
   <!-- Bootstrap core JavaScript -->
   <script src="static/js/jquery.slim.min.js"></script>
   <script src="static/js/bootstrap.bundle.min.js"></script>
+  <!-- JavaScript para dibujar el grafo -->
+  <script src="/static/js/graph{{var1}}.js"></script>
 
 </body>
 
