@@ -116,7 +116,7 @@ def song(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY):
     # Añadimos el nodo de la propiedad si es necesario
     if (('id: "'+level.at[i, 'valueProperty']+'",') not in auxNodes):
         subNodes = ''',
-    {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: 3, level: 4}'''
+    {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: "songEx", level: 4}'''
 
     # Añadimos las aristas para unir la propiedad con ambas canciones
     subEdges += ''',
@@ -132,7 +132,7 @@ def genre(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY):
     # Añadimos el nodo del género X si es necesario, además de una arista para unirlo a la primera canción
     if ((level.at[i, 'ID_x'] + 'GX') not in auxNodes):
         subNodes = ''',
-    {id: "''' + level.at[i, 'ID_x'] + '''GX", label: "''' + level.at[i, 'ID_x'] + ''' ", group: 4, level: 3}'''
+    {id: "''' + level.at[i, 'ID_x'] + '''GX", label: "''' + level.at[i, 'ID_x'] + ''' ", group: "genre", level: 3}'''
 
         subEdges += ''',
     {from: "''' + songX + '''SX", label: "genre", to: "''' + level.at[i, 'ID_x'] + '''GX"}'''
@@ -140,7 +140,7 @@ def genre(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY):
     # Añadimos el nodo del género Y si es necesario, además de una arista para unirlo a la segunda canción
     if ((level.at[i, 'ID_y'] + 'GY') not in auxNodes):
         subNodes = subNodes + ''',
-    {id: "''' + level.at[i, 'ID_y'] + '''GY", label: "''' + level.at[i, 'ID_y'] + ''' ", group: 4, level: 5}'''
+    {id: "''' + level.at[i, 'ID_y'] + '''GY", label: "''' + level.at[i, 'ID_y'] + ''' ", group: "genre", level: 5}'''
 
         subEdges += ''',
     {from: "''' + songY + '''SY", label: "genre", to: "''' + level.at[i, 'ID_y'] + '''GY"}'''
@@ -148,7 +148,7 @@ def genre(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY):
     # Añadimos el nodo de la propiedad si es necesario
     if (('id: "'+level.at[i, 'valueProperty']+'",') not in auxNodes):
         subNodes = subNodes + ''',
-    {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: 3, level: 4}'''
+    {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: "genreEx", level: 4}'''
 
     # Añadimos las aristas para unir la propiedad con ambos géneros
     subEdges += ''',
@@ -164,7 +164,7 @@ def artist(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY):
     # Añadimos el nodo de la propiedad si es necesario
     if (('id: "'+level.at[i, 'valueProperty']+'",') not in auxNodes):
         subNodes = subNodes + ''',
-    {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: 3, level: 4}'''
+    {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: "artistEx", level: 4}'''
 
     # Añadimos las aristas para unir la propiedad con ambos artistas
     subEdges += ''',
@@ -180,7 +180,7 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY):
     # Añadimos el nodo del miembro X si es necesario, además de una arista para unirlo al primer artista
     if ('MembersX' not in auxNodes):
         subNodes = ''',
-    {id: "MembersX", label: "Miembros de ''' + artistX + '''", group: 5, level: 3}'''
+    {id: "MembersX", label: "Miembros de ''' + artistX + '''", group: "member", level: 3}'''
         subEdges += ''',
     {from: "''' + artistX + '''AX", label: "miembros", to: "MembersX"}'''
 
@@ -188,14 +188,14 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY):
     # Añadimos el nodo del miembro Y si es necesario, además de una arista para unirlo al segundo artista
     if ('MembersY' not in auxNodes):
         subNodes = ''',
-    {id: "MembersY", label: "Miembros de ''' + artistY + '''", group: 5, level: 5}'''
+    {id: "MembersY", label: "Miembros de ''' + artistY + '''", group: "member", level: 5}'''
         subEdges += ''',
     {from: "''' + artistY + '''AY", label: "miembros", to: "MembersY"}'''
 
     # Añadimos el nodo de la propiedad si es necesario
     if (('id: "'+level.at[i, 'valueProperty']+'",') not in auxNodes):
         subNodes = subNodes + ''',
-    {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: 3, level: 4}'''
+    {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: "memberEx", level: 4}'''
 
 
 
@@ -298,11 +298,7 @@ async def test(request):
         'index2.html'
     )
 
-@app.route("/aux")
-async def test(request):
-
-    return response.text(globals())
-
+# TEMPORAL
 @app.route("/table")
 async def test(request):
     thislist = request.query_args # Esta es la lista de argumentos recibidos en la URL
@@ -319,12 +315,16 @@ async def test(request):
 
     relationsDF = main(song1, artist1, song2, artist2) # relationsDF es un DataFrame
 
+    nolevel = relationsDF.loc[relationsDF['Level_x'] != relationsDF['Level_y']]
+    nolevel.sort_values(by=['Level_x', 'Level_y', 'valueProperty'], inplace= True)
+
     level = relationsDF.loc[relationsDF['Level_x'] == relationsDF['Level_y']]
     level.sort_values(by=['Level_x', 'idPropertyName', 'valueProperty'], inplace= True)
 
-    return response.html(level.to_html())
+    return response.html(nolevel.to_html())
 
 
+# TEMPORAL
 @app.route("/result")
 async def test(request):
     
@@ -371,6 +371,7 @@ async def test(request):
     return response.text(myNodes)
 
 
+# TEMPORAL
 @app.route("/graph4")
 async def test(request):
 
@@ -390,13 +391,13 @@ async def test(request):
     relationsDF = main(song1,artist1,song2,artist2) # relationsDF es un DataFrame
 
     auxNodes = '''[
-    {id: "''' + song1 + '''SX", label: "''' + song1 + '''", group: 1, level: 1},
-    {id: "''' + song2 + '''SY", label: "''' + song2 + '''", group: 1, level: 7}'''
+    {id: "''' + song1 + '''SX", label: "''' + song1 + '''", group: "song", level: 1},
+    {id: "''' + song2 + '''SY", label: "''' + song2 + '''", group: "song", level: 7}'''
 
     # Si ambos artistas coinciden, los tratamos como una explicación directa
     if (artist1 == artist2):
         auxNodes = auxNodes + ''',
-    {id: "''' + artist1 + '''", label: "''' + artist1 + '''", group: 2, level: 4}'''
+    {id: "''' + artist1 + '''", label: "''' + artist1 + '''", group: "artist", level: 4}'''
 
         auxEdges = '''{from: "''' + song1 + '''SX", label: "artist", to: "''' + artist1 + '''"},
     {from: "''' + song2 + '''SY", label: "artist", to: "''' + artist1 + '''"}'''
@@ -407,8 +408,8 @@ async def test(request):
 
     else:
         auxNodes = auxNodes + ''',
-    {id: "''' + artist1 + '''AX", label: "''' + artist1 + '''", group: 2, level: 2},
-    {id: "''' + artist2 + '''AY", label: "''' + artist2 + '''", group: 2, level: 6}'''
+    {id: "''' + artist1 + '''AX", label: "''' + artist1 + '''", group: "artist", level: 2},
+    {id: "''' + artist2 + '''AY", label: "''' + artist2 + '''", group: "artist", level: 6}'''
 
         auxEdges = '''{from: "''' + song1 + '''SX", label: "artist", to: "''' + artist1 + '''AX"},
     {from: "''' + song2 + '''SY", label: "artist", to: "''' + artist2 + '''AY"}'''
@@ -456,7 +457,8 @@ async def test(request):
         },
         font: {
             size: 16
-        }/*,
+        },
+        shadow: true/*,
         smooth: {
             type: 'cubicBezier',
             forceDirection: 'horizontal'
@@ -469,6 +471,41 @@ async def test(request):
         },
         font: {
             size: 18
+        },
+        shadow: true
+    },
+    groups: {
+        song: {
+            color: 'DodgerBlue',
+            font: '24px arial #ffffff',
+            widthConstraint: {
+                maximum: 180
+            }
+        },
+        songEx: {
+            color: 'LightBlue'
+        },
+        genre: {
+            color: 'LawnGreen'
+        },
+        genreEx: {
+            color: 'LightGreen'
+        },
+        artist: {
+            color: 'Crimson',
+            font: '20px arial #ffffff',
+            widthConstraint: {
+                maximum: 150
+            }
+        },
+        artistEx: {
+            color: 'Salmon'
+        },
+        member: {
+            color: 'Orchid'
+        },
+        memberEx: {
+            color: 'Plum'
         }
     },
     physics: false

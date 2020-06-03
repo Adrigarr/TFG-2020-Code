@@ -142,7 +142,7 @@ def getInfoMembers(member, name):
     WHERE
     {
     wd:%s ?same ?item1.
-    # _, _, Miembro de, Género, _, Tipo de voz
+    # Lugar de nacimiento, _, Miembro de, Género, _, Tipo de voz
     FILTER (?same in (wdt:P19, wdt:P66, wdt:P463, wdt:P136, wdt:P102, wdt:P172)).
     SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
     }
