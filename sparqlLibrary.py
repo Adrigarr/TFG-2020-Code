@@ -5,8 +5,8 @@ import json
 
 
 #Diccionarios para obtener el nombre de la propiedad
-dic = {'P136':'género', 'P175':'intérprete', 'P264':'sello discográfico', 'P86':'compositor', 'P361':'forma parte de','P495':'country','P407':'language',
-       'P577':'publication_date','P86':'compositor','P571':'inception','P737':'influenced by','P279':'subclass','P166':'award received','P2031':'work period start',
+dic = {'P136':'genre', 'P175':'artist', 'P264':'record label', 'P86':'composer', 'P361':'part of','P495':'country','P407':'language',
+       'P577':'publication_date', 'P571':'inception','P737':'influenced by','P279':'subclass','P166':'award received','P2031':'work period start',
        'P358':'discography','P740':'location of formation','P1411':'nominated for','P527':'participants','P463':'member of','P172':'Voice Type','P19':'place of birth'}
 
 
