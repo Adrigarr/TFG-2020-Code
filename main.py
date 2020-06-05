@@ -116,7 +116,7 @@ def song(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY):
     # Añadimos el nodo de la propiedad si es necesario
     if (('id: "'+level.at[i, 'valueProperty']+'",') not in auxNodes):
         subNodes = ''',
-    {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: "songEx", level: 4}'''
+    {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: "center", level: 4}'''
 
     # Añadimos las aristas para unir la propiedad con ambas canciones
     subEdges += ''',
@@ -148,7 +148,7 @@ def genre(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY):
     # Añadimos el nodo de la propiedad si es necesario
     if (('id: "'+level.at[i, 'valueProperty']+'",') not in auxNodes):
         subNodes = subNodes + ''',
-    {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: "genreEx", level: 4}'''
+    {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: "center", level: 4}'''
 
     # Añadimos las aristas para unir la propiedad con ambos géneros
     subEdges += ''',
@@ -161,10 +161,32 @@ def artist(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY):
     subNodes = ''
     subEdges = auxEdges
 
+    nodoArtistas = '''{id: "artists", label: ".*", group: "artist", level: 4}'''
+
+    if (re.findall(nodoArtistas, auxNodes) and ((level.at[i, 'ID_x'] in re.findall(nodoArtistas, auxNodes)[0]) or (level.at[i, 'ID_y'] in re.findall(nodoArtistas, auxNodes)[0]))):
+        return [subNodes, subEdges]
+
+    # Añadimos el nodo del artista X si es necesario, además de una arista para unirlo a la primera canción
+    if ((level.at[i, 'ID_x'] + 'AX') not in auxNodes):
+        subNodes = ''',
+    {id: "''' + level.at[i, 'ID_x'] + '''AX", label: "''' + level.at[i, 'ID_x'] + ''' ", group: "artist", level: 3}'''
+
+        subEdges += ''',
+    {from: "''' + songX + '''SX", label: "genre", to: "''' + level.at[i, 'ID_x'] + '''AX"}'''
+
+    # Añadimos el nodo del artista Y si es necesario, además de una arista para unirlo a la segunda canción
+    if ((level.at[i, 'ID_y'] + 'AY') not in auxNodes):
+        subNodes = subNodes + ''',
+    {id: "''' + level.at[i, 'ID_y'] + '''AY", label: "''' + level.at[i, 'ID_y'] + ''' ", group: "artist", level: 5}'''
+
+        subEdges += ''',
+    {from: "''' + songY + '''SY", label: "genre", to: "''' + level.at[i, 'ID_y'] + '''AY"}'''
+
+
     # Añadimos el nodo de la propiedad si es necesario
     if (('id: "'+level.at[i, 'valueProperty']+'",') not in auxNodes):
         subNodes = subNodes + ''',
-    {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: "artistEx", level: 4}'''
+    {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: "center", level: 4}'''
 
     # Añadimos las aristas para unir la propiedad con ambos artistas
     subEdges += ''',
@@ -195,7 +217,7 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY):
     # Añadimos el nodo de la propiedad si es necesario
     if (('id: "'+level.at[i, 'valueProperty']+'",') not in auxNodes):
         subNodes = subNodes + ''',
-    {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: "memberEx", level: 4}'''
+    {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: "center", level: 4}'''
 
 
 
@@ -301,17 +323,16 @@ async def test(request):
 # TEMPORAL
 @app.route("/table")
 async def test(request):
-    thislist = request.query_args # Esta es la lista de argumentos recibidos en la URL
 
-    #song1 = thislist[0][1]
-    #artist1 = thislist[1][1]
-    #song2 = thislist[2][1]
-    #artist2 = thislist[3][1]
+    #song1 = "(I Can't Get No) Satisfaction" # "Start Me Up"
+    #artist1 = "The Rolling Stones"
+    #song2 = "Hey Jude" # "Let It Be"
+    #artist2 = "The Beatles"
 
-    song1 = "(I Can't Get No) Satisfaction" # "Start Me Up"
-    artist1 = "The Rolling Stones"
-    song2 = "Hey Jude" # "Let It Be"
-    artist2 = "The Beatles"
+    song1 = "Teardrop"
+    artist1 = "Massive Attack"
+    song2 = "Teardrop"
+    artist2 = "Massive Attack"
 
     relationsDF = main(song1, artist1, song2, artist2) # relationsDF es un DataFrame
 
@@ -321,7 +342,7 @@ async def test(request):
     level = relationsDF.loc[relationsDF['Level_x'] == relationsDF['Level_y']]
     level.sort_values(by=['Level_x', 'idPropertyName', 'valueProperty'], inplace= True)
 
-    return response.html(nolevel.to_html())
+    return response.html(level.to_html())
 
 
 # TEMPORAL
@@ -394,16 +415,35 @@ async def test(request):
     {id: "''' + song1 + '''SX", label: "''' + song1 + '''", group: "song", level: 1},
     {id: "''' + song2 + '''SY", label: "''' + song2 + '''", group: "song", level: 7}'''
 
-    # Si ambos artistas coinciden, los tratamos como una explicación directa
-    if (artist1 == artist2):
-        auxNodes = auxNodes + ''',
-    {id: "''' + artist1 + '''", label: "''' + artist1 + '''", group: "artist", level: 4}'''
+    # Nos quedamos con la lista de artistas que coinciden en ambas canciones
+    artistList = relationsDF.loc[(relationsDF['idPropertyName'] == 'artist')]
 
-        auxEdges = '''{from: "''' + song1 + '''SX", label: "artist", to: "''' + artist1 + '''"},
-    {from: "''' + song2 + '''SY", label: "artist", to: "''' + artist1 + '''"}'''
+    # Si coincide algún artista, lo tomamos como una relación directa
+    if (not artistList.empty):
+        index = artistList.index.values.tolist()
 
-        # Nos quedamos con un dataframe en el que solo aparecen las relaciones directas
-        level = relationsDF.loc[(relationsDF['Level_x'] == 2) & (relationsDF['Level_y'] == 2)]
+        nodoArtistas = ''',
+    {id: "artists", label: "''' + artist1 + '''", group: "artist", level: 4}'''
+
+        auxNodes = auxNodes + nodoArtistas
+
+        posicion = auxNodes.find(nodoArtistas) # La posición del nodo
+        splited = nodoArtistas.split(artist1) # Partimos nuestra búsqueda para tener la primera parte de la cadena, es decir, todo hasta llegar al label
+
+        # Por cada artista 
+        for j in index:
+
+            if (artistList.at[j, 'valueProperty'] not in auxNodes[(posicion + len(splited[0])):]):
+                # Añadimos el nombre del artista a la etiqueta del nodo
+                auxNodes = auxNodes[:(posicion + len(splited[0]))] + artistList.at[j, 'valueProperty'] + ', ' + auxNodes[(posicion + len(splited[0])):]
+
+        # Añadimos las aristas para unir la propiedad con ambas canciones
+        auxEdges = '''{from: "''' + song1 + '''SX", label: "artist", to: "artists"},
+        {from: "''' + song2 + '''SY", label: "artist", to: "artists"}'''
+            
+        # Nos quedamos con un dataframe en el que solo aparecen las relaciones del mismo nivel pero sin contar el estudio de miembros
+        level = relationsDF.loc[(relationsDF['Level_x'] == relationsDF['Level_y']) & (relationsDF['Level_x'] != 5)
+                                & (relationsDF['idPropertyName'] != 'artist')]
         level.sort_values(by=['Level_x', 'idPropertyName', 'valueProperty'], inplace= True)
 
     else:
@@ -414,21 +454,49 @@ async def test(request):
         auxEdges = '''{from: "''' + song1 + '''SX", label: "artist", to: "''' + artist1 + '''AX"},
     {from: "''' + song2 + '''SY", label: "artist", to: "''' + artist2 + '''AY"}'''
 
-        # Nos quedamos con un dataframe en el que solo aparecen las relaciones directas
-        level = relationsDF.loc[relationsDF['Level_x'] == relationsDF['Level_y']]
+        # Nos quedamos con un dataframe en el que solo aparecen las relaciones del mismo nivel
+        level = relationsDF.loc[(relationsDF['Level_x'] == relationsDF['Level_y']) & (relationsDF['Level_x'] != 5)]
         level.sort_values(by=['Level_x', 'idPropertyName', 'valueProperty'], inplace= True)
 
     index = level.index.values.tolist()
 
-    # Recorremos todas las relaciones del nivel 1
+    # Recorremos todas las relaciones
     for i in index:
         # Get the function from switcher dictionary
         func = switcher.get(level.at[i, 'Level_x'], "nothing")
         # Execute the function
-        sub = func(level, i, auxNodes, auxEdges, song1, song2, artist1, artist2) #ERROR
+        sub = func(level, i, auxNodes, auxEdges, song1, song2, artist1, artist2)
 
         auxNodes = auxNodes + sub[0]
         auxEdges = sub[1]
+
+
+    # ESTUDIO DE LOS MIEMBROS
+    stringAX = '''{id: ".*AX",'''
+    stringAY = '''{id: ".*AY",'''
+
+    nodosAX = re.findall(stringAX, auxNodes)
+    nodosAY = re.findall(stringAY, auxNodes)
+
+    # Si solo hay un artista por lado, estudiamos las explicaciones de miembros
+    if ((len(nodosAX) == 1) & (len(nodosAY) == 1)):
+        # Nos quedamos con un dataframe en el que solo aparecen las relaciones del mismo nivel
+        level = relationsDF.loc[(relationsDF['Level_x'] == relationsDF['Level_y']) & (relationsDF['Level_x'] == 5)]
+        level.sort_values(by=['Level_x', 'idPropertyName', 'valueProperty'], inplace= True)
+
+        index = level.index.values.tolist()
+
+        # Recorremos todas las relaciones
+        for i in index:
+            # Get the function from switcher dictionary
+            func = switcher.get(level.at[i, 'Level_x'], "nothing")
+            # Execute the function
+            sub = func(level, i, auxNodes, auxEdges, song1, song2, artist1, artist2)
+
+            auxNodes = auxNodes + sub[0]
+            auxEdges = sub[1]
+
+
 
     myNodes = auxNodes + '''
 ]'''
@@ -482,14 +550,8 @@ async def test(request):
                 maximum: 180
             }
         },
-        songEx: {
-            color: 'LightBlue'
-        },
         genre: {
             color: 'LawnGreen'
-        },
-        genreEx: {
-            color: 'LightGreen'
         },
         artist: {
             color: 'Crimson',
@@ -498,14 +560,11 @@ async def test(request):
                 maximum: 150
             }
         },
-        artistEx: {
-            color: 'Salmon'
-        },
         member: {
             color: 'Orchid'
         },
-        memberEx: {
-            color: 'Plum'
+        center: {
+            color: 'Khaki'
         }
     },
     physics: false
