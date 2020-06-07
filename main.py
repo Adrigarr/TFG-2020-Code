@@ -514,7 +514,8 @@ async def test(request):
     layout: {
         hierarchical: {
             direction: 'LR',
-            levelSeparation: 250
+            levelSeparation: 250,
+            nodeSpacing: 125
         }
     },
     edges: {

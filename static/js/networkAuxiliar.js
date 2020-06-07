@@ -45,13 +45,13 @@ function funcion2(value, idNodo1, labelNodo1, nodosConectados1) {
                             
                             nodes.update({
                                 id: idNodo1,
-                                label: labelNodo1 + "\n - \n" + labelNodo2
+                                label: labelNodo1 + "\n — \n" + labelNodo2
                             });
 
                             aristasConectadas2.forEach(borraArista);
                             nodes.remove(idNodo2);
 
-                            return labelNodo1 + "\n - \n" + labelNodo2;
+                            return labelNodo1 + "\n — \n" + labelNodo2;
                         }
                     }
 
