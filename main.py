@@ -300,6 +300,15 @@ switcher = {
         5: member
     }
 
+def cleanSong(song):
+    if ('",' in song):
+        aux = song[1:]
+        cleanSong = aux.split('",')
+        
+    else:
+        cleanSong = song.split(',')
+
+    return cleanSong
 # ----------------------------    SECCIÓN DE LA APP Y SUS RUTAS ----------------------------
 
 app = Sanic()
@@ -317,7 +326,7 @@ async def test(request):
     # Si el html necesita valores, habría que añadirlos dentro de este template
     # separados por comas. Ej: template('index2.html', var1=var1, var2=var2)
     return template(
-        'index2.html'
+        'template.html'
     )
 
 # TEMPORAL
@@ -400,15 +409,30 @@ async def test(request):
         'graph4.html'
     )
 
+# TEMPORAL
+@app.route("/prueba")
+async def test(request):
+
+    return template(
+        'template.html'
+    )
+
+# TEMPORAL
+@app.route("/random")
+async def test(request):
+    thislist = request.query_args # Esta es la lista de argumentos recibidos en la URL
+
+    return response.text(thislist)
+
 #WIP
 @app.route("/index")
 async def test(request):
     thislist = request.query_args # Esta es la lista de argumentos recibidos en la URL
 
-    song1 = thislist[0][1]
-    artist1 = thislist[1][1]
-    song2 = thislist[2][1]
-    artist2 = thislist[3][1]
+    song1 = cleanSong(thislist[0][1])[0]
+    artist1 = cleanSong(thislist[0][1])[1]
+    song2 = cleanSong(thislist[1][1])[0]
+    artist2 = cleanSong(thislist[1][1])[1]
     relationsDF = main(song1,artist1,song2,artist2) # relationsDF es un DataFrame
 
     auxNodes = '''[
@@ -515,7 +539,7 @@ async def test(request):
         hierarchical: {
             direction: 'LR',
             levelSeparation: 250,
-            nodeSpacing: 125
+            nodeSpacing: 150
         }
     },
     edges: {
@@ -525,18 +549,15 @@ async def test(request):
             label: false
         },
         font: {
-            size: 16
+            size: 16,
+            align: 'middle'
         },
-        shadow: true/*,
-        smooth: {
-            type: 'cubicBezier',
-            forceDirection: 'horizontal'
-        }*/
+        shadow: true
     },
     nodes: {
         shape: 'box',
         widthConstraint: {
-            maximum: 120
+            maximum: 150
         },
         font: {
             size: 18
@@ -556,10 +577,7 @@ async def test(request):
         },
         artist: {
             color: 'Crimson',
-            font: '20px arial #ffffff',
-            widthConstraint: {
-                maximum: 150
-            }
+            font: '20px arial #ffffff'
         },
         member: {
             color: 'Orchid'
@@ -594,6 +612,10 @@ var options = {myOptions};
 
 // initialize your network!
 var network = new vis.Network(container, data, options);
+
+network.moveTo({{
+  scale: 0.5             // Zooms out
+}});
 """.strip())
 
     return template(

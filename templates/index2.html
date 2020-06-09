@@ -17,34 +17,6 @@
 
 <body>
 
-  <!-- Navigation 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
-    <div class="container">
-      <a class="navbar-brand" href="#">Start Bootstrap</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Home
-              <span class="sr-only">(current)</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Services</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Contact</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
--->
   <!-- Page Content -->
   <div class="container">
     <div class="row">
@@ -55,32 +27,20 @@
         <br>
 
         <!-- Inicio del formulario que recoge las canciones -->
-        <form action="/index"  method="get"> <!--target="_blank"-->
+        <form action="/index"  method="get"><!--target="_blank"-->
           <label for="xsong">First song:</label><br>
           <!-- <input type="text" id="xsong" name="xsong" value="Q158553"><br> -->
           <input list="songs" name="xsong">
           <datalist id="songs">
-            <option value="Start Me Up">
-            <option value="Let It Be">
-            <option value="(I Can't Get No) Satisfaction">
-            <option value="Hey Jude">
-          </datalist><br>
-
-          <label for="ysong">First artist:</label><br>
-          <!-- <input type="text" id="ysong" name="ysong" value="Q607742"><br><br> -->
-          <input list="artists" name="xartist">
-          <datalist id="artists">
-            <option value="The Rolling Stones">
-            <option value="The Beatles">
+            <option value="Start Me Up,The Rolling Stones">
+            <option value="Let It Be,The Beatles">
+            <option value="(I Can't Get No) Satisfaction,The Rolling Stones">
+            <option value="Hey Jude,The Beatles">
           </datalist><br>
 
           <label for="ysong">Second song:</label><br>
           <!-- <input type="text" id="ysong" name="ysong" value="Q607742"><br><br> -->
-          <input list="songs" name="ysong"><br>
-
-          <label for="ysong">Second artist:</label><br>
-          <!-- <input type="text" id="ysong" name="ysong" value="Q607742"><br><br> -->
-          <input list="artists" name="yartist"><br><br>
+          <input list="songs" name="ysong"><br><br>
 
 
           <input type="submit" value="Submit">
