@@ -1,5 +1,7 @@
+
 // Recorremos todos los nodos
 nodes.forEach(funcion1);
+nodes2.forEach(funcion1);
 
 function funcion1(value) {
     // Comprobamos que sea un nodo central

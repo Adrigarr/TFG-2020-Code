@@ -16,10 +16,20 @@
   <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 
     <style type="text/css">
-        #mynetwork {
-            width: 900px;
-            height: 800px;
-            border: 1px solid lightgray;
+        #mynetwork, #mynetwork2 {
+          width: 1000px;
+          height: 800px;
+          border: 1px solid lightgray;
+        }
+
+        .hide {
+           position: absolute !important;
+           top: -9999px !important;
+           left: -9999px !important;
+        }
+
+        #mySubmit {
+          padding: 15px;
         }
 
         * {
@@ -68,11 +78,12 @@
   <div class="container-fluid">
 
     <!-- Inicio del formulario que recoge las canciones -->
-    <form action="/index" id="myForm" method="get"><!--target="_blank"-->
+    <form action="/index" id="myForm" method="get"></form><!--target="_blank"-->
+
     <div class="row">
-      <div class="col-lg text-center">
+      <div id="mySubmit" class="col-lg text-center">
         
-        <button type="submit" class="btn btn-primary btn-lg" value="Submit">COMPARAR</button>
+        <button type="submit" class="btn btn-primary btn-lg" value="Submit" form="myForm">COMPARAR</button>
         
       </div>
     </div>
@@ -87,10 +98,12 @@
 
       </div>
 
-      <div class="row">
-        <div class="col-lg-8 text-center">
-          <center><div id="mynetwork"></div></center>
-        </div>
+      <div class="col-lg-7 text-center">
+        <button onclick="toggleGraph1()">Explicaciones del mismo tipo</button>
+        <button onclick="toggleGraph2()">Explicaciones de tipos distintos</button>
+
+        <center><div id="mynetwork"></div></center>
+        <center><div id="mynetwork2" class="hide"></div></center>
       </div>
 
       <div class="col-lg text-center">
@@ -102,7 +115,6 @@
       </div>
 
     </div> <!-- Row -->
-    </form>
   </div> <!-- Container -->  
 
   <!-- Bootstrap core JavaScript -->
@@ -116,6 +128,24 @@
   <script src="/static/js/networkAuxiliar.js"></script>-->
 
   <script>
+
+    function toggleGraph1() {
+      var x = document.getElementById("mynetwork");
+
+      if (x.classList.contains("hide")) {
+        $("#mynetwork2").toggleClass("hide");
+        $("#mynetwork").toggleClass("hide");
+      }
+    }
+
+    function toggleGraph2() {
+      var x = document.getElementById("mynetwork2");
+
+      if (x.classList.contains("hide")) {
+        $("#mynetwork").toggleClass("hide");
+        $("#mynetwork2").toggleClass("hide");
+      }
+    }
 
     // Función para eliminar duplicados de un array
     function uniq(a) {
