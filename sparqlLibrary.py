@@ -1,14 +1,21 @@
 from SPARQLWrapper import SPARQLWrapper, RDFXML, JSON
 import pandas as pd
+import math
 import json
  
 
 
 #Diccionarios para obtener el nombre de la propiedad
-dic = {'P136':'genre', 'P175':'artist', 'P264':'record label', 'P86':'composer', 'P361':'part of','P495':'country','P407':'language',
+dic = {'P136':'genre', 'P175':'performer', 'P264':'record label', 'P86':'composer', 'P361':'part of','P495':'country','P407':'language','P106': 'occupation',
        'P577':'publication_date', 'P571':'inception','P737':'influenced by','P279':'subclass','P166':'award received','P2031':'work period start',
-       'P358':'discography','P740':'location of formation','P1411':'nominated for','P527':'participants','P463':'member of','P172':'Voice Type','P19':'place of birth'}
+       'P358':'discography','P740':'location of formation','P1411':'nominated for','P527':'participants','P463':'member of','P412':'Voice Type',
+       'P19':'place of birth','P2341':'indigenous to'}
 
+
+def formatDates(df):
+     df['valueProperty'] = df.apply(lambda x: x.valueProperty[2:] if x.idProperty == 'P571' else x.valueProperty, axis=1)
+     df['valueProperty'] = df.apply(lambda x: x.valueProperty[2:] if x.idProperty == 'P577' else x.valueProperty, axis=1)   
+     return df
 
 
 
@@ -24,7 +31,7 @@ def commonProperties(song1,song2):
       wd:%s ?same ?item2. # Segunda cancion - Propiedad buscada - Valor de la propiedad
       FILTER (?item1 = ?item2). # Nos quedamos solo con las propiedades cuyo valor coincide
       # Género, Intérprete (Artista), Sello discofráfico, Compositor, Parte de, Idioma, Fecha de publicación, Discografía
-      FILTER (?same in (wdt:P136, wdt:P175, wdt:P264, wdt:P86, wdt:P361, wdt:P495, wdt:P407,wdt:P577,wdt:P358)). # Nos quedamos con las propiedades relevantes para nosotros: género, intérprete, sello discográfico, compositor, letra de, forma parte de (album),country,language,publication_date
+      FILTER (?same in (wdt:P136, wdt:P175, wdt:P264, wdt:P86, wdt:P361, wdt:P495, wdt:P407,wdt:P577,wdt:P358)). # Nos quedamos con las propiedades relevantes para nosotros: género, intérprete, sello discográfico, compositor, letra de, part of (album),country,language,publication_date
       SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
       }
       """%(song1,song2))
@@ -60,6 +67,26 @@ def tratamientoDataSet(df):
     df['item1.value']=df['item1.value'].apply(lambda x: x.split('/')[4])
     df.columns = ['idProperty', 'idValueProperty','valueProperty','Level', 'ID']
     return df
+
+
+#Obtener genero de una canción para la clase study
+def getGetGenreSong(song,artist):
+    sparql.setQuery("""
+    SELECT distinct ?genreLabel
+    WHERE{  
+    ?item ?label "%s"@en. 
+    ?item wdt:P175 ?artist.    
+    ?artist ?label "%s"@en.
+    ?item wdt:P136 ?genre
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+    }
+    """%(song,artist))
+    sparql.setReturnFormat(JSON)
+    results3 = sparql.query().convert()
+    #print(results3)
+    resultsG1 = pd.io.json.json_normalize(results3['results']['bindings'])
+    resultsGenre=resultsG1[['genreLabel.value']]
+    return resultsGenre
 
 
 #Obtenemos propiedades de la cancion.
@@ -259,3 +286,10 @@ def checkNameArtist(song):
     resultsA1 = pd.io.json.json_normalize(results['results']['bindings'])
     resultsA1=resultsA1[['artist.value','artistValue.value']]
     return resultsA1
+
+
+def groupCSV(df):
+    path='genreSongs.csv'
+    data = pd.read_csv(path,sep=',', error_bad_lines=False)
+    dataGrouped = data.groupby(['genreLabel.value']).size().reset_index(name='counts')
+    dataGrouped.to_csv('genreGrouped.csv',index=False)

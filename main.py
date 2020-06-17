@@ -91,13 +91,28 @@ def main(arg1,arg2,arg3,arg4):
                 artistData2 = getArtist2(songData2,logger)
                 membersData2 = getMembers2(artistData2,logger)
 
+                #GENERE SONGINFO
+                songData.to_csv('songData1.csv',index=False)
+                songData2.to_csv('songData2.csv',index=False)
+
+                #GENERE ARTIST
+                artistData.to_csv('artistData.csv',index=False)
+                artistData2.to_csv('artistData2.csv',index=False)
+
                 song1Data = [songData,genreData,artistData,membersData]
                 song1Data = pd.concat(song1Data,sort=False)
+
+                song1Data = parseDates(song1Data)
+                song1Data = formatDates(song1Data)
 
                 song2Data = [songData2,genreData2,artistData2,membersData2]
                 song2Data = pd.concat(song2Data,sort=False)
 
+                song2Data = parseDates(song2Data)
+                song2Data = formatDates(song2Data)
+
                 relationsDF = mergeData(song1Data,song2Data)
+                
                 relationsDF = relationsDF.drop_duplicates()
                 relationsDF.to_csv('relations.csv',index=False)
 
