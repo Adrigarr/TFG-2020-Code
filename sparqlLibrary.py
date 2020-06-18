@@ -146,7 +146,7 @@ def getInfoArtist(artist, name):
     {
     wd:%s ?same ?item1.
     # Origen, Género, País, Influenciado por, Sello discográfico, Discografía, Lugar de formación, Premio recibido, Nominado a, Participantes, Miembro de, Tipo de voz
-    FILTER (?same in (wdt:P571, wdt:P136, wdt:P495, wdt:P737, wdt:P264, wdt:P358, wdt:P740, wdt:P166, wdt:1411, wdt:P527, wdt:P463, wdt:P172)).
+    FILTER (?same in (wdt:P571, wdt:P136, wdt:P495, wdt:P737, wdt:P264, wdt:P358, wdt:P740, wdt:P166, wdt:1411, wdt:P527, wdt:P463, wdt:P412)).
     SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
     }
     """%artist)
@@ -169,8 +169,8 @@ def getInfoMembers(member, name):
     WHERE
     {
     wd:%s ?same ?item1.
-    # Lugar de nacimiento, _, Miembro de, Género, _, Tipo de voz
-    FILTER (?same in (wdt:P19, wdt:P66, wdt:P463, wdt:P136, wdt:P102, wdt:P172)).
+    # Lugar de nacimiento, Miembro de, Género, Tipo de voz
+    FILTER (?same in (wdt:P19, wdt:P463, wdt:P136, wdt:P412)).
     SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
     }
     """%member)

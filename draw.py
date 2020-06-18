@@ -95,7 +95,7 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY):
     # Añadimos el nodo del miembro X si es necesario, además de una arista para unirlo al primer artista
     if ('MembersX' not in auxNodes):
         subNodes = ''',
-    {id: "MembersX", label: "Miembros de ''' + artistX + '''", group: "member", level: 3}'''
+    {id: "MembersX", label: "Members of ''' + artistX + '''", group: "member", level: 3}'''
         subEdges += ''',
     {from: "''' + artistX + '''AX", label: "miembros", to: "MembersX"}'''
 
@@ -103,7 +103,7 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY):
     # Añadimos el nodo del miembro Y si es necesario, además de una arista para unirlo al segundo artista
     if ('MembersY' not in auxNodes):
         subNodes = ''',
-    {id: "MembersY", label: "Miembros de ''' + artistY + '''", group: "member", level: 5}'''
+    {id: "MembersY", label: "Members of ''' + artistY + '''", group: "member", level: 5}'''
         subEdges += ''',
     {from: "''' + artistY + '''AY", label: "miembros", to: "MembersY"}'''
 
@@ -287,7 +287,7 @@ def member2(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
         # Añadimos el nodo del miembro X si es necesario, además de una arista para unirlo al primer artista
         if ('MembersX' not in auxNodes):
             subNodes = ''',
-    {id: "MembersX", label: "Miembros de ''' + artistX + '''", group: "member", level: 3}'''
+    {id: "MembersX", label: "Members of ''' + artistX + '''", group: "member", level: 3}'''
             subEdges += ''',
     {from: "''' + artistX + '''AX", label: "miembros", to: "MembersX"}'''
 
@@ -295,7 +295,7 @@ def member2(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
         # Añadimos el nodo del miembro Y si es necesario, además de una arista para unirlo al segundo artista
         if ('MembersY' not in auxNodes):
             subNodes = ''',
-    {id: "MembersY", label: "Miembros de ''' + artistY + '''", group: "member", level: 5}'''
+    {id: "MembersY", label: "Members of ''' + artistY + '''", group: "member", level: 5}'''
             subEdges += ''',
     {from: "''' + artistY + '''AY", label: "miembros", to: "MembersY"}'''
 
