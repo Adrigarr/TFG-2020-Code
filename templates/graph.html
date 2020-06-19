@@ -25,7 +25,7 @@
   <div class="container-fluid">
 
     <!-- Inicio del formulario que recoge las canciones -->
-    <form action="/index" id="myForm" method="get"></form><!--target="_blank"-->
+    <form action="/index" id="myForm" method="get"></form>
 
     <div class="row">
       <div id="mySubmit" class="col-lg text-center">
@@ -37,7 +37,7 @@
 
     <div class="row">
       <div class="col-lg text-center">
-        <input type="text" class="form-control" id="myInput1" onkeyup="myFunction('myInput1','mySelect1')" placeholder="Search for names.." title="Type in a name">
+        <input type="text" class="form-control" id="myInput1" onkeyup="myFilter('myInput1','mySelect1')" placeholder="Search for songs..." title="Type in a name">
 
         <select id="mySelect1" name="xsong" size="14" form="myForm" required>
 
@@ -46,15 +46,15 @@
       </div>
 
       <div class="col-lg-7 text-center">
-        <button onclick="toggleGraph1()">Explicaciones del mismo tipo</button>
-        <button onclick="toggleGraph2()">Explicaciones de tipos distintos</button>
+        <button onclick='toggleGraph("mynetwork", "mynetwork2")'>Explicaciones del mismo tipo</button>
+        <button onclick='toggleGraph("mynetwork2", "mynetwork")'>Explicaciones de tipos distintos</button>
 
         <center><div id="mynetwork"></div></center>
         <center><div id="mynetwork2" class="hide"></div></center>
       </div>
 
       <div class="col-lg text-center">
-        <input type="text" class="form-control" id="myInput2" onkeyup="myFunction('myInput2','mySelect2')" placeholder="Search for names.." title="Type in a name">
+        <input type="text" class="form-control" id="myInput2" onkeyup="myFilter('myInput2','mySelect2')" placeholder="Search for songs..." title="Type in a name">
 
         <select id="mySelect2" name="ysong" size="14" form="myForm" required>
 
@@ -71,8 +71,8 @@
   <!-- JavaScript para dibujar el grafo -->
   <script src="/static/js/graph{{var1}}.js"></script>
   <script src="/static/js/networkAuxiliar.js"></script>
-  <!--<script src="/static/js/graph202065195056.js"></script>
-  <script src="/static/js/networkAuxiliar.js"></script>-->
+
+  <!-- JavaScript de la interfaz -->
   <script src="/static/js/view.js"></script>
 
 </body>

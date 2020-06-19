@@ -1,22 +1,21 @@
-function toggleGraph1() {
-  var x = document.getElementById("mynetwork");
+// Función para alternar entre la vista de ambos grafos
+// RECIBE: String param  => id de la network a mostrar,
+//         String param2 => id de la network a ocultar
+function toggleGraph(param, param2) {
+  var x = document.getElementById(param);
+  var y = "#".concat("", param);
+  var z = "#".concat("", param2);
 
+  // Solo hace el cambio si el elemento está oculto
   if (x.classList.contains("hide")) {
-    $("#mynetwork2").toggleClass("hide");
-    $("#mynetwork").toggleClass("hide");
-  }
-}
-
-function toggleGraph2() {
-  var x = document.getElementById("mynetwork2");
-
-  if (x.classList.contains("hide")) {
-    $("#mynetwork").toggleClass("hide");
-    $("#mynetwork2").toggleClass("hide");
+    $(z).toggleClass("hide");
+    $(y).toggleClass("hide");
   }
 }
 
 // Función para eliminar duplicados de un array
+// RECIBE:   Array a => array que se quiere limpiar
+// DEVUELVE: array sin elementos repetidos
 function uniq(a) {
   var seen = {};
   return a.filter(function(item) {
@@ -34,18 +33,21 @@ $(document).ready(function() {
 });
 
 // Cargamos las dos listas de canciones
+// RECIBE: texto data => datos del archivo .csv
 function loadSongs(data) {
   loadSong(data, 'mySelect1');
   loadSong(data, 'mySelect2');
 }
 
 // En esta función se cargan las canciones del dataset en una de las listas del html
+// RECIBE: texto data => datos del archivo .csv,
+//         String select => id del elemento select de la vista
 function loadSong(data, select) {
 
   //split and get the rows in an array
   var splited = data.split('\n');
   splited.shift();
-  var aux = uniq(splited);
+  var aux = uniq(splited); // Eliminamos repeticiones del array
   var rows = aux.sort();
 
   //move line by line
@@ -67,11 +69,12 @@ function loadSong(data, select) {
     sel.appendChild(opt);
 
   }
-
 } 
 
 // Función para filtrar las listas en función de lo que escribe el usuario
-function myFunction(input, select) {
+// RECIBE: String input  => id del elemento desde el que se realiza la búsqueda,
+//         String select => id de la lista a filtrar
+function myFilter(input, select) {
     var myInput, filter, ul, li, a, i, txtValue;
 
     myInput = document.getElementById(input);

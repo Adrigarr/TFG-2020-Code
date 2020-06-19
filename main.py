@@ -176,14 +176,6 @@ async def test(request):
     )
 
 # TEMPORAL
-@app.route("/prueba")
-async def test(request):
-
-    return template(
-        'template.html'
-    )
-
-# TEMPORAL
 @app.route("/random")
 async def test(request):
     thislist = request.query_args # Esta es la lista de argumentos recibidos en la URL
