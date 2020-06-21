@@ -56,6 +56,19 @@ function loadSong(data, select) {
     //the value of the current row
     var val = rows[i];
 
+    // Separamos la línea en un array de dos elementos: la canción y el artista
+    // Si la canción está entre comillas, las quitamos
+    if (val.includes('",')) {
+        var tmp = val.slice(1,val.length);
+        var cleanSong = tmp.split('",');
+    }    
+    else {
+        var cleanSong = val.split(',');
+    }
+
+    // Reconstruimos la línea para mostrarla en el select, pero cambiamos la coma por un guión
+    var line = cleanSong[0] + " — " + cleanSong[1];
+
     // get reference to select element
     var sel = document.getElementById(select);
 
@@ -63,7 +76,7 @@ function loadSong(data, select) {
     var opt = document.createElement('option');
 
     // create text node to add to option element (opt)
-    opt.appendChild( document.createTextNode(val) );
+    opt.appendChild( document.createTextNode(line) );
 
     // add opt to end of select box (sel)
     sel.appendChild(opt);

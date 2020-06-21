@@ -191,6 +191,7 @@ async def test(request):
     artist1 = cleanSong(thislist[0][1])[1]
     song2 = cleanSong(thislist[1][1])[0]
     artist2 = cleanSong(thislist[1][1])[1]
+
     relationsDF = main(song1,artist1,song2,artist2) # relationsDF es un DataFrame
 
     auxNodes = '''[
@@ -198,8 +199,8 @@ async def test(request):
     {id: "''' + song2 + '''SY", label: "''' + song2 + '''", group: "song", level: 7}'''
 
     # Nos quedamos con la lista de artistas que coinciden en ambas canciones
-    artistList = relationsDF.loc[(relationsDF['idPropertyName'] == 'artist')]
-
+    artistList = relationsDF.loc[(relationsDF['idPropertyName'] == 'performer')]
+    
     # Si coincide algún artista, lo tomamos como una relación directa
     if (not artistList.empty):
         index = artistList.index.values.tolist()
@@ -225,7 +226,7 @@ async def test(request):
             
         # Nos quedamos con un dataframe en el que solo aparecen las relaciones del mismo nivel pero sin contar el estudio de miembros
         level = relationsDF.loc[(relationsDF['Level_x'] == relationsDF['Level_y']) & (relationsDF['Level_x'] != 5)
-                                & (relationsDF['idPropertyName'] != 'artist')]
+                                & (relationsDF['idPropertyName'] != 'performer')]
         level.sort_values(by=['Level_x', 'idPropertyName', 'valueProperty'], inplace= True)
 
     else:
@@ -236,7 +237,7 @@ async def test(request):
         auxEdges = '''{from: "''' + song1 + '''SX", label: "artist", to: "''' + artist1 + '''AX"},
     {from: "''' + song2 + '''SY", label: "artist", to: "''' + artist2 + '''AY"}'''
 
-        # Nos quedamos con un dataframe en el que solo aparecen las relaciones del mismo nivel
+        # Nos quedamos con un dataframe en el que solo aparecen las relaciones del mismo nivel pero sin contar el estudio de miembros
         level = relationsDF.loc[(relationsDF['Level_x'] == relationsDF['Level_y']) & (relationsDF['Level_x'] != 5)]
         level.sort_values(by=['Level_x', 'idPropertyName', 'valueProperty'], inplace= True)
 

@@ -36,7 +36,7 @@
     </div>
 
     <div class="row">
-      <div class="col-lg text-center">
+      <div id="listColumn1" class="col-lg col-md col-sm text-center">
         <input type="text" class="form-control" id="myInput1" onkeyup="myFilter('myInput1','mySelect1')" placeholder="Search for songs..." title="Type in a name">
 
         <select id="mySelect1" name="xsong" size="14" form="myForm" required>
@@ -45,15 +45,15 @@
 
       </div>
 
-      <div class="col-lg-7 text-center">
-        <button onclick='toggleGraph("mynetwork", "mynetwork2")'>Explicaciones del mismo tipo</button>
-        <button onclick='toggleGraph("mynetwork2", "mynetwork")'>Explicaciones de tipos distintos</button>
+      <div class="col-lg-7 col-md-7 col-sm-7 text-center">
+        <button onclick='toggleGraph("mynetwork", "mynetwork2")'>Explicaciones de la misma categoría</button>
+        <button onclick='toggleGraph("mynetwork2", "mynetwork")'>Explicaciones de distinta categoría</button>
 
         <center><div id="mynetwork"></div></center>
         <center><div id="mynetwork2" class="hide"></div></center>
       </div>
 
-      <div class="col-lg text-center">
+      <div id="listColumn2" class="col-lg col-md col-sm text-center">
         <input type="text" class="form-control" id="myInput2" onkeyup="myFilter('myInput2','mySelect2')" placeholder="Search for songs..." title="Type in a name">
 
         <select id="mySelect2" name="ysong" size="14" form="myForm" required>

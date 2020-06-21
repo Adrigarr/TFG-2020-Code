@@ -364,11 +364,6 @@ switcher2 = {
     }
 
 def cleanSong(song):
-    if ('",' in song):
-        aux = song[1:]
-        cleanSong = aux.split('",')
-        
-    else:
-        cleanSong = song.split(',')
+    cleanSong = song.split(' — ')
 
     return cleanSong

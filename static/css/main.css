@@ -10,6 +10,10 @@
    left: -9999px !important;
 }
 
+#listColumn1, #listColumn2 {
+  max-width: 400px;
+}
+
 #mySubmit {
   padding: 15px;
 }
@@ -34,6 +38,7 @@
   padding: 0;
   margin: 0;
   width: 100%;
+  overflow-x: auto;
 }
 
 #mySelect1 option, #mySelect2 option {
@@ -45,6 +50,7 @@
   font-size: 18px;
   color: black;
   display: block;
+  width: 500px;
 }
 
 #mySelect1 option:hover:not(.header), #mySelect2 option:hover:not(.header) {
