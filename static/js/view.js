@@ -39,21 +39,30 @@ function loadSongs(data) {
   loadSong(data, 'mySelect2');
 }
 
+// Función de ordenación personalizada que ignora las comillas dobles
+// Debe ser llamada dentro de la función sort así: array.sort(mySortFunction)
+function mySortFunction(a,b) {
+  a = a.replace(/"/g,'');
+  b = b.replace(/"/g,'');
+
+  return (a < b ? -1 : 1);
+}
+
 // En esta función se cargan las canciones del dataset en una de las listas del html
 // RECIBE: texto data => datos del archivo .csv,
 //         String select => id del elemento select de la vista
 function loadSong(data, select) {
 
-  //split and get the rows in an array
+  // Separamos las líneas del documento y las guardamos en un array
   var splited = data.split('\n');
   splited.shift();
   var aux = uniq(splited); // Eliminamos repeticiones del array
-  var rows = aux.sort();
+  var rows = aux.sort(mySortFunction); // Ordenamos el array
 
-  //move line by line
+  // Recorremos el array de líneas
   for (var i = 0; i < rows.length; i++) {
 
-    //the value of the current row
+    // Valor de la línea actual
     var val = rows[i];
 
     // Separamos la línea en un array de dos elementos: la canción y el artista
@@ -69,16 +78,16 @@ function loadSong(data, select) {
     // Reconstruimos la línea para mostrarla en el select, pero cambiamos la coma por un guión
     var line = cleanSong[0] + " — " + cleanSong[1];
 
-    // get reference to select element
+    // Obtenemos la referencia al elemento select
     var sel = document.getElementById(select);
 
-    // create new option element
+    // Creamos un nuevo elemento option
     var opt = document.createElement('option');
 
-    // create text node to add to option element (opt)
+    // Creamos y añadimos el texto del elemento option
     opt.appendChild( document.createTextNode(line) );
 
-    // add opt to end of select box (sel)
+    // Añadimos el elemento option al final del select
     sel.appendChild(opt);
 
   }

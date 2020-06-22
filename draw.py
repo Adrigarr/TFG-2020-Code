@@ -25,7 +25,7 @@ def genre(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY):
     # Añadimos el nodo del género X si es necesario, además de una arista para unirlo a la primera canción
     if ((level.at[i, 'ID_x'] + 'GX') not in auxNodes):
         subNodes = ''',
-    {id: "''' + level.at[i, 'ID_x'] + '''GX", label: "''' + level.at[i, 'ID_x'] + ''' ", group: "genre", level: 3}'''
+    {id: "''' + level.at[i, 'ID_x'] + '''GX", label: "''' + level.at[i, 'ID_x'] + ''' ", title: "Genre", group: "genre", level: 3}'''
 
         subEdges += ''',
     {from: "''' + songX + '''SX", label: "genre", to: "''' + level.at[i, 'ID_x'] + '''GX"}'''
@@ -33,7 +33,7 @@ def genre(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY):
     # Añadimos el nodo del género Y si es necesario, además de una arista para unirlo a la segunda canción
     if ((level.at[i, 'ID_y'] + 'GY') not in auxNodes):
         subNodes = subNodes + ''',
-    {id: "''' + level.at[i, 'ID_y'] + '''GY", label: "''' + level.at[i, 'ID_y'] + ''' ", group: "genre", level: 5}'''
+    {id: "''' + level.at[i, 'ID_y'] + '''GY", label: "''' + level.at[i, 'ID_y'] + ''' ", title: "Genre", group: "genre", level: 5}'''
 
         subEdges += ''',
     {from: "''' + songY + '''SY", label: "genre", to: "''' + level.at[i, 'ID_y'] + '''GY"}'''
@@ -62,7 +62,7 @@ def artist(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY):
     # Añadimos el nodo del artista X si es necesario, además de una arista para unirlo a la primera canción
     if ((level.at[i, 'ID_x'] + 'AX') not in auxNodes):
         subNodes = ''',
-    {id: "''' + level.at[i, 'ID_x'] + '''AX", label: "''' + level.at[i, 'ID_x'] + ''' ", group: "artist", level: 2}'''
+    {id: "''' + level.at[i, 'ID_x'] + '''AX", label: "''' + level.at[i, 'ID_x'] + ''' ", title: "Artist", group: "artist", level: 2}'''
 
         subEdges += ''',
     {from: "''' + songX + '''SX", label: "artist", to: "''' + level.at[i, 'ID_x'] + '''AX"}'''
@@ -70,7 +70,7 @@ def artist(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY):
     # Añadimos el nodo del artista Y si es necesario, además de una arista para unirlo a la segunda canción
     if ((level.at[i, 'ID_y'] + 'AY') not in auxNodes):
         subNodes = subNodes + ''',
-    {id: "''' + level.at[i, 'ID_y'] + '''AY", label: "''' + level.at[i, 'ID_y'] + ''' ", group: "artist", level: 6}'''
+    {id: "''' + level.at[i, 'ID_y'] + '''AY", label: "''' + level.at[i, 'ID_y'] + ''' ", title: "Artist", group: "artist", level: 6}'''
 
         subEdges += ''',
     {from: "''' + songY + '''SY", label: "artist", to: "''' + level.at[i, 'ID_y'] + '''AY"}'''
@@ -95,15 +95,15 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY):
     # Añadimos el nodo del miembro X si es necesario, además de una arista para unirlo al primer artista
     if ('MembersX' not in auxNodes):
         subNodes = ''',
-    {id: "MembersX", label: "Members of ''' + artistX + '''", group: "member", level: 3}'''
+    {id: "MembersX", label: "Members of ''' + artistX + '''", title: "Members", group: "member", level: 3}'''
         subEdges += ''',
     {from: "''' + artistX + '''AX", label: "miembros", to: "MembersX"}'''
 
 
     # Añadimos el nodo del miembro Y si es necesario, además de una arista para unirlo al segundo artista
     if ('MembersY' not in auxNodes):
-        subNodes = ''',
-    {id: "MembersY", label: "Members of ''' + artistY + '''", group: "member", level: 5}'''
+        subNodes += ''',
+    {id: "MembersY", label: "Members of ''' + artistY + '''", title: "Members", group: "member", level: 5}'''
         subEdges += ''',
     {from: "''' + artistY + '''AY", label: "miembros", to: "MembersY"}'''
 
@@ -209,7 +209,7 @@ def genre2(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
         # Añadimos el nodo del género si es necesario, además de una arista para unirlo a la canción correspondiente
         if ((level.at[i, 'ID_x'] + 'GX') not in auxNodes):
             subNodes = ''',
-    {id: "''' + level.at[i, 'ID_x'] + '''GX", label: "''' + level.at[i, 'ID_x'] + ''' ", group: "genre", level: 3}'''
+    {id: "''' + level.at[i, 'ID_x'] + '''GX", label: "''' + level.at[i, 'ID_x'] + ''' ", title: "Genre", group: "genre", level: 3}'''
 
         if (('''{from: "''' + songX + '''SX", label: "genre", to: "''' + level.at[i, 'ID_x'] + '''GX"}''') not in subEdges):
             subEdges += ''',
@@ -219,7 +219,7 @@ def genre2(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
         # Añadimos el nodo del género si es necesario, además de una arista para unirlo a la canción correspondiente
         if ((level.at[i, 'ID_y'] + 'GY') not in auxNodes):
             subNodes = ''',
-    {id: "''' + level.at[i, 'ID_y'] + '''GY", label: "''' + level.at[i, 'ID_y'] + ''' ", group: "genre", level: 5}'''
+    {id: "''' + level.at[i, 'ID_y'] + '''GY", label: "''' + level.at[i, 'ID_y'] + ''' ", title: "Genre", group: "genre", level: 5}'''
 
         if (('''{from: "''' + songY + '''SY", label: "genre", to: "''' + level.at[i, 'ID_y'] + '''GY"}''') not in subEdges):
             subEdges += ''',
@@ -241,7 +241,7 @@ def artist2(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     subNodes = ''
     subEdges = auxEdges
 
-    nodoArtistas = '''{id: "artists", label: ".*", group: "artist", level: 4}'''
+    nodoArtistas = '''{id: "artists", label: ".*", title: "Artist", group: "artist", level: 4}'''
 
     if (re.findall(nodoArtistas, auxNodes) and ((level.at[i, 'ID_x'] in re.findall(nodoArtistas, auxNodes)[0]) or (level.at[i, 'ID_y'] in re.findall(nodoArtistas, auxNodes)[0]))):
         return [subNodes, subEdges]
@@ -250,7 +250,7 @@ def artist2(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
         # Añadimos el nodo del artista X si es necesario, además de una arista para unirlo a la primera canción
         if ((level.at[i, 'ID_x'] + 'AX') not in auxNodes):
             subNodes = ''',
-    {id: "''' + level.at[i, 'ID_x'] + '''AX", label: "''' + level.at[i, 'ID_x'] + ''' ", group: "artist", level: 2}'''
+    {id: "''' + level.at[i, 'ID_x'] + '''AX", label: "''' + level.at[i, 'ID_x'] + ''' ", title: "Artist", group: "artist", level: 2}'''
 
         if (('''{from: "''' + songX + '''SX", label: "artist", to: "''' + level.at[i, 'ID_x'] + '''AX"}''') not in subEdges):
             subEdges += ''',
@@ -260,7 +260,7 @@ def artist2(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
         # Añadimos el nodo del artista X si es necesario, además de una arista para unirlo a la primera canción
         if ((level.at[i, 'ID_y'] + 'AY') not in auxNodes):
             subNodes = ''',
-    {id: "''' + level.at[i, 'ID_y'] + '''AY", label: "''' + level.at[i, 'ID_y'] + ''' ", group: "artist", level: 6}'''
+    {id: "''' + level.at[i, 'ID_y'] + '''AY", label: "''' + level.at[i, 'ID_y'] + ''' ", title: "Artist", group: "artist", level: 6}'''
 
         if (('''{from: "''' + songY + '''SY", label: "artist", to: "''' + level.at[i, 'ID_y'] + '''AY"}''') not in subEdges):
             subEdges += ''',
@@ -287,15 +287,15 @@ def member2(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
         # Añadimos el nodo del miembro X si es necesario, además de una arista para unirlo al primer artista
         if ('MembersX' not in auxNodes):
             subNodes = ''',
-    {id: "MembersX", label: "Members of ''' + artistX + '''", group: "member", level: 3}'''
+    {id: "MembersX", label: "Members of ''' + artistX + '''", title: "Members", group: "member", level: 3}'''
             subEdges += ''',
     {from: "''' + artistX + '''AX", label: "miembros", to: "MembersX"}'''
 
     else:
         # Añadimos el nodo del miembro Y si es necesario, además de una arista para unirlo al segundo artista
         if ('MembersY' not in auxNodes):
-            subNodes = ''',
-    {id: "MembersY", label: "Members of ''' + artistY + '''", group: "member", level: 5}'''
+            subNodes += ''',
+    {id: "MembersY", label: "Members of ''' + artistY + '''", title: "Members", group: "member", level: 5}'''
             subEdges += ''',
     {from: "''' + artistY + '''AY", label: "miembros", to: "MembersY"}'''
 

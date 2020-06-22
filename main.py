@@ -195,8 +195,8 @@ async def test(request):
     relationsDF = main(song1,artist1,song2,artist2) # relationsDF es un DataFrame
 
     auxNodes = '''[
-    {id: "''' + song1 + '''SX", label: "''' + song1 + '''", group: "song", level: 1},
-    {id: "''' + song2 + '''SY", label: "''' + song2 + '''", group: "song", level: 7}'''
+    {id: "''' + song1 + '''SX", label: "''' + song1 + '''", title: "Song", group: "song", level: 1},
+    {id: "''' + song2 + '''SY", label: "''' + song2 + '''", title: "Song", group: "song", level: 7}'''
 
     # Nos quedamos con la lista de artistas que coinciden en ambas canciones
     artistList = relationsDF.loc[(relationsDF['idPropertyName'] == 'performer')]
@@ -206,7 +206,7 @@ async def test(request):
         index = artistList.index.values.tolist()
 
         nodoArtistas = ''',
-    {id: "artists", label: "''' + artist1 + '''", group: "artist", level: 4}'''
+    {id: "artists", label: "''' + artist1 + '''", title: "Artist", group: "artist", level: 4}'''
 
         auxNodes = auxNodes + nodoArtistas
 
@@ -230,12 +230,8 @@ async def test(request):
         level.sort_values(by=['Level_x', 'idPropertyName', 'valueProperty'], inplace= True)
 
     else:
-        auxNodes = auxNodes + ''',
-    {id: "''' + artist1 + '''AX", label: "''' + artist1 + '''", group: "artist", level: 2},
-    {id: "''' + artist2 + '''AY", label: "''' + artist2 + '''", group: "artist", level: 6}'''
 
-        auxEdges = '''{from: "''' + song1 + '''SX", label: "artist", to: "''' + artist1 + '''AX"},
-    {from: "''' + song2 + '''SY", label: "artist", to: "''' + artist2 + '''AY"}'''
+        auxEdges = '''{}'''
 
         # Nos quedamos con un dataframe en el que solo aparecen las relaciones del mismo nivel pero sin contar el estudio de miembros
         level = relationsDF.loc[(relationsDF['Level_x'] == relationsDF['Level_y']) & (relationsDF['Level_x'] != 5)]

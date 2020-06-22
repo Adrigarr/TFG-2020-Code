@@ -10,7 +10,7 @@ var nodosCentrales2 = nodos2.filter(nodo => nodo.level == 4);
 var nodosIntermedios2 = nodos2.filter(nodo => ((nodo.level > 1) && (nodo.level < 7) && (nodo.level != 4)));
 
 nodosCentrales2.forEach(nodoInnecesario);
-nodosIntermedios2.forEach(nodoSuelto);
+nodosIntermedios2.forEach(nodoInnecesario);
 
 // Actualizamos nuestra variable nodos2
 nodos2 = nodes2.get();
@@ -28,7 +28,7 @@ function nodoInnecesario(value) {
     // Si el nodo actual conecta con menos de 2 nodos, significa que está "suelto", así que es innecesario
     // También es innecesario si solo está conectado a dos nodos del mismo grupo o categoría, porque en
     // ese caso corresponde a un nodo del primer grafo, no del segundo
-    if ((nodosConectados.length < 2) || ((nodosConectados.length == 2) && (nodosConectados[0]["group"] == nodosConectados[1]["group"]))) {
+    if ((nodosConectados.length < 2) || ((nodosConectados.length == 2) && (nodes2.get(nodosConectados[0])["group"] == nodes2.get(nodosConectados[1])["group"]))) {
         var aristasConectadas = network2.getConnectedEdges(value["id"]);
 
         // Borramos todas sus aristas
