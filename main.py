@@ -248,7 +248,7 @@ async def test(request):
         # Get the function from switcher dictionary
         func = switcher.get(level.at[i, 'Level_x'], "nothing")
         # Execute the function
-        sub = func(level, i, auxNodes, auxEdges, song1, song2, artist1, artist2)
+        sub = func(level, i, auxNodes, auxEdges, song1, song2, artist1, artist2, 'z')
 
         auxNodes = auxNodes + sub[0]
         auxEdges = sub[1]
@@ -260,7 +260,7 @@ async def test(request):
 
     for k in noindex:
         # Get the function from switcher dictionary
-        func = switcher2.get(nolevel.at[k, 'Level_x'], "nothing")
+        func = switcher.get(nolevel.at[k, 'Level_x'], "nothing")
         # Execute the function
         subx = func(nolevel, k, auxNodes2, auxEdges2, song1, song2, artist1, artist2, 'x')
 
@@ -268,7 +268,7 @@ async def test(request):
         auxEdges2 = subx[1]
 
         # Get the function from switcher dictionary
-        func = switcher2.get(nolevel.at[k, 'Level_y'], "nothing")
+        func = switcher.get(nolevel.at[k, 'Level_y'], "nothing")
         # Execute the function
         suby = func(nolevel, k, auxNodes2, auxEdges2, song1, song2, artist1, artist2, 'y')
 
@@ -295,7 +295,7 @@ async def test(request):
             # Get the function from switcher dictionary
             func = switcher.get(level.at[i, 'Level_x'], "nothing")
             # Execute the function
-            sub = func(level, i, auxNodes, auxEdges, song1, song2, artist1, artist2)
+            sub = func(level, i, auxNodes, auxEdges, song1, song2, artist1, artist2, 'z')
 
             auxNodes = auxNodes + sub[0]
             auxEdges = sub[1]
@@ -308,7 +308,7 @@ async def test(request):
 
         for k in noindex:
             # Get the function from switcher dictionary
-            func = switcher2.get(nolevel.at[k, 'Level_x'], "nothing")
+            func = switcher.get(nolevel.at[k, 'Level_x'], "nothing")
             # Execute the function
             subx = func(nolevel, k, auxNodes2, auxEdges2, song1, song2, artist1, artist2, 'x')
 
@@ -316,7 +316,7 @@ async def test(request):
             auxEdges2 = subx[1]
 
             # Get the function from switcher dictionary
-            func = switcher2.get(nolevel.at[k, 'Level_y'], "nothing")
+            func = switcher.get(nolevel.at[k, 'Level_y'], "nothing")
             # Execute the function
             suby = func(nolevel, k, auxNodes2, auxEdges2, song1, song2, artist1, artist2, 'y')
 
