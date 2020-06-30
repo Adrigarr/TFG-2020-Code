@@ -2,6 +2,16 @@ import re
 
 # ----------------------------    FUNCIONES PARA DIBUJAR EL GRAFO --------------------------
 
+# RECIBE:   dataframe level => dataframe con el que trabajamos,
+#           integer i       => índice actual del dataframe,
+#           String auxNodes => lista de nodos del grafo,
+#           String auxEdges => lista de aristas del grafo,
+#           Sring songX     => primera canción a comparar,
+#           String songY    => segunda canción a comparar,
+#           String artistX  => artista de la primera canción,
+#           String artistY  => artista de la segunda canción,
+#           String XY       => carácter de control 'x'/'y'/'z'
+# DEVUELVE: array de String => subNodes es la lista de nodos a añadir y subEdges es la nueva lista de aristas
 def song(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     subNodes = ''
     subEdges = auxEdges
@@ -11,12 +21,16 @@ def song(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
         subNodes = ''',
     {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: "center", level: 4}'''
 
+    # ------------------------------------------------------ Z --------------------------------------------------------------
+    # Si es una explicación de la misma categoría
     if (XY == 'z'):
         # Añadimos las aristas para unir la propiedad con ambas canciones
         subEdges += ''',
     {from: "''' + level.at[i, 'ID_x'] + '''SX", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"},
     {from: "''' + level.at[i, 'ID_y'] + '''SY", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
 
+    # ------------------------------------------------------ XY --------------------------------------------------------------
+    # Si es una explicación de distinta categoría (solo trabajamos un lado de la explicación)
     else:
         # Añadimos las aristas para unir la propiedad con la canción
         subEdges += ''',
@@ -25,8 +39,16 @@ def song(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     return [subNodes, subEdges]
 
 
-
-
+# RECIBE:   dataframe level => dataframe con el que trabajamos,
+#           integer i       => índice actual del dataframe,
+#           String auxNodes => lista de nodos del grafo,
+#           String auxEdges => lista de aristas del grafo,
+#           Sring songX     => primera canción a comparar,
+#           String songY    => segunda canción a comparar,
+#           String artistX  => artista de la primera canción,
+#           String artistY  => artista de la segunda canción,
+#           String XY       => carácter de control 'x'/'y'/'z'
+# DEVUELVE: array de String => subNodes es la lista de nodos a añadir y subEdges es la nueva lista de aristas
 def genre(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     subNodes = ''
     subEdges = auxEdges
@@ -36,35 +58,13 @@ def genre(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     edgeGX = '''{from: "''' + level.at[i, 'ID_x'] + '''GX", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
     edgeGY = '''{from: "''' + level.at[i, 'ID_y'] + '''GY", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
 
-    # ------------------------------------------------------ Z --------------------------------------------------------------
-    if (XY == 'z'):
-        # Añadimos el nodo del género X si es necesario, además de una arista para unirlo a la primera canción
-        if ((level.at[i, 'ID_x'] + 'GX') not in auxNodes):
-            subNodes = ''',
-    {id: "''' + level.at[i, 'ID_x'] + '''GX", label: "''' + level.at[i, 'ID_x'] + ''' ", title: "Genre", group: "genre", level: 3}'''
 
-            subEdges += ''',
-    ''' + edgeSX
-
-        # Añadimos el nodo del género Y si es necesario, además de una arista para unirlo a la segunda canción
-        if ((level.at[i, 'ID_y'] + 'GY') not in auxNodes):
-            subNodes = subNodes + ''',
-    {id: "''' + level.at[i, 'ID_y'] + '''GY", label: "''' + level.at[i, 'ID_y'] + ''' ", title: "Genre", group: "genre", level: 5}'''
-
-            subEdges += ''',
-    ''' + edgeSY
-
-        # Añadimos las aristas para unir la propiedad con ambos géneros
-        subEdges += ''',
-    ''' + edgeGX + ''',
-    ''' + edgeGY
-
-
-    # ------------------------------------------------------ X --------------------------------------------------------------
-    elif (XY == 'x'):
+    # ------------------------------------------------------ XZ --------------------------------------------------------------
+    # Si es una explicación de la misma categoría o de distinta categoría por la izquierda
+    if (XY != 'y'):
         # Añadimos el nodo del género si es necesario, además de una arista para unirlo a la canción correspondiente
         if ((level.at[i, 'ID_x'] + 'GX') not in auxNodes):
-            subNodes = ''',
+            subNodes += ''',
     {id: "''' + level.at[i, 'ID_x'] + '''GX", label: "''' + level.at[i, 'ID_x'] + ''' ", title: "Genre", group: "genre", level: 3}'''
 
         if (edgeSX not in subEdges):
@@ -77,11 +77,12 @@ def genre(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     ''' + edgeGX
 
 
-    # ------------------------------------------------------ Y --------------------------------------------------------------
-    else:
+    # ------------------------------------------------------ YZ --------------------------------------------------------------
+    # Si es una explicación de la misma categoría o de distinta categoría por la derecha
+    if (XY != 'x'):
         # Añadimos el nodo del género si es necesario, además de una arista para unirlo a la canción correspondiente
         if ((level.at[i, 'ID_y'] + 'GY') not in auxNodes):
-            subNodes = ''',
+            subNodes += ''',
     {id: "''' + level.at[i, 'ID_y'] + '''GY", label: "''' + level.at[i, 'ID_y'] + ''' ", title: "Genre", group: "genre", level: 5}'''
 
         if (edgeSY not in subEdges):
@@ -97,15 +98,23 @@ def genre(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     #------------------------------------------------------ XYZ --------------------------------------------------------------
     # Añadimos el nodo de la propiedad si es necesario
     if (('id: "'+level.at[i, 'valueProperty']+'",') not in auxNodes):
-        subNodes = subNodes + ''',
+        subNodes += ''',
     {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: "center", level: 4}'''
 
 
     return [subNodes, subEdges]
 
 
-
-
+# RECIBE:   dataframe level => dataframe con el que trabajamos,
+#           integer i       => índice actual del dataframe,
+#           String auxNodes => lista de nodos del grafo,
+#           String auxEdges => lista de aristas del grafo,
+#           Sring songX     => primera canción a comparar,
+#           String songY    => segunda canción a comparar,
+#           String artistX  => artista de la primera canción,
+#           String artistY  => artista de la segunda canción,
+#           String XY       => carácter de control 'x'/'y'/'z'
+# DEVUELVE: array de String => subNodes es la lista de nodos a añadir y subEdges es la nueva lista de aristas
 def artist(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     subNodes = ''
     subEdges = auxEdges
@@ -121,6 +130,8 @@ def artist(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     edgeAY = '''{from: "''' + level.at[i, 'ID_y'] + '''AY", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
 
 
+    # ------------------------------------------------------ Z --------------------------------------------------------------
+    # Si es una explicación de la misma categoría
     if (XY == 'z'):
         # Añadimos el nodo del artista X si es necesario, además de una arista para unirlo a la primera canción
         if ((level.at[i, 'ID_x'] + 'AX') not in auxNodes):
@@ -188,12 +199,16 @@ def artist(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     return [subNodes, subEdges]
 
 
-
-
-
-
-
-
+# RECIBE:   dataframe level => dataframe con el que trabajamos,
+#           integer i       => índice actual del dataframe,
+#           String auxNodes => lista de nodos del grafo,
+#           String auxEdges => lista de aristas del grafo,
+#           Sring songX     => primera canción a comparar,
+#           String songY    => segunda canción a comparar,
+#           String artistX  => artista de la primera canción,
+#           String artistY  => artista de la segunda canción,
+#           String XY       => carácter de control 'x'/'y'/'z'
+# DEVUELVE: array de String => subNodes es la lista de nodos a añadir y subEdges es la nueva lista de aristas
 def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     subNodes = ''
     subEdges = auxEdges
@@ -201,6 +216,7 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     edgeAX = '''{from: "''' + artistX + '''AX", label: "miembros", to: "MembersX"}'''
     edgeAY = '''{from: "''' + artistY + '''AY", label: "miembros", to: "MembersY"}'''
 
+    # Si es una explicación de la misma categoría
     if ((XY == 'x') or (XY == 'z')):
         # Añadimos el nodo del miembro X si es necesario, además de una arista para unirlo al primer artista
         if ('MembersX' not in auxNodes):
@@ -210,6 +226,7 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
             subEdges += ''',
     ''' + edgeAX
 
+    # Si es una explicación de la misma categoría
     if ((XY == 'y') or (XY == 'z')):
         # Añadimos el nodo del miembro Y si es necesario, además de una arista para unirlo al segundo artista
         if ('MembersY' not in auxNodes):
@@ -225,6 +242,7 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: "center", level: 4}'''
 
     # ------------------------------------------------------ Z --------------------------------------------------------------
+    # Si es una explicación de la misma categoría
     if (XY == 'z'):
         # Añadimos las aristas para unir la propiedad con ambos miembros
         x = level.at[i, 'ID_x']
