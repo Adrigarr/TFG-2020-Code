@@ -2,6 +2,9 @@ import re
 
 # ----------------------------    FUNCIONES PARA DIBUJAR EL GRAFO --------------------------
 
+# Esta función analiza una explicación relacionada con el estudio de la canción y genera los nodos y aristas
+# necesarios para representarla en el grafo. Puede utilizarse para relaciones entre ambas canciones o entre
+# una canción y otro elemento, en cuyo caso solo se llama a esta función para el lado de la canción.
 # RECIBE:   dataframe level => dataframe con el que trabajamos,
 #           integer i       => índice actual del dataframe,
 #           String auxNodes => lista de nodos del grafo,
@@ -39,6 +42,9 @@ def song(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     return [subNodes, subEdges]
 
 
+# Esta función analiza una explicación relacionada con el estudio del género y genera los nodos y aristas
+# necesarios para representarla en el grafo. Puede utilizarse para relaciones entre dos géneros o entre
+# un género y otro elemento, en cuyo caso solo se llama a esta función para el lado del género.
 # RECIBE:   dataframe level => dataframe con el que trabajamos,
 #           integer i       => índice actual del dataframe,
 #           String auxNodes => lista de nodos del grafo,
@@ -105,6 +111,9 @@ def genre(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     return [subNodes, subEdges]
 
 
+# Esta función analiza una explicación relacionada con el estudio del artista y genera los nodos y aristas
+# necesarios para representarla en el grafo. Puede utilizarse para relaciones entre dos artistas o entre
+# un artista y otro elemento, en cuyo caso solo se llama a esta función para el lado del artista.
 # RECIBE:   dataframe level => dataframe con el que trabajamos,
 #           integer i       => índice actual del dataframe,
 #           String auxNodes => lista de nodos del grafo,
@@ -121,6 +130,7 @@ def artist(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
 
     nodoArtistas = '''{id: "artists", label: ".*", title: "Artist", group: "artist", level: 4}'''
 
+    # Si alguno de los artistas pertenece a la explicación directa "Artista" entre las canciones, la función termina
     if (re.findall(nodoArtistas, auxNodes) and ((level.at[i, 'ID_x'] in re.findall(nodoArtistas, auxNodes)[0]) or (level.at[i, 'ID_y'] in re.findall(nodoArtistas, auxNodes)[0]))):
         return [subNodes, subEdges]
 
@@ -130,33 +140,9 @@ def artist(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     edgeAY = '''{from: "''' + level.at[i, 'ID_y'] + '''AY", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
 
 
-    # ------------------------------------------------------ Z --------------------------------------------------------------
-    # Si es una explicación de la misma categoría
-    if (XY == 'z'):
-        # Añadimos el nodo del artista X si es necesario, además de una arista para unirlo a la primera canción
-        if ((level.at[i, 'ID_x'] + 'AX') not in auxNodes):
-            subNodes = ''',
-    {id: "''' + level.at[i, 'ID_x'] + '''AX", label: "''' + level.at[i, 'ID_x'] + ''' ", title: "Artist", group: "artist", level: 2}'''
 
-            subEdges += ''',
-    ''' + edgeSX
-
-        # Añadimos el nodo del artista Y si es necesario, además de una arista para unirlo a la segunda canción
-        if ((level.at[i, 'ID_y'] + 'AY') not in auxNodes):
-            subNodes = subNodes + ''',
-    {id: "''' + level.at[i, 'ID_y'] + '''AY", label: "''' + level.at[i, 'ID_y'] + ''' ", title: "Artist", group: "artist", level: 6}'''
-
-            subEdges += ''',
-    ''' + edgeSY
-
-        # Añadimos las aristas para unir la propiedad con ambos artistas
-        subEdges += ''',
-    ''' + edgeAX + ''',
-    ''' + edgeAY
-
-
-    # ------------------------------------------------------ X --------------------------------------------------------------
-    elif (XY == 'x'):
+    # ------------------------------------------------------ XZ --------------------------------------------------------------
+    if (XY != 'y'):
         # Añadimos el nodo del artista X si es necesario, además de una arista para unirlo a la primera canción
         if ((level.at[i, 'ID_x'] + 'AX') not in auxNodes):
             subNodes = ''',
@@ -172,8 +158,8 @@ def artist(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     ''' + edgeAX
 
 
-    # ------------------------------------------------------ Y --------------------------------------------------------------
-    else:
+    # ------------------------------------------------------ YZ --------------------------------------------------------------
+    if (XY != 'x'):
         # Añadimos el nodo del artista X si es necesario, además de una arista para unirlo a la primera canción
         if ((level.at[i, 'ID_y'] + 'AY') not in auxNodes):
             subNodes = ''',
@@ -192,13 +178,16 @@ def artist(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     # ------------------------------------------------------ XYZ --------------------------------------------------------------
     # Añadimos el nodo de la propiedad si es necesario
     if (('id: "'+level.at[i, 'valueProperty']+'",') not in auxNodes):
-        subNodes = subNodes + ''',
+        subNodes += ''',
     {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: "center", level: 4}'''
 
 
     return [subNodes, subEdges]
 
 
+# Esta función analiza una explicación relacionada con el estudio de los miembros y genera los nodos y aristas
+# necesarios para representarla en el grafo. Puede utilizarse para relaciones entre dos miembros o entre
+# un miembro y otro elemento, en cuyo caso solo se llama a esta función para el lado del miembro.
 # RECIBE:   dataframe level => dataframe con el que trabajamos,
 #           integer i       => índice actual del dataframe,
 #           String auxNodes => lista de nodos del grafo,
@@ -217,7 +206,7 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     edgeAY = '''{from: "''' + artistY + '''AY", label: "miembros", to: "MembersY"}'''
 
     # Si es una explicación de la misma categoría
-    if ((XY == 'x') or (XY == 'z')):
+    if (XY != 'y'):
         # Añadimos el nodo del miembro X si es necesario, además de una arista para unirlo al primer artista
         if ('MembersX' not in auxNodes):
             subNodes = ''',
@@ -227,7 +216,7 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     ''' + edgeAX
 
     # Si es una explicación de la misma categoría
-    if ((XY == 'y') or (XY == 'z')):
+    if (XY != 'x'):
         # Añadimos el nodo del miembro Y si es necesario, además de una arista para unirlo al segundo artista
         if ('MembersY' not in auxNodes):
             subNodes += ''',
@@ -361,8 +350,7 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
 
 
 
-    
- 
+# Switch que devuelve el nombre de la función a la que corresponde cada número 
 switcher = {
         2: song,
         3: genre,

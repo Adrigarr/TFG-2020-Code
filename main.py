@@ -125,7 +125,7 @@ def main(arg1,arg2,arg3,arg4):
 
 # ----------------------------    SECCIÓN DE LA APP Y SUS RUTAS ----------------------------
 
-app = Sanic()
+app = Sanic(__name__)
 
 # Serves files from the static folder to the URL /static
 app.static('/static', './static')
