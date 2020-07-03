@@ -404,13 +404,11 @@ async def test(request):
     physics: false
 }"""
 
-    # Añadimos la hora actual al .js para tener un control de versiones.
-    # De esta forma nos aseguramos de que el cliente tenga siempre el .js
-    # correcto.
-    x = datetime.now()
-    date = f"{x.year}{x.month}{x.day}{x.hour}{x.minute}{x.second}"
 
-    with open(os.getcwd() + '/static/js/graph' + date + '.js', 'w') as file:
+    if os.path.exists(os.getcwd() + '/static/js/graph.js'):
+        os.remove(os.getcwd() + '/static/js/graph.js')
+
+    with open(os.getcwd() + '/static/js/graph.js', 'w') as file:
         file.write(f"""
 // create an array with nodes
 var nodes = new vis.DataSet({myNodes});
@@ -442,8 +440,7 @@ network2.moveTo({{
 """.strip())
 
     return template(
-        'graph.html',
-        var1 = date
+        'graph.html'
     )
 
 if __name__ == '__main__':
