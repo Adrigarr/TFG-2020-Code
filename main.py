@@ -14,7 +14,7 @@ import json
 
 # define the environment for the Jinja2 templates
 env = Environment(
-    loader=PackageLoader('main', 'templates'),
+    loader=PackageLoader('main', 'app/view'),
     autoescape=select_autoescape(['html', 'xml', 'tpl'])
 )
 
@@ -128,13 +128,13 @@ def main(arg1,arg2,arg3,arg4):
 app = Sanic(__name__)
 
 # Serves files from the static folder to the URL /static
-app.static('/static', './static')
+app.static('app/static', './app/static')
 
 # Esta es la página principal de la aplicación
 @app.route("/")
 async def test(request):
     # os.getcwd() devuelve la URL actual
-    # template = open(os.getcwd() + "/templates/index.html")
+    # template = open(os.getcwd() + "/view/index.html")
     # return html(template.read())
 
     # Si el html necesita valores, habría que añadirlos dentro de este template
@@ -405,10 +405,10 @@ async def test(request):
 }"""
 
 
-    if os.path.exists(os.getcwd() + '/static/js/graph.js'):
-        os.remove(os.getcwd() + '/static/js/graph.js')
+    if os.path.exists(os.getcwd() + '/app/static/js/graph.js'):
+        os.remove(os.getcwd() + '/app/static/js/graph.js')
 
-    with open(os.getcwd() + '/static/js/graph.js', 'w') as file:
+    with open(os.getcwd() + '/app/static/js/graph.js', 'w') as file:
         file.write(f"""
 // create an array with nodes
 var nodes = new vis.DataSet({myNodes});

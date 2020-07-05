@@ -27,7 +27,7 @@ function uniq(a) {
 $(document).ready(function() {
   $.ajax({
     type: "GET",
-    url: "/static/cleanDataset.csv",
+    url: "/app/static/cleanDataset.csv",
     dataType: "text"
   }).done(loadSongs);
 });
