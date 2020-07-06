@@ -1,5 +1,5 @@
 from SPARQLWrapper import SPARQLWrapper, RDFXML, JSON
-from sparqlLibrary import *
+from app.model.sparqlLibrary import *
 import pandas as pd
 import json
 import sys
