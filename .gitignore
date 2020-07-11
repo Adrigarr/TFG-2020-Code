@@ -1,3 +1,5 @@
-
+graph*.js
 *.log
 *.pyc
+relations.csv
+*Data*.csv
