@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Explicaciones de música</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="app/static/css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="app/static/css/main.css" rel="stylesheet">
+
+  <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+
+</head>
+
+<body>
+  
+  <!-- Page Content -->
+  <div class="container-fluid">
+
+    <!-- Inicio del formulario que recoge las canciones -->
+    <form action="/index" id="myForm" method="get"></form>
+
+    <div class="row">
+      <div id="mySubmit" class="col-lg text-center">
+        
+        <button type="submit" class="btn btn-primary btn-lg" value="Submit" form="myForm">COMPARAR</button>
+        
+      </div>
+    </div>
+
+    <div class="row">
+      <div id="listColumn1" class="col-lg col-md col-sm text-center">
+        <input type="text" class="form-control" id="myInput1" onkeyup="myFilter('myInput1','mySelect1')" placeholder="Search for songs..." title="Type in a name">
+
+        <select id="mySelect1" name="xsong" size="14" form="myForm" required>
+
+        </select>
+
+      </div>
+
+      <div class="col-lg-7 col-md-7 col-sm-7 text-center">
+        <button onclick='toggleGraph("mynetwork", "mynetwork2")'>Explicaciones de la misma categoría</button>
+        <button onclick='toggleGraph("mynetwork2", "mynetwork")'>Explicaciones de distinta categoría</button>
+
+        <center><div id="mynetwork"></div></center>
+        <center><div id="mynetwork2" class="hide"></div></center>
+      </div>
+
+      <div id="listColumn2" class="col-lg col-md col-sm text-center">
+        <input type="text" class="form-control" id="myInput2" onkeyup="myFilter('myInput2','mySelect2')" placeholder="Search for songs..." title="Type in a name">
+
+        <select id="mySelect2" name="ysong" size="14" form="myForm" required>
+
+        </select>
+      </div>
+
+    </div> <!-- Row -->
+    <pre id="eventSpan"></pre>
+  </div> <!-- Container -->  
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="app/static/js/jquery.js"></script>
+
+  <script src="app/static/js/bootstrap.bundle.min.js"></script>
+  <!-- JavaScript para dibujar el grafo -->
+  <script src="app/static/js/graph.js"></script>
+  <script src="app/static/js/networkAuxiliar.js"></script>
+
+  <!-- JavaScript de la interfaz -->
+  <script src="app/static/js/view.js"></script>
+
+</body>
+
+</html>
