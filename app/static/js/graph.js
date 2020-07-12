@@ -205,10 +205,6 @@ network2.moveTo({
 network.on("click", function(params) {
   params.event = "[original event]";
   if (params.nodes.length > 0) {
-    
-    console.log(
-    "click event, getNodeAt returns: " + this.getNodeAt(params.pointer.DOM)
-    );
 
     var name = params.nodes[0];
 
@@ -219,17 +215,19 @@ network.on("click", function(params) {
             var len = Object.keys(data.ID).length;
             var table = document.getElementById("mytable");
 
-            addRow(table, data.ID[0], len);
+            addRow(table, data.ID[0], "");
 
             for (i = 0; i < len; i++) {
-                addRow(table, data.idPropertyName[i], data.valueProperty[i]);
+                var lastRowCells = table.rows[table.rows.length-1].cells;
+
+                if (data.idPropertyName[i] == lastRowCells[0].innerHTML) {
+                    lastRowCells[1].innerHTML += ", " + data.valueProperty[i];
+                }
+                else {
+                    addRow(table, data.idPropertyName[i], data.valueProperty[i]);
+                }
             }
 
-        }).fail(function() { 
-            // not exists code
-            document.getElementById("eventSpan").innerHTML =
-            "<h2>Click event ERROR:</h2>" + name + JSON.stringify(params.nodes, null, 4);
-            
         })
   }
 });
