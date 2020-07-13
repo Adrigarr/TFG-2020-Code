@@ -160,15 +160,53 @@ function borraArista(value, edg) {
 
 
 
+// WIP
+network.on("click", function(params) {
+  showTable(params);
+});
 
-function arrayToTable(tableData) {
-    var table = $('<table></table>');
-    $(tableData).each(function (i, rowData) {
-        var row = $('<tr></tr>');
-        $(rowData).each(function (j, cellData) {
-            row.append($('<td>'+cellData+'</td>'));
-        });
-        table.append(row);
-    });
-    return table;
+network2.on("click", function(params) {
+  showTable(params);
+});
+
+
+function showTable(params) {
+    params.event = "[original event]";
+    if (params.nodes.length > 0) {
+
+    var name = params.nodes[0].slice(0, -2);
+
+
+    $.getJSON('/app/static/' + name + '.json')
+        .done(function (data) {
+
+            var len = Object.keys(data.ID).length;
+            var table = document.getElementById("mytable");
+
+            table.innerHTML = '';
+
+            addRow(table, data.ID[0], "");
+
+            for (i = 0; i < len; i++) {
+                var lastRowCells = table.rows[table.rows.length-1].cells;
+
+                if (data.idPropertyName[i] == lastRowCells[0].innerHTML) {
+                    lastRowCells[1].innerHTML += ", " + data.valueProperty[i];
+                }
+                else {
+                    addRow(table, data.idPropertyName[i], data.valueProperty[i]);
+                }
+            }
+
+        })
+    }
 }
+
+
+function addRow(table, data1, data2) {
+    var row = table.insertRow(-1);
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    cell1.innerHTML = data1;
+    cell2.innerHTML = data2;
+};

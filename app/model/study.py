@@ -2,7 +2,7 @@ import pandas as pd
 import json
 from sparqlLibrary import *
 
-path='cleanDataset.csv'
+path='/app/static/cleanDataset.csv'
 data = pd.read_csv(path,sep=',', error_bad_lines=False)
 aux = pd.DataFrame()
 for row in data.iterrows():

@@ -271,15 +271,4 @@ network.moveTo({{
 network2.moveTo({{
   scale: 0.5             // Zooms out
 }});
-
-network.on("click", function(params) {{
-  params.event = "[original event]";
-  if (params.nodes.length > 0) {{
-    document.getElementById("eventSpan").innerHTML =
-    "<h2>Click event:</h2>" + JSON.stringify(params.nodes, null, 4);
-    console.log(
-    "click event, getNodeAt returns: " + this.getNodeAt(params.pointer.DOM)
-    );
-  }}
-}});
 """.strip())

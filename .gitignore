@@ -1,6 +1,6 @@
-graph*.js
+graph.js
 *.log
 *.pyc
 relations.csv
-*Data*.csv
-*Data*.json
+*.json
+
