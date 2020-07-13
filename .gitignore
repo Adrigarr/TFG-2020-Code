@@ -2,4 +2,5 @@ graph*.js
 *.log
 *.pyc
 relations.csv
-*Data*.csv
+artistData*.csv
+songData*.csv
