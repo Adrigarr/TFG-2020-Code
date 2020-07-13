@@ -1,6 +1,7 @@
 from sanic import response
 from jinja2 import Environment, PackageLoader, select_autoescape
 import sys
+import os
 import logging
 from datetime import datetime, timedelta
 
@@ -94,12 +95,9 @@ def main(arg1,arg2,arg3,arg4):
                 membersData2 = getMembers2(artistData2,logger)
 
                 #GENERE SONGINFO
-                songData.to_csv('songData1.csv',index=False)
-                songData2.to_csv('songData2.csv',index=False)
+                songData.to_json(os.getcwd() + '/app/static/' + song1['itemLabel.value'][0] + '.json')
+                songData2.to_json(os.getcwd() + '/app/static/' + song2['itemLabel.value'][0] +'.json')
 
-                #GENERE ARTIST
-                artistData.to_csv('artistData.csv',index=False)
-                artistData2.to_csv('artistData2.csv',index=False)
 
                 song1Data = [songData,genreData,artistData,membersData]
                 song1Data = pd.concat(song1Data,sort=False)

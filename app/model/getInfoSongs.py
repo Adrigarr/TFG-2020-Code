@@ -3,6 +3,7 @@ from app.model.sparqlLibrary import *
 import pandas as pd
 import json
 import sys
+import os
  
 sparql = SPARQLWrapper("https://query.wikidata.org/sparql", agent='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36')
  
@@ -36,6 +37,9 @@ def getArtist2(df,logger):
             resultsArtist1 = getInfoArtist(i[1]['idValueProperty'],i[1]['valueProperty'])
             resultsArtist1['Level'] = 4
             resultsArtist1 = executeDict(resultsArtist1)
+
+            resultsArtist1.to_json(os.getcwd() + '/app/static/' + i[1]['valueProperty'] + '.json')
+
             aux = pd.concat([aux, resultsArtist1], ignore_index=True)
 
     else:
@@ -72,11 +76,11 @@ def getInfSong(songCode,title):
 
     dfSong = executeDict(dfSong)
 
-    return dfSong
-
-
     #PARSE DATES
     dfSong = parseDates(dfSong)
+
+    return dfSong
+
 
 #if __name__ == '__main__':
 #    main(sys.argv[1], sys.argv[2], sys.argv[3])
