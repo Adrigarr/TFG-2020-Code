@@ -160,53 +160,72 @@ function borraArista(value, edg) {
 
 
 
-// WIP
+// Cuando se hace click en el primer grafo, se llama a la función
+// para mostrar la tabla de datos adicionales
 network.on("click", function(params) {
   showTable(params);
 });
 
+// Cuando se hace click en el segundo grafo, se llama a la función
+// para mostrar la tabla de datos adicionales
 network2.on("click", function(params) {
   showTable(params);
 });
 
 
+// Función para mostrar la tabla de datos adicionales en el caso de los nodos de canciones o artistas
+// RECIBE: objeto params => objeto con la información del evento
 function showTable(params) {
     params.event = "[original event]";
+
+    // Comprobamos si se ha hecho click en (al menos) un nodo
     if (params.nodes.length > 0) {
 
-    var name = params.nodes[0].slice(0, -2);
+        // Recortamos los dos últimos caracteres de la ID del nodo para obtener
+        // el nombre de nuestro objeto de estudio
+        var name = params.nodes[0].slice(0, -2);
 
+        // Se busca un archivo .json con el nombre del objeto de estudio
+        // y, si se encuentra, se muestra su contenido en una tabla
+        $.getJSON('/app/static/' + name + '.json')
+            .done(function (data) {
 
-    $.getJSON('/app/static/' + name + '.json')
-        .done(function (data) {
+                var len = Object.keys(data.ID).length;
+                var table = document.getElementById("mytable");
 
-            var len = Object.keys(data.ID).length;
-            var table = document.getElementById("mytable");
+                // Se limpia la tabla para evitar datos residuales
+                table.innerHTML = '';
 
-            table.innerHTML = '';
+                // Se añade la fila de cabecera
+                addRow(table, data.ID[0], "");
 
-            addRow(table, data.ID[0], "");
+                // Se van añadiendo filas a la tabla con todos los datos disponibles
+                for (i = 0; i < len; i++) {
+                    var lastRowCells = table.rows[table.rows.length-1].cells;
 
-            for (i = 0; i < len; i++) {
-                var lastRowCells = table.rows[table.rows.length-1].cells;
-
-                if (data.idPropertyName[i] == lastRowCells[0].innerHTML) {
-                    lastRowCells[1].innerHTML += ", " + data.valueProperty[i];
+                    // Si se trata de una propiedad que ya está en la tabla, su valor se amplía
+                    if (data.idPropertyName[i] == lastRowCells[0].innerHTML) {
+                        lastRowCells[1].innerHTML += ", " + data.valueProperty[i];
+                    }
+                    // Si no, se añade una fila nueva
+                    else {
+                        addRow(table, data.idPropertyName[i], data.valueProperty[i]);
+                    }
                 }
-                else {
-                    addRow(table, data.idPropertyName[i], data.valueProperty[i]);
-                }
-            }
 
-        })
+            })
     }
 }
 
 
+// Función para añadir una fila de dos celdas a una tabla HTML
+// RECIBE: tabla table  => tabla a modificar,
+//         String data1 => datos a introducir en la primera celda,
+//         String data2 => datos a introducir en la segunda celda
 function addRow(table, data1, data2) {
-    var row = table.insertRow(-1);
-    var cell1 = row.insertCell(0);
-    var cell2 = row.insertCell(1);
-    cell1.innerHTML = data1;
-    cell2.innerHTML = data2;
+    var row = table.insertRow(-1); // Se añade una fila al final de la tabla
+    var cell1 = row.insertCell(0); // Se añade una celda a la fila
+    var cell2 = row.insertCell(1); // Se añade otra celda a la fila
+    cell1.innerHTML = data1; // Se rellena la primera celda
+    cell2.innerHTML = data2; // Se rellena la segunda celda
 };
