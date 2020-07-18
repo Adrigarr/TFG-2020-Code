@@ -4,6 +4,8 @@ import sys
 import os
 import logging
 from datetime import datetime, timedelta
+import requests
+import csv
 
 
 # local imports
@@ -170,6 +172,53 @@ async def random(request):
 
     return response.text(thislist)
 
+# Función que sirve para generar un archivo con todas las consultas erróneas. Está por testear
+async def status(request):
+
+    tracklist = []
+
+    with open(os.getcwd() + '/app/static/cleanDataset.csv') as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        line_count = 0
+        for row in csv_reader:
+            if line_count == 0:
+                line_count += 1
+            else:
+                if (len(row) > 2):
+                    song = row[0][1:len(row[0])]
+                    i = 1
+                    while i < len(row)-1: 
+                        song += ',' + row[i]
+                        i += 1
+
+                    song += ',' + row[i][0:len(row[i]-1)] + ' — ' + row[-1]
+
+                else: 
+                    song = row[0] + ' — ' + row[1]
+
+                tracklist.append(song)
+
+                line_count += 1
+
+    file = open(os.getcwd() + '/app/static/status.txt', 'w')
+
+    for a in tracklist:
+        for b in tracklist:
+            if a != b:
+                payload = {"xsong": a,
+                           "ysong": b}
+                
+                req = requests.get('https://explicaciones.herokuapp.com/index', params=payload)
+
+                status = req.status_code
+
+                if (status != 200):
+                    file.write('song1: ' + a + ' / song2: ' + b + 'status: ' + str(status) + '\n')
+
+    file.close()
+
+    return response.text('OK')
+
 #WIP
 async def index(request):
     thislist = request.query_args # Esta es la lista de argumentos recibidos en la URL
@@ -200,6 +249,7 @@ app.add_route(index, '/index')
 app.add_route(table, '/table') #Temporal
 app.add_route(graph4, '/graph4') #Temporal
 app.add_route(random, '/random') #Temporal
+app.add_route(status, '/status')
 
 #@app.route("/")
 #@app.route("/table")
