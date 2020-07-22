@@ -197,7 +197,8 @@ function showTable(params) {
                 table.innerHTML = '';
 
                 // Se añade la fila de cabecera
-                addRow(table, data.ID[0], "");
+                addRow(table, data.ID[0], "", 'y');
+                table.appendChild(document.createElement('tbody'));
 
                 // Se van añadiendo filas a la tabla con todos los datos disponibles
                 for (i = 0; i < len; i++) {
@@ -209,7 +210,7 @@ function showTable(params) {
                     }
                     // Si no, se añade una fila nueva
                     else {
-                        addRow(table, data.idPropertyName[i], data.valueProperty[i]);
+                        addRow(table, data.idPropertyName[i], data.valueProperty[i], 'n');
                     }
                 }
 
@@ -222,10 +223,23 @@ function showTable(params) {
 // RECIBE: tabla table  => tabla a modificar,
 //         String data1 => datos a introducir en la primera celda,
 //         String data2 => datos a introducir en la segunda celda
-function addRow(table, data1, data2) {
-    var row = table.insertRow(-1); // Se añade una fila al final de la tabla
-    var cell1 = row.insertCell(0); // Se añade una celda a la fila
-    var cell2 = row.insertCell(1); // Se añade otra celda a la fila
-    cell1.innerHTML = data1; // Se rellena la primera celda
-    cell2.innerHTML = data2; // Se rellena la segunda celda
+function addRow(table, data1, data2, isHeader) {
+    if (isHeader == 'y') {
+        var header = table.createTHead();
+        var row = header.insertRow(-1); // Se añade una fila a la cabecera de la tabla
+        var cell1 = row.insertCell(0); // Se añade una celda a la fila
+        var cell2 = row.insertCell(1); // Se añade otra celda a la fila
+        cell1.outerHTML = "<th>" + data1 +"</th>";  // Se rellena la primera celda
+        cell2.outerHTML = "<th>" + data2 +"</th>";  // Se rellena la segunda celda
+    }
+    else {
+
+        var row = table.tBodies[0].insertRow(-1); // Se añade una fila al final de la tabla
+        var cell1 = row.insertCell(0); // Se añade una celda a la fila
+        var cell2 = row.insertCell(1); // Se añade otra celda a la fila
+        cell1.innerHTML = data1; // Se rellena la primera celda
+        cell2.innerHTML = data2; // Se rellena la segunda celda
+    }
+
+    
 };
