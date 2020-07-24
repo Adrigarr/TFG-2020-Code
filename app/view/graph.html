@@ -28,7 +28,7 @@
     <form action="/index" id="myForm" method="get"></form>
 
     <div class="row">
-      <div id="mySubmit" class="col-lg text-center">
+      <div id="mySubmit" class="col-12 text-center">
         
         <button type="submit" class="btn btn-primary btn-lg" value="Submit" form="myForm">COMPARAR</button>
         
@@ -36,16 +36,16 @@
     </div>
 
     <div class="row">
-      <div id="listColumn1" class="col-lg col-md col-sm text-center">
+      <div id="listColumn1" class="col-2 text-center">
         <input type="text" class="form-control" id="myInput1" onkeyup="myFilter('myInput1','mySelect1')" placeholder="Search for songs..." title="Type in a name">
 
-        <select id="mySelect1" name="xsong" size="14" form="myForm" required>
+        <select id="mySelect1" class="col-12" name="xsong" size="14" form="myForm" required>
 
         </select>
 
       </div>
 
-      <div class="col-lg-7 col-md-7 col-sm-7 text-center">
+      <div class="col-lg-8 text-center">
         <button onclick='toggleGraph("mynetwork", "mynetwork2")'>Explicaciones de la misma categoría</button>
         <button onclick='toggleGraph("mynetwork2", "mynetwork")'>Explicaciones de distinta categoría</button>
 
@@ -53,10 +53,10 @@
         <center><div id="mynetwork2" class="hide"></div></center>
       </div>
 
-      <div id="listColumn2" class="col-lg col-md col-sm text-center">
+      <div id="listColumn2" class="col-2 text-center">
         <input type="text" class="form-control" id="myInput2" onkeyup="myFilter('myInput2','mySelect2')" placeholder="Search for songs..." title="Type in a name">
 
-        <select id="mySelect2" name="ysong" size="14" form="myForm" required>
+        <select id="mySelect2" class="col-12" name="ysong" size="14" form="myForm" required>
 
         </select>
       </div>
@@ -66,8 +66,8 @@
     <br>
     <div class="row">
       
-      <div class="col-lg-1 col-md1 col-sm-1 text-center"></div>
-      <table id="mytable" class="col-lg-9 col-md-9 col-sm-9 text-center"></table>
+      <div class="col-1text-center"></div>
+      <table id="mytable" class="col-9 text-center"></table>
       
     </div>
     <br>
