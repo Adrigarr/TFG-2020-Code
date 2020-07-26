@@ -352,6 +352,7 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
 
 # Switch que devuelve el nombre de la función a la que corresponde cada número 
 switcher = {
+        1: song,
         2: song,
         3: genre,
         4: artist,
