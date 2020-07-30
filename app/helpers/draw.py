@@ -202,8 +202,8 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     subNodes = ''
     subEdges = auxEdges
 
-    edgeAX = '''{from: "''' + artistX + '''AX", label: "miembros", to: "MembersX"}'''
-    edgeAY = '''{from: "''' + artistY + '''AY", label: "miembros", to: "MembersY"}'''
+    edgeAX = '''{from: "''' + artistX + '''AX", label: "members", to: "MembersX"}'''
+    edgeAY = '''{from: "''' + artistY + '''AY", label: "members", to: "MembersY"}'''
 
     # Si es una explicación de la misma categoría
     if (XY != 'y'):

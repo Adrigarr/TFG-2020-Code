@@ -211,7 +211,11 @@ def generateGraph(song1, song2, artist1, artist2, relationsDF):
         font: {
             size: 18
         },
-        shadow: true
+        shadow: true,
+        chosen: {
+            label: false,
+            node: changeChosenNodeBorder
+        }
     },
     groups: {
         song: {
@@ -255,6 +259,11 @@ var edges2 = new vis.DataSet({myEdges2});
 // create a network
 var container = document.getElementById('mynetwork');
 var container2 = document.getElementById('mynetwork2');
+
+var changeChosenNodeBorder = function (values, id, selected, hovering) {{
+  values.borderColor = "#000000";
+  values.borderWidth = 2;
+}};
 
 // provide the data in the vis format
 var data = {myData};
