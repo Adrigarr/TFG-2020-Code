@@ -92,3 +92,7 @@ th {
   .col-11 {width: 91.66%;}
   .col-12 {width: 100%;}
 }
+
+.inactive {
+  opacity: 0.6;
+}

@@ -1,15 +1,18 @@
 // Función para alternar entre la vista de ambos grafos
 // RECIBE: String param  => id de la network a mostrar,
 //         String param2 => id de la network a ocultar
-function toggleGraph(param, param2) {
-  var x = document.getElementById(param);
-  var y = "#".concat("", param);
-  var z = "#".concat("", param2);
+function toggleGraph(net1, net2) {
+  var x = document.getElementById(net1);
+  var y = "#".concat("", net1);
+  var z = "#".concat("", net2);
+
 
   // Solo hace el cambio si el elemento está oculto
   if (x.classList.contains("hide")) {
     $(z).toggleClass("hide");
+    $("#mybutton").toggleClass("inactive");
     $(y).toggleClass("hide");
+    $("#mybutton2").toggleClass("inactive");
   }
 }
 
