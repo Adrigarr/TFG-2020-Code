@@ -4,10 +4,13 @@ from app.helpers.draw import *
 # Función que hace un estudio de los artistas para comprobar si alguno coincide 
 # RECIBE:    Dataframe relationsDF            => dataframe con la información de las explicaciones,
 #            String auxNodes                  => lista denodos del grafo de explicaciones de la misma categoría
+#            String song1                     => título de la primera canción,
+#            String song2                     => título de la segunda canción,
+#            String artist1                   => nombre del primer artista,
 # DEVUELVE:  array de 2 Strings y 1 dataframe => auxNodes es la nueva lista de nodos,
 #                                                auxEdges es la lista de aristas,
 #                                                level es un dataframe con las relaciones del mismo nivel pero sin los miembros
-def artistTreatment(relationsDF, auxNodes):
+def artistTreatment(relationsDF, auxNodes, song1, song2, artist1):
 
     # Nos quedamos con la lista de artistas que coinciden en ambas canciones
     artistList = relationsDF.loc[(relationsDF['idPropertyName'] == 'performer')]
@@ -66,7 +69,7 @@ def generateGraph(song1, song2, artist1, artist2, relationsDF):
     {id: "''' + song2 + '''SY", label: "''' + song2 + '''", title: "Song", group: "song", level: 7}'''
 
     # Se hace un estudio de los artistas y se inicializa la lista de aristas
-    aux = artistTreatment(relationsDF, auxNodes)
+    aux = artistTreatment(relationsDF, auxNodes, song1, song2, artist1)
 
     auxNodes = aux[0]
     auxEdges = aux[1]
@@ -278,6 +281,6 @@ network.moveTo({{
   scale: 0.5             // Zooms out
 }});
 network2.moveTo({{
-  scale: 0.5             // Zooms out
+  scale: 0.15             // Zooms out
 }});
 """.strip())
