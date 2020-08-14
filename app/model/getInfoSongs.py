@@ -64,9 +64,9 @@ class getInfoSongs:
     def getMembers2(self,df,logger):
         members = getMembersfrom(df)
         aux = pd.DataFrame()
-        if members.empty == False:
+        if (members.empty == False):
             logger.info("Se han encontrado miembros")
-            for i in members.iterrows():   
+            for i in members.iterrows():
                 resultsMembers1 = self.sparq.getInfo('Members',i[1]['idValueProperty'],i[1]['valueProperty'])
                 resultsMembers1['Level'] = 5
                 resultsMembers1 = self.sparq.executeDict(resultsMembers1,'Members')
@@ -109,7 +109,7 @@ class getInfoSongs:
 
         except Exception as miss:
             self.logger.info(miss)
-       
+
         #GET PROPERTIES         
         try:
             if songP1.empty == True:

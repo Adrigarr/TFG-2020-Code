@@ -109,7 +109,12 @@ class sparQLSession:
         self.sparql.setReturnFormat(JSON)
         results3 = self.sparql.query().convert()
         resultsI1 = pd.io.json.json_normalize(results3['results']['bindings'])
-        resultsItem1 = resultsI1[['same.value','item1.value','item1Label.value']]
+
+        resultsItem1 = pd.DataFrame(pd.np.empty((0, 3)))
+
+        if {'same.value','item1.value','item1Label.value'}.issubset(resultsI1.columns):
+            resultsItem1 = resultsI1[['same.value','item1.value','item1Label.value']]
+        
         if mode == 'Song':
            resultsItem1['Level'] = 1
         elif mode == 'Artist':

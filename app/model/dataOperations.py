@@ -5,23 +5,26 @@ import json
 
 #Obtenmos el valor real de las propiedades sin caracteres sobrantes
 def tratamientoDataSet(df):
-    df['same.value']=df['same.value'].apply(lambda x: x.split('/')[5])
-    idx = df.index[df['same.value']=='P571']
-    aux = df.iloc[idx]['item1.value']
-    aux2 = "////"+aux
-    df.at[idx, 'item1.value'] = aux2
+    if {'same.value','item1.value','item1Label.value'}.issubset(df.columns):
+        
+        df['same.value']=df['same.value'].apply(lambda x: x.split('/')[5])
+        idx = df.index[df['same.value']=='P571']
+        aux = df.iloc[idx]['item1.value']
+        aux2 = "////"+aux
+        df.at[idx, 'item1.value'] = aux2
 
-    idx = df.index[df['same.value']=='P2031']
-    aux=df.iloc[idx]['item1.value']
-    aux2="////"+aux
-    df.at[idx, 'item1.value'] = aux2
+        idx = df.index[df['same.value']=='P2031']
+        aux=df.iloc[idx]['item1.value']
+        aux2="////"+aux
+        df.at[idx, 'item1.value'] = aux2
 
-    idx = df.index[df['same.value']=='P577']
-    aux=df.iloc[idx]['item1.value']
-    aux2="////"+aux
-    df.at[idx, 'item1.value'] = aux2
+        idx = df.index[df['same.value']=='P577']
+        aux=df.iloc[idx]['item1.value']
+        aux2="////"+aux
+        df.at[idx, 'item1.value'] = aux2
 
-    df['item1.value']=df['item1.value'].apply(lambda x: x.split('/')[4])
+        df['item1.value']=df['item1.value'].apply(lambda x: x.split('/')[4])
+
     df.columns = ['idProperty', 'idValueProperty','valueProperty','Level','ID']
     return df
  

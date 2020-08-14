@@ -130,7 +130,7 @@ async def status(request):
                 status = req.status_code
 
                 if (status != 200):
-                    file.write('song1: ' + a + ' / song2: ' + b + 'status: ' + str(status) + '\n')
+                    file.write('song1: ' + a + ' / song2: ' + b + ' status: ' + str(status) + '\n')
 
     file.close()
 
