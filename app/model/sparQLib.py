@@ -117,6 +117,7 @@ class sparQLSession:
         
         if mode == 'Song':
            resultsItem1['Level'] = 1
+           
         elif mode == 'Artist':
             resultsItem1['Level'] = 2
 

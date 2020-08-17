@@ -50,7 +50,7 @@ class getInfoSongs:
             logger.info("Se ha encontrado artista")
             for i in artist.iterrows():   
                 resultsArtist1 = self.sparq.getInfo('Artist',i[1]['idValueProperty'],i[1]['valueProperty'])
-                resultsArtist1['Level'] = 4
+                resultsArtist1['Level'] = 2
                 resultsArtist1 = self.sparq.executeDict(resultsArtist1,'Artist')
 
                 #GENERE ARTIST
@@ -68,7 +68,7 @@ class getInfoSongs:
             logger.info("Se han encontrado miembros")
             for i in members.iterrows():
                 resultsMembers1 = self.sparq.getInfo('Members',i[1]['idValueProperty'],i[1]['valueProperty'])
-                resultsMembers1['Level'] = 5
+                resultsMembers1['Level'] = 4
                 resultsMembers1 = self.sparq.executeDict(resultsMembers1,'Members')
                 aux = pd.concat([aux, resultsMembers1], ignore_index=True)
         else:
