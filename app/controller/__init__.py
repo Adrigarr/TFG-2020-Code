@@ -136,7 +136,6 @@ async def status(request):
 
     return response.text('OK')
 
-#WIP
 async def index(request):
     thislist = request.query_args # Esta es la lista de argumentos recibidos en la URL
 

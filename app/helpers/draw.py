@@ -59,6 +59,11 @@ def genre(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     subNodes = ''
     subEdges = auxEdges
 
+    # Si ambos elementos a comparar son el mismo, termina la función. Esto ocurrirá en las explicaciones del mismo nivel que comparen un
+    # género consigo mismo
+    if (level.at[i, 'ID_x'] == level.at[i, 'ID_y']):
+        return [subNodes, subEdges]
+
     edgeSX = '''{from: "''' + songX + '''SX", label: "genre", to: "''' + level.at[i, 'ID_x'] + '''GX"}'''
     edgeSY = '''{from: "''' + songY + '''SY", label: "genre", to: "''' + level.at[i, 'ID_y'] + '''GY"}'''
     edgeGX = '''{from: "''' + level.at[i, 'ID_x'] + '''GX", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
@@ -145,7 +150,7 @@ def artist(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     if (XY != 'y'):
         # Añadimos el nodo del artista X si es necesario, además de una arista para unirlo a la primera canción
         if ((level.at[i, 'ID_x'] + 'AX') not in auxNodes):
-            subNodes = ''',
+            subNodes += ''',
     {id: "''' + level.at[i, 'ID_x'] + '''AX", label: "''' + level.at[i, 'ID_x'] + ''' ", title: "Artist", group: "artist", level: 2}'''
 
         if (edgeSX not in subEdges):
@@ -162,7 +167,7 @@ def artist(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     if (XY != 'x'):
         # Añadimos el nodo del artista X si es necesario, además de una arista para unirlo a la primera canción
         if ((level.at[i, 'ID_y'] + 'AY') not in auxNodes):
-            subNodes = ''',
+            subNodes += ''',
     {id: "''' + level.at[i, 'ID_y'] + '''AY", label: "''' + level.at[i, 'ID_y'] + ''' ", title: "Artist", group: "artist", level: 6}'''
 
         if (edgeSY not in subEdges):
@@ -202,6 +207,11 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     subNodes = ''
     subEdges = auxEdges
 
+    # Si ambos elementos a comparar son el mismo, termina la función. Esto ocurrirá en las explicaciones del mismo nivel que comparen un
+    # género consigo mismo
+    if (level.at[i, 'ID_x'] == level.at[i, 'ID_y']):
+        return [subNodes, subEdges]
+
     edgeAX = '''{from: "''' + artistX + '''AX", label: "members", to: "MembersX"}'''
     edgeAY = '''{from: "''' + artistY + '''AY", label: "members", to: "MembersY"}'''
 
@@ -209,7 +219,7 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     if (XY != 'y'):
         # Añadimos el nodo del miembro X si es necesario, además de una arista para unirlo al primer artista
         if ('MembersX' not in auxNodes):
-            subNodes = ''',
+            subNodes += ''',
     {id: "MembersX", label: "Members of ''' + artistX + '''", title: "Members", group: "member", level: 3}'''
             
             subEdges += ''',
@@ -227,7 +237,7 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
 
     # Añadimos el nodo de la propiedad si es necesario
     if (('id: "'+level.at[i, 'valueProperty']+'",') not in auxNodes):
-        subNodes = subNodes + ''',
+        subNodes += ''',
     {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: "center", level: 4}'''
 
     # ------------------------------------------------------ Z --------------------------------------------------------------
@@ -238,7 +248,6 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
         y = level.at[i, 'ID_y']
         buscadoX = 'from: "MembersX", label: "' + level.at[i, 'idPropertyName'] +'", title: ".*", value: ., to: "' + level.at[i, 'valueProperty'] + '"'
         buscadoY = 'from: "MembersY", label: "' + level.at[i, 'idPropertyName'] +'", title: ".*", value: ., to: "' + level.at[i, 'valueProperty'] + '"'
-
 
         # Buscamos todas las apariciones de buscadoX, con lo que obtenemos la arista exacta (si la hay)
         encontradoX = re.findall(buscadoX, subEdges) # NOTA: Esto es una lista (que debería tener uno o cero elementos)
@@ -262,7 +271,7 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
 
                 # Actualizamos el valor
                 incremento = int(value) + 1
-                nuevaArista = encontradoX[0].replace(value,str(incremento))
+                nuevaArista = encontradoX[0].replace(value,str(incremento), 1)
                 subEdges = re.sub(encontradoX[0], nuevaArista, subEdges)    
                 
                 # Añadimos el nombre del miembro X al título de la arista
@@ -288,7 +297,7 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
 
                 # Actualizamos el valor
                 incremento = int(value) + 1
-                nuevaArista = encontradoY[0].replace(value,str(incremento))
+                nuevaArista = encontradoY[0].replace(value,str(incremento), 1)
                 subEdges = re.sub(encontradoY[0], nuevaArista, subEdges)
 
                 # Añadimos el nombre del miembro X al título de la arista
@@ -332,7 +341,7 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
 
                 # Actualizamos el valor
                 incremento = int(value) + 1
-                nuevaArista = encontradoXY[0].replace(value,str(incremento))
+                nuevaArista = encontradoXY[0].replace(value,str(incremento), 1)
                 subEdges = re.sub(encontradoXY[0], nuevaArista, subEdges)    
                 
                 # Añadimos el nombre del miembro X al título de la arista
@@ -353,8 +362,8 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
 # Switch que devuelve el nombre de la función a la que corresponde cada número 
 switcher = {
         1: song,
-        3: genre,
         2: artist,
+        3: genre,
         4: member
     }
 

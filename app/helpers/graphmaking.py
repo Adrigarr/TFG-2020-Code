@@ -39,7 +39,7 @@ def artistTreatment(relationsDF, auxNodes, song1, song2, artist1):
         {from: "''' + song2 + '''SY", label: "artist", to: "artists"}'''
             
         # Nos quedamos con un dataframe en el que solo aparecen las relaciones del mismo nivel pero sin contar el estudio de miembros
-        level = relationsDF.loc[(relationsDF['Level_x'] == relationsDF['Level_y']) & (relationsDF['Level_x'] != 5)
+        level = relationsDF.loc[(relationsDF['Level_x'] == relationsDF['Level_y']) & (relationsDF['Level_x'] != 4)
                                 & (relationsDF['idPropertyName'] != 'performer')]
         level.sort_values(by=['Level_x', 'idPropertyName', 'valueProperty'], inplace= True)
 
@@ -48,7 +48,7 @@ def artistTreatment(relationsDF, auxNodes, song1, song2, artist1):
         auxEdges = '''{}'''
 
         # Nos quedamos con un dataframe en el que solo aparecen las relaciones del mismo nivel pero sin contar el estudio de miembros
-        level = relationsDF.loc[(relationsDF['Level_x'] == relationsDF['Level_y']) & (relationsDF['Level_x'] != 5)]
+        level = relationsDF.loc[(relationsDF['Level_x'] == relationsDF['Level_y']) & (relationsDF['Level_x'] != 4)]
         level.sort_values(by=['Level_x', 'idPropertyName', 'valueProperty'], inplace= True)
 
 
@@ -90,7 +90,7 @@ def generateGraph(song1, song2, artist1, artist2, relationsDF):
         auxNodes = auxNodes + sub[0]
         auxEdges = sub[1]
 
-    nolevel = relationsDF.loc[(relationsDF['Level_x'] != relationsDF['Level_y']) & (relationsDF['Level_x'] != 5) & (relationsDF['Level_y'] != 5)]
+    nolevel = relationsDF.loc[(relationsDF['Level_x'] != relationsDF['Level_y']) & (relationsDF['Level_x'] != 4) & (relationsDF['Level_y'] != 4)]
     nolevel.sort_values(by=['Level_x', 'Level_y', 'idPropertyName', 'valueProperty'], inplace= True)
     
     noindex = nolevel.index.values.tolist()
@@ -122,7 +122,7 @@ def generateGraph(song1, song2, artist1, artist2, relationsDF):
     # Si solo hay un artista por lado, estudiamos las explicaciones de miembros
     if ((len(nodosAX) == 1) & (len(nodosAY) == 1)):
         # Nos quedamos con un dataframe en el que solo aparecen las relaciones del mismo nivel
-        level = relationsDF.loc[(relationsDF['Level_x'] == relationsDF['Level_y']) & (relationsDF['Level_x'] == 5)]
+        level = relationsDF.loc[(relationsDF['Level_x'] == relationsDF['Level_y']) & (relationsDF['Level_x'] == 4)]
         level.sort_values(by=['Level_x', 'idPropertyName', 'valueProperty'], inplace= True)
 
         index = level.index.values.tolist()
@@ -138,7 +138,7 @@ def generateGraph(song1, song2, artist1, artist2, relationsDF):
             auxEdges = sub[1]
 
 
-        nolevel = relationsDF.loc[(relationsDF['Level_x'] != relationsDF['Level_y']) & ((relationsDF['Level_x'] == 5) | (relationsDF['Level_y'] == 5))]
+        nolevel = relationsDF.loc[(relationsDF['Level_x'] != relationsDF['Level_y']) & ((relationsDF['Level_x'] == 4) | (relationsDF['Level_y'] == 4))]
         nolevel.sort_values(by=['Level_x', 'Level_y', 'idPropertyName', 'valueProperty'], inplace= True)
         
         noindex = nolevel.index.values.tolist()
