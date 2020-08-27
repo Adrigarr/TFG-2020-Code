@@ -187,7 +187,7 @@ function showTable(params) {
 
         // Se busca un archivo .json con el nombre del objeto de estudio
         // y, si se encuentra, se muestra su contenido en una tabla
-        $.getJSON('/app/static/' + name + '.json')
+        $.getJSON('/app/static/' + name.replace('/', ' ') + '.json')
             .done(function (data) {
 
                 var len = Object.keys(data.ID).length;

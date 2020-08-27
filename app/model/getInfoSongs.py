@@ -132,8 +132,8 @@ class getInfoSongs:
 
 
                     #GENERE SONGINFO
-                    songData.to_json(os.getcwd() + '/app/static/' + songP1['itemLabel.value'][0] + '.json')
-                    songData2.to_json(os.getcwd() + '/app/static/' + songP2['itemLabel.value'][0] +'.json')
+                    songData.to_json(os.getcwd() + '/app/static/' + songP1['itemLabel.value'][0].replace('/', ' ') + '.json')
+                    songData2.to_json(os.getcwd() + '/app/static/' + songP2['itemLabel.value'][0].replace('/', ' ') +'.json')
 
 
                     song1Data = [songData,genreData,artistData,membersData]
