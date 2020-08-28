@@ -204,7 +204,10 @@ def generateGraph(song1, song2, artist1, artist2, relationsDF):
             size: 16,
             align: 'middle'
         },
-        shadow: true
+        shadow: true,
+        smooth: {
+            enabled: false
+        }
     },
     nodes: {
         shape: 'box',

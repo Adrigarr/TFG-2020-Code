@@ -29,8 +29,10 @@ for (var i = 0, len = nodos2.length; i < len; i++) {
 }
 
 // Función que, dado un nodo del primer grafo, comprueba si es producto de una relación "instance of" y si es un single
+// También sirve para evitar la superposición de aristas, cosa que ocurre con las explicaciones de los premios
 // RECIBE: object value => nodo estudiado
 function single(value) {
+    var nodosConectados = network.getConnectedNodes(value["id"]);
     var aristasConectadas = network.getConnectedEdges(value["id"]); // Aristas conectadas al nodo
     var arista = edges.get(aristasConectadas[0]); // Obtenemos el objeto correspondiente a la primera arista conectada al nodo
 
@@ -41,8 +43,67 @@ function single(value) {
             borraArista(aristasConectadas[i], edges);
         }
         nodes.remove(value["id"]);
-
     }
+
+    // Comprobamos si el nodo tiene 4 aristas y 2 nodos conectados
+    // En caso afirmativo, le damos curvatura a sus aristas para diferenciarlas visualmente
+    else if ((aristasConectadas.length == 4) && (nodosConectados.length == 2)) {
+        var bool1 = false;
+        var bool2 = false;
+        
+        for (var i = 0, len = aristasConectadas.length; i < len; i++) {
+
+            if (edges.get(aristasConectadas[i])["from"] == nodosConectados[0]) {
+                if (bool1) {
+                    edges.update({
+                        id: edges.get(aristasConectadas[i])["id"],
+                        smooth: {
+                            enabled: true,
+                            type: "curvedCW",
+                            roundness: 0.1
+                        }
+                         
+                    });
+                }
+                else {
+                    edges.update({
+                        id: edges.get(aristasConectadas[i])["id"],
+                        smooth: {
+                            enabled: true,
+                            type: "curvedCCW",
+                            roundness: 0.1
+                        }
+                    });
+                    bool1 = true;
+                }
+            }
+
+            else {
+                if (bool2 == true) {
+                    edges.update({
+                        id: edges.get(aristasConectadas[i])["id"],
+                        smooth: {
+                            enabled: true,
+                            type: "curvedCW",
+                            roundness: 0.1
+                        }
+                    });
+                }
+                else {
+                    edges.update({
+                        id: edges.get(aristasConectadas[i])["id"],
+                        smooth: {
+                            enabled: true,
+                            type: "curvedCCW",
+                            roundness: 0.1
+                        }
+                    });
+                    bool2 = true;
+                }
+            }
+        }
+    }
+
 }
 
 
