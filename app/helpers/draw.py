@@ -165,7 +165,7 @@ def artist(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
 
     # ------------------------------------------------------ YZ --------------------------------------------------------------
     if (XY != 'x'):
-        # Añadimos el nodo del artista X si es necesario, además de una arista para unirlo a la primera canción
+        # Añadimos el nodo del artista Y si es necesario, además de una arista para unirlo a la primera canción
         if ((level.at[i, 'ID_y'] + 'AY') not in auxNodes):
             subNodes += ''',
     {id: "''' + level.at[i, 'ID_y'] + '''AY", label: "''' + level.at[i, 'ID_y'] + ''' ", title: "Artist", group: "artist", level: 6}'''
@@ -214,8 +214,10 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
 
     edgeAX = '''{from: "''' + artistX + '''AX", label: "members", to: "MembersX"}'''
     edgeAY = '''{from: "''' + artistY + '''AY", label: "members", to: "MembersY"}'''
+    edgeSX = '''{from: "''' + songX + '''SX", label: "artist", to: "''' + artistX + '''AX"}'''
+    edgeSY = '''{from: "''' + songY + '''SY", label: "artist", to: "''' + artistY + '''AY"}'''
 
-    # Si es una explicación de la misma categoría
+    # Si es una explicación de distinta categoría por la izquierda
     if (XY != 'y'):
         # Añadimos el nodo del miembro X si es necesario, además de una arista para unirlo al primer artista
         if ('MembersX' not in auxNodes):
@@ -225,7 +227,17 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
             subEdges += ''',
     ''' + edgeAX
 
-    # Si es una explicación de la misma categoría
+        # Añadimos el nodo del artista X si es necesario, además de una arista para unirlo a la primera canción
+        # Esta parte es útil para los grafos de explicaciones de distinta categoría/nivel
+        if (artistX+'AX' not in auxNodes):
+            subNodes += ''',
+    {id: "''' + artistX + '''AX", label: "''' + artistX + ''' ", title: "Artist", group: "artist", level: 2}'''
+
+        if (edgeSX not in subEdges):
+                subEdges += ''',
+        ''' + edgeSX
+
+    # Si es una explicación de distinta categoría por la derecha
     if (XY != 'x'):
         # Añadimos el nodo del miembro Y si es necesario, además de una arista para unirlo al segundo artista
         if ('MembersY' not in auxNodes):
@@ -234,6 +246,16 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
             
             subEdges += ''',
     ''' + edgeAY
+
+        # Añadimos el nodo del artista Y si es necesario, además de una arista para unirlo a la segunda canción
+        # Esta parte es útil para los grafos de explicaciones de distinta categoría/nivel
+        if (artistY+'AY' not in auxNodes):
+            subNodes += ''',
+    {id: "''' + artistY + '''AY", label: "''' + artistY + ''' ", title: "Artist", group: "artist", level: 6}'''
+
+        if (edgeSY not in subEdges):
+                subEdges += ''',
+        ''' + edgeSY
 
     # Añadimos el nodo de la propiedad si es necesario
     if (('id: "'+level.at[i, 'valueProperty']+'",') not in auxNodes):

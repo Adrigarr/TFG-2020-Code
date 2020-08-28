@@ -74,7 +74,10 @@ function loadSong(data, select) {
         var tmp = val.slice(1,val.length);
         var cleanSong = tmp.split('",');
     }    
-    else {
+    else if (val.includes(',"')) {
+        var tmp = val.slice(0,val.length-1);
+        var cleanSong = tmp.split(',"');
+    } else {
         var cleanSong = val.split(',');
     }
 

@@ -30,7 +30,13 @@ def tratamientoDataSet(df):
  
 def formatDates(df):
      df['valueProperty'] = df.apply(lambda x: x.valueProperty[2:] if x.idProperty == 'P571' else x.valueProperty, axis=1)
-     df['valueProperty'] = df.apply(lambda x: x.valueProperty[2:] if x.idProperty == 'P577' else x.valueProperty, axis=1)   
+     df['valueProperty'] = df.apply(lambda x: x.valueProperty[:-1] if x.idProperty == 'P571' else x.valueProperty, axis=1)
+     df['valueProperty'] = df.apply(lambda x: x.valueProperty + '0' if x.idProperty == 'P571' else x.valueProperty, axis=1)
+
+     df['valueProperty'] = df.apply(lambda x: x.valueProperty[2:] if x.idProperty == 'P577' else x.valueProperty, axis=1)  
+     df['valueProperty'] = df.apply(lambda x: x.valueProperty[:-1] if x.idProperty == 'P577' else x.valueProperty, axis=1)
+     df['valueProperty'] = df.apply(lambda x: x.valueProperty + '0' if x.idProperty == 'P577' else x.valueProperty, axis=1) 
+     
      return df
 #
 def getGenrefrom(df):

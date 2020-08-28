@@ -3,7 +3,7 @@ import os
 #SONG
 dictSongCodes =['wdt:P136','wdt:P175','wdt:P264','wdt:P361','wdt:P495','wdt:P407','wdt:P106','wdt:P577','wdt:P86',
         'wdt:P571','wdt:P737','wdt:P279','wdt:P166','wdt:P2031','wdt:P358','wdt:P740','wdt:P1411','wdt:P527','wdt:P463',
-        'wdt:P412','wdt:P19','wdt:P2341']
+        'wdt:P412','wdt:P19','wdt:P2341','wdt:P1433','wdt:P31']
         
 dictSong = {
         'P136':'genre', 
@@ -27,7 +27,9 @@ dictSong = {
         'P463':'member of',
         'P412':'Voice Type',
         'P19':'place of birth',
-        'P2341':'indigenous to'
+        'P2341':'indigenous to',
+        'P1433':'published in',
+        'P31':'instance of'
         }
 
 

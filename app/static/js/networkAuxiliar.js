@@ -1,5 +1,13 @@
 // Recorremos todos los nodos y llamamos a funcion1 por cada uno de ellos
 var nodos = nodes.get();
+
+// Eliminamos aquellos nodos correspondientes a la relación "instance of" a menos que sean "single"
+var nodosCentrales = nodos.filter(nodo => nodo.level == 4);
+nodosCentrales.forEach(single);
+
+// Actualizamos nuestra variable nodos
+nodos = nodes.get();
+
 for (var i = 0, len = nodos.length; i < len; i++) {
     funcion1(nodos[i], "");
 }
@@ -19,6 +27,24 @@ nodos2 = nodes2.get();
 for (var i = 0, len = nodos2.length; i < len; i++) {
     funcion1(nodos2[i], "2");
 }
+
+// Función que, dado un nodo del primer grafo, comprueba si es producto de una relación "instance of" y si es un single
+// RECIBE: object value => nodo estudiado
+function single(value) {
+    var aristasConectadas = network.getConnectedEdges(value["id"]); // Aristas conectadas al nodo
+    var arista = edges.get(aristasConectadas[0]); // Obtenemos el objeto correspondiente a la primera arista conectada al nodo
+
+    // Si el nodo es una explicación "instance of" pero su valor (id) es distinto a "single", lo borramos junto a sus aristas
+    if (arista["label"] == "instance of" && value["id"] != "single") {
+
+        for (var i = 0, len = aristasConectadas.length; i < len; i++) {
+            borraArista(aristasConectadas[i], edges);
+        }
+        nodes.remove(value["id"]);
+
+    }
+}
+
 
 // Esta función comprueba si un nodo es innecesario y lo borra en ese caso
 // RECIBE: object value => nodo estudiado
