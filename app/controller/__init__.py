@@ -136,6 +136,8 @@ async def status(request):
 
     return response.text('OK')
 
+# Esta es la ruta a la que se dirige tras pulsar el botón de comparación
+# Se llama a las funciones necesarias para obtener los grafos y se muestran por pantalla
 async def index(request):
     thislist = request.query_args # Esta es la lista de argumentos recibidos en la URL
 
