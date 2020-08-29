@@ -2,7 +2,7 @@ import csv
 import os
 #SONG
 dictSongCodes =['wdt:P136','wdt:P175','wdt:P264','wdt:P361','wdt:P495','wdt:P407','wdt:P106','wdt:P577','wdt:P86',
-        'wdt:P571','wdt:P737','wdt:P279','wdt:P166','wdt:P2031','wdt:P358','wdt:P740','wdt:P1411','wdt:P527','wdt:P463',
+        'wdt:P571','wdt:P737','wdt:P279','wdt:P166','wdt:P2031','wdt:P358','wdt:P1411','wdt:P527','wdt:P463',
         'wdt:P412','wdt:P19','wdt:P2341','wdt:P1433','wdt:P31']
         
 dictSong = {
@@ -13,19 +13,18 @@ dictSong = {
         'P495':'country',
         'P407':'language',
         'P106':'occupation',
-        'P577':'publication_date',
+        'P577':'publication date',
         'P86':'compositor',
         'P571':'inception',
         'P737':'influenced by',
         'P279':'subclass',
         'P166':'award received',
         'P2031':'work period start',
-        'P358':'discography',
-        'P740':'location of formation',
+        'P358':'discography'
         'P1411':'nominated for',
-        'P527':'participnats',
+        'P527':'participants',
         'P463':'member of',
-        'P412':'Voice Type',
+        'P412':'voice type',
         'P19':'place of birth',
         'P2341':'indigenous to',
         'P1433':'published in',
@@ -36,7 +35,7 @@ dictSong = {
         #MEMBERS
 dictMembers = {
         'P463':'member of',
-        'P412':'Voice Type',
+        'P412':'voice type',
         'P19':'place of birth',
         'P2341':'indigenous to',
         'P166':'award received',
@@ -81,8 +80,8 @@ dictArtist = {
         'P358':'discography',
         'P740':'location of formation',
         'P1411':'nominated for',
-        'P527':'participnats',
-        'P412':'Voice Type',
+        'P527':'participants',
+        'P412':'voice type',
         'P19':'place of birth',
         'P2341':'indigenous to'
         }
