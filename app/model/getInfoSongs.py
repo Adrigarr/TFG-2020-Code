@@ -142,6 +142,8 @@ class getInfoSongs:
                     song1Data = parseDates(song1Data)
                     song1Data = formatDates(song1Data)
                     song1Data = parseDecades(song1Data)
+                    song1Data = song1Data.reset_index()
+                    song1Data = song1Data.drop(['index'],axis=1)
 
                     song2Data = [songData2,genreData2,artistData2,membersData2]
                     song2Data = pd.concat(song2Data,sort=False)
@@ -149,6 +151,8 @@ class getInfoSongs:
                     song2Data = parseDates(song2Data)
                     song2Data = formatDates(song2Data)
                     song2Data = parseDecades(song2Data)
+                    song2Data = song2Data.reset_index()
+                    song2Data = song2Data.drop(['index'],axis=1)
 
                     relationsDF = mergeData(song1Data,song2Data)
 
