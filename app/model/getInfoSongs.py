@@ -141,12 +141,14 @@ class getInfoSongs:
 
                     song1Data = parseDates(song1Data)
                     song1Data = formatDates(song1Data)
+                    song1Data = parseDecades(song1Data)
 
                     song2Data = [songData2,genreData2,artistData2,membersData2]
                     song2Data = pd.concat(song2Data,sort=False)
 
                     song2Data = parseDates(song2Data)
                     song2Data = formatDates(song2Data)
+                    song2Data = parseDecades(song2Data)
 
                     relationsDF = mergeData(song1Data,song2Data)
 
