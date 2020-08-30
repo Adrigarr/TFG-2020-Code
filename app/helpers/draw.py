@@ -29,15 +29,15 @@ def song(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     if (XY == 'z'):
         # Añadimos las aristas para unir la propiedad con ambas canciones
         subEdges += ''',
-    {from: "''' + level.at[i, 'ID_x'] + '''SX", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"},
-    {from: "''' + level.at[i, 'ID_y'] + '''SY", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
+    {from: "''' + level.at[i, 'ID_x'] + '''SX", label: "''' + level.at[i, 'idPropertyName_x'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"},
+    {from: "''' + level.at[i, 'ID_y'] + '''SY", label: "''' + level.at[i, 'idPropertyName_x'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
 
     # ------------------------------------------------------ XY --------------------------------------------------------------
     # Si es una explicación de distinta categoría (solo trabajamos un lado de la explicación)
     else:
         # Añadimos las aristas para unir la propiedad con la canción
         subEdges += ''',
-    {from: "''' + level.at[i, 'ID_'+XY] + '''S'''+XY.upper()+'''", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
+    {from: "''' + level.at[i, 'ID_'+XY] + '''S'''+XY.upper()+'''", label: "''' + level.at[i, 'idPropertyName_x'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
 
     return [subNodes, subEdges]
 
@@ -66,8 +66,8 @@ def genre(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
 
     edgeSX = '''{from: "''' + songX + '''SX", label: "genre", to: "''' + level.at[i, 'ID_x'] + '''GX"}'''
     edgeSY = '''{from: "''' + songY + '''SY", label: "genre", to: "''' + level.at[i, 'ID_y'] + '''GY"}'''
-    edgeGX = '''{from: "''' + level.at[i, 'ID_x'] + '''GX", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
-    edgeGY = '''{from: "''' + level.at[i, 'ID_y'] + '''GY", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
+    edgeGX = '''{from: "''' + level.at[i, 'ID_x'] + '''GX", label: "''' + level.at[i, 'idPropertyName_x'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
+    edgeGY = '''{from: "''' + level.at[i, 'ID_y'] + '''GY", label: "''' + level.at[i, 'idPropertyName_x'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
 
 
     # ------------------------------------------------------ XZ --------------------------------------------------------------
@@ -141,8 +141,8 @@ def artist(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
 
     edgeSX = '''{from: "''' + songX + '''SX", label: "artist", to: "''' + level.at[i, 'ID_x'] + '''AX"}'''
     edgeSY = '''{from: "''' + songY + '''SY", label: "artist", to: "''' + level.at[i, 'ID_y'] + '''AY"}'''
-    edgeAX = '''{from: "''' + level.at[i, 'ID_x'] + '''AX", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
-    edgeAY = '''{from: "''' + level.at[i, 'ID_y'] + '''AY", label: "''' + level.at[i, 'idPropertyName'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
+    edgeAX = '''{from: "''' + level.at[i, 'ID_x'] + '''AX", label: "''' + level.at[i, 'idPropertyName_x'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
+    edgeAY = '''{from: "''' + level.at[i, 'ID_y'] + '''AY", label: "''' + level.at[i, 'idPropertyName_x'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
 
 
 
@@ -268,8 +268,8 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
         # Añadimos las aristas para unir la propiedad con ambos miembros
         x = level.at[i, 'ID_x']
         y = level.at[i, 'ID_y']
-        buscadoX = 'from: "MembersX", label: "' + level.at[i, 'idPropertyName'] +'", title: ".*", value: ., to: "' + level.at[i, 'valueProperty'] + '"'
-        buscadoY = 'from: "MembersY", label: "' + level.at[i, 'idPropertyName'] +'", title: ".*", value: ., to: "' + level.at[i, 'valueProperty'] + '"'
+        buscadoX = 'from: "MembersX", label: "' + level.at[i, 'idPropertyName_x'] +'", title: ".*", value: ., to: "' + level.at[i, 'valueProperty'] + '"'
+        buscadoY = 'from: "MembersY", label: "' + level.at[i, 'idPropertyName_x'] +'", title: ".*", value: ., to: "' + level.at[i, 'valueProperty'] + '"'
 
         # Buscamos todas las apariciones de buscadoX, con lo que obtenemos la arista exacta (si la hay)
         encontradoX = re.findall(buscadoX, subEdges) # NOTA: Esto es una lista (que debería tener uno o cero elementos)
@@ -286,7 +286,7 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
             if (x not in subEdges[(index + len(splited[0])):]):
 
                 # Limpiamos el string de la arista para obtener el valor antiguo
-                auxiliar = re.sub('from: "MembersX", label: "' + level.at[i, 'idPropertyName'] +
+                auxiliar = re.sub('from: "MembersX", label: "' + level.at[i, 'idPropertyName_x'] +
                     '", title: ".*", value: ', '', encontradoX[0])
 
                 value = re.sub(', to: "' + level.at[i, 'valueProperty'] + '"', '', auxiliar)
@@ -312,7 +312,7 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
             if (y not in subEdges[(index + len(splited[0])):]):   
 
                 # Limpiamos el string de la arista para obtener el valor antiguo
-                auxiliar = re.sub('from: "MembersY", label: "' + level.at[i, 'idPropertyName'] +
+                auxiliar = re.sub('from: "MembersY", label: "' + level.at[i, 'idPropertyName_x'] +
                     '", title: ".*", value: ','',encontradoY[0])
 
                 value = re.sub(', to: "' + level.at[i, 'valueProperty'] + '"', '', auxiliar)
@@ -330,15 +330,15 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
         else:
 
           subEdges += ''',
-        {from: "MembersX", label: "''' + level.at[i, 'idPropertyName'] + '''", title: "''' + x + '''", value: 1, to: "''' + level.at[i, 'valueProperty'] + '''"},
-        {from: "MembersY", label: "''' + level.at[i, 'idPropertyName'] + '''", title: "''' + y + '''", value: 1, to: "''' + level.at[i, 'valueProperty'] + '''"}'''
+        {from: "MembersX", label: "''' + level.at[i, 'idPropertyName_x'] + '''", title: "''' + x + '''", value: 1, to: "''' + level.at[i, 'valueProperty'] + '''"},
+        {from: "MembersY", label: "''' + level.at[i, 'idPropertyName_x'] + '''", title: "''' + y + '''", value: 1, to: "''' + level.at[i, 'valueProperty'] + '''"}'''
 
 
     # ------------------------------------------------------ XY --------------------------------------------------------------
     else:
         # Añadimos las aristas para unir la propiedad con ambos miembros
         xy = level.at[i, 'ID_'+XY]
-        buscadoXY = 'from: "Members'+XY.upper()+'", label: "' + level.at[i, 'idPropertyName'] +'", title: ".*", value: ., to: "' + level.at[i, 'valueProperty'] + '"'
+        buscadoXY = 'from: "Members'+XY.upper()+'", label: "' + level.at[i, 'idPropertyName_x'] +'", title: ".*", value: ., to: "' + level.at[i, 'valueProperty'] + '"'
 
 
         # Buscamos todas las apariciones de buscadoXY, con lo que obtenemos la arista exacta (si la hay)
@@ -356,7 +356,7 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
             if (xy not in subEdges[(index + len(splited[0])):]):
 
                 # Limpiamos el string de la arista para obtener el valor antiguo
-                auxiliar = re.sub('from: "Members'+XY.upper()+'", label: "' + level.at[i, 'idPropertyName'] +
+                auxiliar = re.sub('from: "Members'+XY.upper()+'", label: "' + level.at[i, 'idPropertyName_x'] +
                     '", title: ".*", value: ', '', encontradoXY[0])
 
                 value = re.sub(', to: "' + level.at[i, 'valueProperty'] + '"', '', auxiliar)
@@ -374,7 +374,7 @@ def member(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
         else:
 
           subEdges += ''',
-        {from: "Members'''+XY.upper()+'''", label: "''' + level.at[i, 'idPropertyName'] + '''", title: "''' + xy + '''", value: 1, to: "''' + level.at[i, 'valueProperty'] + '''"}'''
+        {from: "Members'''+XY.upper()+'''", label: "''' + level.at[i, 'idPropertyName_x'] + '''", title: "''' + xy + '''", value: 1, to: "''' + level.at[i, 'valueProperty'] + '''"}'''
 
     return [subNodes, subEdges]
 

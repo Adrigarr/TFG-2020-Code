@@ -53,8 +53,16 @@ class getInfoSongs:
                 resultsArtist1['Level'] = 2
                 resultsArtist1 = self.sparq.executeDict(resultsArtist1,'Artist')
 
+                resultsArtistAux = resultsArtist1.copy()
+
+                resultsArtistAux = parseDates(resultsArtistAux)
+                resultsArtistAux = formatDates(resultsArtistAux)
+                resultsArtistAux = parseDecades(resultsArtistAux)
+                resultsArtistAux = resultsArtistAux.reset_index()
+                resultsArtistAux = resultsArtistAux.drop(['index'],axis=1)
+
                 #GENERE ARTIST
-                resultsArtist1.to_json(os.getcwd() + '/app/static/' + i[1]['valueProperty'] + '.json')
+                resultsArtistAux.to_json(os.getcwd() + '/app/static/' + i[1]['valueProperty'] + '.json')
 
                 aux = pd.concat([aux, resultsArtist1], ignore_index=True)
         else:
@@ -130,10 +138,24 @@ class getInfoSongs:
                     artistData2 = self.getArtist2(songData2,self.logger)
                     membersData2 = self.getMembers2(artistData2,self.logger)
 
+                    songDataAux = songData.copy()
+                    songData2Aux = songData2.copy()
+
+                    songDataAux = parseDates(songDataAux)
+                    songDataAux = formatDates(songDataAux)
+                    songDataAux = parseDecades(songDataAux)
+                    songDataAux = songDataAux.reset_index()
+                    songDataAux = songDataAux.drop(['index'],axis=1)
+
+                    songData2Aux = parseDates(songData2Aux)
+                    songData2Aux = formatDates(songData2Aux)
+                    songData2Aux = parseDecades(songData2Aux)
+                    songData2Aux = songData2Aux.reset_index()
+                    songData2Aux = songData2Aux.drop(['index'],axis=1)
 
                     #GENERE SONGINFO
-                    songData.to_json(os.getcwd() + '/app/static/' + songP1['itemLabel.value'][0].replace('/', ' ') + '.json')
-                    songData2.to_json(os.getcwd() + '/app/static/' + songP2['itemLabel.value'][0].replace('/', ' ') +'.json')
+                    songDataAux.to_json(os.getcwd() + '/app/static/' + songP1['itemLabel.value'][0].replace('/', ' ') + '.json')
+                    songData2Aux.to_json(os.getcwd() + '/app/static/' + songP2['itemLabel.value'][0].replace('/', ' ') +'.json')
 
 
                     song1Data = [songData,genreData,artistData,membersData]
@@ -153,6 +175,7 @@ class getInfoSongs:
                     song2Data = parseDecades(song2Data)
                     song2Data = song2Data.reset_index()
                     song2Data = song2Data.drop(['index'],axis=1)
+
 
                     relationsDF = mergeData(song1Data,song2Data)
 

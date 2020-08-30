@@ -1,6 +1,14 @@
+body {
+  background-image: url('/app/static/img/fondo.jpeg'); 
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center; 
+}
+
 #mynetwork, #mynetwork2 {
   height: 650px;
-  border: 1px solid lightgray;
+  border: 1px solid #131313;
+  background-color: white;
 }
 
 .hide {
@@ -11,6 +19,7 @@
 
 #mySubmit {
   padding: 15px;
+  align-items: center;
 }
 
 * {
@@ -51,6 +60,16 @@
   background-color: #eee;
 }
 
+#help {
+  height: 50px;
+  width: 50px;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  margin-left: 75px;
+}
+
 table {
   border-collapse: collapse;
 }
@@ -61,10 +80,19 @@ th, td {
 }
 
 tr:nth-child(even){background-color: #f2f2f2}
+tr:nth-child(odd){background-color: white}
 
 th {
   background-color: #007bcc;
   color: white;
+}
+
+th:first-child {
+  width: 30%;
+}
+
+.paragraph {
+  text-align: justify!important;
 }
 
 /* For mobile phones: */
