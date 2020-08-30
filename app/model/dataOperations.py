@@ -91,6 +91,6 @@ def parseQueryString(propString):
 
 #MERGE DATAFRAMES
 def mergeData(df1,df2):
-    df3 = pd.merge(df1, df2, on=['idProperty', 'idPropertyName', 'idValueProperty', 'valueProperty'], how='inner')
+    df3 = pd.merge(df1, df2, on=['valueProperty'], how='inner')
     return df3
 
