@@ -35,9 +35,17 @@ def formatDates(df):
 
      df['valueProperty'] = df.apply(lambda x: x.valueProperty[2:] if x.idProperty == 'P577' else x.valueProperty, axis=1)  
      df['valueProperty'] = df.apply(lambda x: x.valueProperty[:-1] if x.idProperty == 'P577' else x.valueProperty, axis=1)
-     df['valueProperty'] = df.apply(lambda x: x.valueProperty + '0' if x.idProperty == 'P577' else x.valueProperty, axis=1) 
+     df['valueProperty'] = df.apply(lambda x: x.valueProperty + '0' if x.idProperty == 'P577' else x.valueProperty, axis=1)
      
+     df['valueProperty'] = df.apply(lambda x: x.valueProperty[2:] if x.idProperty == 'P2031' else x.valueProperty, axis=1)  
+     df['valueProperty'] = df.apply(lambda x: x.valueProperty[:-1] if x.idProperty == 'P2031' else x.valueProperty, axis=1)
+     df['valueProperty'] = df.apply(lambda x: x.valueProperty + '0' if x.idProperty == 'P2031' else x.valueProperty, axis=1)
+ 
      return df
+
+def parseDecades(dfSong):
+    dfSong['valueProperty'] = dfSong.apply(lambda x: '2000' if x.valueProperty == '00' else x.valueProperty, axis=1)
+    return dfSong
 #
 def getGenrefrom(df):
     if(df['idProperty'] == 'P136').any()==True:
