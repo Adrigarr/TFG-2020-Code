@@ -19,25 +19,27 @@ def song(level, i, auxNodes, auxEdges, songX, songY, artistX, artistY, XY):
     subNodes = ''
     subEdges = auxEdges
 
+    edgeSX = '''{from: "''' + level.at[i, 'ID_x'] + '''SX", label: "''' + level.at[i, 'idPropertyName_x'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
+    edgeSY = '''{from: "''' + level.at[i, 'ID_y'] + '''SY", label: "''' + level.at[i, 'idPropertyName_x'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
+
     # Añadimos el nodo de la propiedad si es necesario
     if (('id: "'+level.at[i, 'valueProperty']+'",') not in auxNodes):
         subNodes = ''',
     {id: "''' + level.at[i, 'valueProperty'] + '''", label: "''' + level.at[i, 'valueProperty'] + '''", group: "center", level: 4}'''
 
-    # ------------------------------------------------------ Z --------------------------------------------------------------
-    # Si es una explicación de la misma categoría
-    if (XY == 'z'):
-        # Añadimos las aristas para unir la propiedad con ambas canciones
-        subEdges += ''',
-    {from: "''' + level.at[i, 'ID_x'] + '''SX", label: "''' + level.at[i, 'idPropertyName_x'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"},
-    {from: "''' + level.at[i, 'ID_y'] + '''SY", label: "''' + level.at[i, 'idPropertyName_x'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
+    # ------------------------------------------------------ XZ --------------------------------------------------------------
+    # Si es una explicación de la misma categoría o de distinta categoría por la derecha
+    if (XY != 'y'):
+        if (edgeSX not in subEdges):
+            subEdges += ''',
+    ''' + edgeSX
 
-    # ------------------------------------------------------ XY --------------------------------------------------------------
-    # Si es una explicación de distinta categoría (solo trabajamos un lado de la explicación)
-    else:
-        # Añadimos las aristas para unir la propiedad con la canción
-        subEdges += ''',
-    {from: "''' + level.at[i, 'ID_'+XY] + '''S'''+XY.upper()+'''", label: "''' + level.at[i, 'idPropertyName_x'] + '''", to: "''' + level.at[i, 'valueProperty'] + '''"}'''
+    # ------------------------------------------------------ YZ --------------------------------------------------------------
+    # Si es una explicación de la misma categoría o de distinta categoría por la derecha
+    if (XY != 'x'):
+        if (edgeSY not in subEdges):
+            subEdges += ''',
+    ''' + edgeSY
 
     return [subNodes, subEdges]
 

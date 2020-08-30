@@ -5,12 +5,18 @@ var nodos = nodes.get();
 var nodosCentrales = nodos.filter(nodo => nodo.level == 4);
 nodosCentrales.forEach(single);
 
+// Evitamos que se superpongan las aristas
+for (var i = 0, len = nodosCentrales.length; i < len; i++) {
+    dobles(nodosCentrales[i], "1");
+}
+
 // Actualizamos nuestra variable nodos
 nodos = nodes.get();
 
 for (var i = 0, len = nodos.length; i < len; i++) {
-    funcion1(nodos[i], "");
+    funcion1(nodos[i], "");  
 }
+
 
 // Eliminamos del segundo grafo posibles nodos que no conectan con ambas canciones
 var nodos2 = nodes2.get();
@@ -20,6 +26,11 @@ var nodosIntermedios2 = nodos2.filter(nodo => ((nodo.level > 1) && (nodo.level <
 nodosCentrales2.forEach(nodoInnecesario);
 nodosIntermedios2.forEach(nodoInnecesario);
 
+// Evitamos que se superpongan las aristas
+for (var i = 0, len = nodosCentrales2.length; i < len; i++) {
+    dobles(nodosCentrales2[i], "2");
+}
+
 // Actualizamos nuestra variable nodos2
 nodos2 = nodes2.get();
 
@@ -28,11 +39,11 @@ for (var i = 0, len = nodos2.length; i < len; i++) {
     funcion1(nodos2[i], "2");
 }
 
+
+
 // Función que, dado un nodo del primer grafo, comprueba si es producto de una relación "instance of" y si es un single
-// También sirve para evitar la superposición de aristas, cosa que ocurre con las explicaciones de los premios
 // RECIBE: object value => nodo estudiado
 function single(value) {
-    var nodosConectados = network.getConnectedNodes(value["id"]);
     var aristasConectadas = network.getConnectedEdges(value["id"]); // Aristas conectadas al nodo
     var arista = edges.get(aristasConectadas[0]); // Obtenemos el objeto correspondiente a la primera arista conectada al nodo
 
@@ -44,66 +55,54 @@ function single(value) {
         }
         nodes.remove(value["id"]);
     }
+    
+}
 
-    // Comprobamos si el nodo tiene 4 aristas y 2 nodos conectados
-    // En caso afirmativo, le damos curvatura a sus aristas para diferenciarlas visualmente
-    else if ((aristasConectadas.length == 4) && (nodosConectados.length == 2)) {
-        var bool1 = false;
-        var bool2 = false;
-        
-        for (var i = 0, len = aristasConectadas.length; i < len; i++) {
-
-            if (edges.get(aristasConectadas[i])["from"] == nodosConectados[0]) {
-                if (bool1) {
-                    edges.update({
-                        id: edges.get(aristasConectadas[i])["id"],
-                        smooth: {
-                            enabled: true,
-                            type: "curvedCW",
-                            roundness: 0.1
-                        }
-                         
-                    });
-                }
-                else {
-                    edges.update({
-                        id: edges.get(aristasConectadas[i])["id"],
-                        smooth: {
-                            enabled: true,
-                            type: "curvedCCW",
-                            roundness: 0.1
-                        }
-                    });
-                    bool1 = true;
-                }
-            }
-
-            else {
-                if (bool2 == true) {
-                    edges.update({
-                        id: edges.get(aristasConectadas[i])["id"],
-                        smooth: {
-                            enabled: true,
-                            type: "curvedCW",
-                            roundness: 0.1
-                        }
-                    });
-                }
-                else {
-                    edges.update({
-                        id: edges.get(aristasConectadas[i])["id"],
-                        smooth: {
-                            enabled: true,
-                            type: "curvedCCW",
-                            roundness: 0.1
-                        }
-                    });
-                    bool2 = true;
-                }
-            }
-        }
+// Función que comprueba si un nodo tiene 2 aristas que conecten a un mismo nodo.
+// En caso afirmativo, cambia la forma de esas aristas por una curva
+// RECIBE: object value       => nodo estudiado
+//         String alternative => indica en qué grafo estamos trabajando
+function dobles(value, alternative) {
+    if (alternative == "1") {
+        var net = network;
+        var edg = edges;
     }
 
+    else {
+        var net = network2;
+        var edg = edges2;
+    }
+
+    var aristasConectadas = net.getConnectedEdges(value["id"]); // Aristas conectadas al nodo
+    var vistos = {};
+
+    for (var i = 0, len = aristasConectadas.length; i < len; i++) {
+        var aristaI = edg.get(aristasConectadas[i]);
+
+        if (Object.keys(vistos).includes(aristaI["from"])) {
+            edg.update({
+                id: aristaI["id"],
+                smooth: {
+                    enabled: true,
+                    type: "curvedCW",
+                    roundness: 0.1
+                }    
+            });
+
+            edg.update({
+                id: vistos[aristaI["from"]]["id"],
+                smooth: {
+                    enabled: true,
+                    type: "curvedCCW",
+                    roundness: 0.1
+                }
+            });
+        }
+
+        else {
+            vistos[aristaI["from"]] = aristaI;
+        }
+    }
 }
 
 
