@@ -14,8 +14,6 @@ from app.helpers.draw import *
 from app.helpers.graphmaking import *
 
 from app.model.main import *
-#from app.model.getInfoSongs import *
-#from app.model.sparqlLibrary import *
 
 # define the environment for the Jinja2 templates
 env = Environment(
@@ -44,50 +42,6 @@ async def home(request):
         'template.html'
     )
 
-# TEMPORAL
-async def table(request):
-
-    song1 = "(I Can't Get No) Satisfaction" # "Start Me Up"
-    artist1 = "The Rolling Stones"
-    song2 = "Hey Jude" # "Let It Be"
-    artist2 = "The Beatles"
-
-    #song1 = "Teardrop"
-    #artist1 = "Massive Attack"
-    #song2 = "Teardrop"
-    #artist2 = "Massive Attack"
-
-    relationsDF = main(song1, artist1, song2, artist2) # relationsDF es un DataFrame
-
-    nolevel = relationsDF.loc[(relationsDF['Level_x'] != relationsDF['Level_y'])]
-    nolevel.sort_values(by=['Level_x', 'Level_y', 'idPropertyName', 'valueProperty'], inplace= True)
-
-    level = relationsDF.loc[relationsDF['Level_x'] == relationsDF['Level_y']]
-    level.sort_values(by=['Level_x', 'idPropertyName', 'valueProperty'], inplace= True)
-
-    return response.html(nolevel.to_html())
-
-# TEMPORAL
-async def graph4(request):
-
-    return template(
-        'graph4.html'
-    )
-
-# TEMPORAL
-async def random(request):
-    thislist = request.query_args # Esta es la lista de argumentos recibidos en la URL
-
-    song1 = cleanSong(thislist[0][1])[0]
-    artist1 = cleanSong(thislist[0][1])[1]
-    song2 = cleanSong(thislist[1][1])[0]
-    artist2 = cleanSong(thislist[1][1])[1]
-
-    objectMain = Main(song1, artist1, song2, artist2) # relationsDF es un DataFrame
-    
-    relationsDF = objectMain.relations
-    
-    return response.html(relationsDF.to_html())
 
 # Función que sirve para generar un archivo con todas las consultas erróneas. Está por testear
 async def status(request):
@@ -136,6 +90,7 @@ async def status(request):
 
     return response.text('OK')
 
+
 # Esta es la ruta a la que se dirige tras pulsar el botón de comparación
 # Se llama a las funciones necesarias para obtener los grafos y se muestran por pantalla
 async def index(request):
@@ -166,13 +121,4 @@ app.static('app/static', './app/static')
 # Rutas
 app.add_route(home, '/')
 app.add_route(index, '/index')
-app.add_route(table, '/table') #Temporal
-app.add_route(graph4, '/graph4') #Temporal
-app.add_route(random, '/random') #Temporal
 app.add_route(status, '/status')
-
-#@app.route("/")
-#@app.route("/table")
-#@app.route("/graph4")
-#@app.route("/random")
-#@app.route("/index")
